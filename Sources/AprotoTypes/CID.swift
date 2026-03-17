@@ -43,10 +43,15 @@ public struct CID: Sendable {
 	}
 }
 
-extension CID: Encodable {
+extension CID: Codable {
+	public init(from decoder: any Decoder) throws {
+		let container = try decoder.singleValueContainer()
+		self = try .init(string: container.decode(String.self))
+	}
+	
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
-		try container.encode(self.bytes)
+		try container.encode(self.string)
 	}
 }
 
