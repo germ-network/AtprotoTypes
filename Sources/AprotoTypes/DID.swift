@@ -65,9 +65,26 @@ extension Atproto {
 }
 
 extension Atproto.DID {
-	static public func mock(method: Methods = .plc) -> Self {
-		.init(method: method, identifier: UUID().uuidString)
+	static public func mock() -> Self {
+		mockPlc()
 	}
+
+	static public func mockPlc() -> Self {
+		.init(
+			method: .plc,
+			identifier: .init(
+				(0..<24).compactMap { _ in base32Set.randomElement() }
+			)
+		)
+	}
+
+	//generate test did per the spec https://github.com/did-method-plc/did-method-plc
+	static let lowercaseAlpha = (UInt8(ascii: "a")...UInt8(ascii: "z"))
+		.map { Character(UnicodeScalar($0)) }
+
+	static let numeric = (UInt8(ascii: "2")...UInt8(ascii: "7"))
+		.map { Character(UnicodeScalar($0)) }
+	static let base32Set: [Character] = lowercaseAlpha + numeric
 }
 
 //code it as the bare string so we can type fields
