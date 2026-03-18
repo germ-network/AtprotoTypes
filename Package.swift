@@ -14,14 +14,25 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2")
+		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2"),
+		.package(
+			url: "https://github.com/germ-network/GermConvenience.git",
+			from: "0.0.2"
+		),
+		.package(
+			url: "https://github.com/apple/swift-crypto.git",
+			.upToNextMajor(from: "4.2.0")),
 	],
 	targets: [
 		// Targets are the basic building blocks of a package, defining a module or a test suite.
 		// Targets can depend on other targets in this package and products from dependencies.
 		.target(
 			name: "AtprotoTypes",
-			dependencies: ["Base32"]
+			dependencies: [
+				"Base32",
+				"GermConvenience",
+				.product(name: "Crypto", package: "swift-crypto"),
+			]
 		),
 		.testTarget(
 			name: "AtprotoTypesTests",

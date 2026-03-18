@@ -8,4 +8,11 @@
 import Foundation
 
 ///To keep this repo lightweight, define extensions on Lexicon as needed to incorporate types you need
-public enum Lexicon {}
+public enum Lexicon {
+	public enum Com {
+		public enum Atproto {
+			public enum Repo {}
+			public enum Sync {}
+		}
+	}
+}
