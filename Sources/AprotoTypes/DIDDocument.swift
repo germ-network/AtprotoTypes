@@ -16,26 +16,26 @@ import Foundation
 /// authentication and data storage locations.
 extension Atproto {
 	public struct DIDDocument: Sendable, Codable, Equatable {
-		
+
 		/// An array of context URLs for the DID document, providing additional semantics for
 		/// the properties.
 		public let context: [String]
-		
+
 		/// The unique identifier of the DID document.
 		public let id: String
-		
+
 		/// An array of URIs under which this decentralized identifier (DID) is also known, including
 		/// the primary handle URI. Optional.
 		public let alsoKnownAs: [String]?
-		
+
 		/// An array of methods for verifying digital signatures, including the public signing key
 		/// for the account.
 		public let verificationMethod: [VerificationMethod]
-		
+
 		/// An array of service endpoints related to the decentralized identifier (DID), including the
 		/// Personal Data Server's (PDS) location.
 		public let service: [Service]
-		
+
 		/// Checks if the ``service`` property array contains items, and if so, sees if `#atproto_pds`
 		/// is in the ``ATService/id`` property.
 		///
@@ -45,20 +45,20 @@ extension Atproto {
 		/// contain `#atproto_pds`.
 		public func checkServiceForAtproto() throws -> Service {
 			let services = self.service
-			
+
 			guard services.count > 0 else {
 				throw DIDDocumentError.emptyArray
 			}
-			
+
 			for service in services {
 				if service.id == "#atproto_pds" {
 					return service
 				}
 			}
-			
+
 			throw DIDDocumentError.noAtprotoPDSValue
 		}
-		
+
 		enum CodingKeys: String, CodingKey {
 			case context = "@context"
 			case id
@@ -66,58 +66,58 @@ extension Atproto {
 			case verificationMethod
 			case service
 		}
-		
+
 		/// Errors relating to the DID Document.
 		public enum DIDDocumentError: Error {
-			
+
 			/// The ``DIDDocument/service`` array is empty.
 			case emptyArray
-			
+
 			/// None of the items in the ``DIDDocument/service`` array contains a `#atproto_pds`
 			/// value in the ``ATService/id`` property.
 			case noAtprotoPDSValue
-			
+
 			case urlConstructionError
 			case missingServiceUrl
 		}
-		
+
 		public var handle: String? {
 			(alsoKnownAs ?? [])
 				.filter { $0.hasPrefix("at://") }
-			//TODO: filter for "no path or other URI parts."
+				//TODO: filter for "no path or other URI parts."
 				.first
 		}
 	}
-	
+
 	/// Describes a method for verifying digital signatures in the AT Protocol, including the public
 	/// signing key.
 	public struct VerificationMethod: Sendable, Codable, Equatable {
-		
+
 		/// The unique identifier of the verification method.
 		public let id: String
-		
+
 		/// The type of verification method that indicates the cryptographic curve used.
 		public let type: String
-		
+
 		/// The controller of the verification method, which matches the
 		/// decentralized identifier (DID).
 		public let controller: String
-		
+
 		/// The public key, in multibase encoding; used for verifying digital signatures.
 		public let publicKeyMultibase: String
 	}
-	
+
 	/// Represents a service endpoint in a DID document, such as the
 	/// Personal Data Server's (PDS) location.
 	public struct Service: Sendable, Codable, Equatable {
-		
+
 		/// The unique identifier of the service.
 		public let id: String
-		
+
 		/// The type of service (matching `AtprotoPersonalDataServer`) for use in identifying
 		/// the Personal Data Server (PDS).
 		public let type: String
-		
+
 		/// The endpoint URL for the service, specifying the location of the service.
 		public let serviceEndpoint: URL
 	}

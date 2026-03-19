@@ -48,7 +48,7 @@ extension CID: Codable {
 		let container = try decoder.singleValueContainer()
 		self = try .init(string: container.decode(String.self))
 	}
-	
+
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(self.string)
