@@ -25,6 +25,12 @@ extension Lexicon.Com.Atproto.Repo {
 
 			/// The value for the record. Codable for later conversion
 			public let value: Result
+
+			public init(uri: String, cid: String, value: Result) {
+				self.uri = uri
+				self.cid = cid
+				self.value = value
+			}
 		}
 		public static var nsid: Atproto.NSID { getRecordNSID }
 		public static var acceptValue: String { "application/json" }

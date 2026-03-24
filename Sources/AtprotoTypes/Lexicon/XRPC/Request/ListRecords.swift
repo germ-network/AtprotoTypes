@@ -17,6 +17,11 @@ extension Lexicon.Com.Atproto.Repo {
 		public struct Result: Sendable, Codable {
 			public let cursor: String?
 			public let records: [Record]
+
+			public init(cursor: String?, records: [Record]) {
+				self.cursor = cursor
+				self.records = records
+			}
 		}
 		public static var nsid: Atproto.NSID { listRecordsNSID }
 		public static var acceptValue: String { "application/json" }
