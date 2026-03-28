@@ -1,5 +1,5 @@
 {
-  "originHash" : "150f65c2415947f52d9c95a7b5837c4121a09bc08249a2e4c002dfd66c72657e",
+  "originHash" : "90a147e0548b63301471d4b04fa7eeafd0b518e7739913bb92e21cc1102de182",
   "pins" : [
     {
       "identity" : "base32",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/germ-network/GermConvenience.git",
       "state" : {
         "branch" : "mark/http-types",
-        "revision" : "e481c34f894accd6a619bfc92890aa949b14ab35"
+        "revision" : "1eb34f2d42ca1bb225b5ef91ae10b6e040e4b348"
       }
     },
     {

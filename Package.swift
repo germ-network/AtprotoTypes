@@ -23,6 +23,7 @@ let package = Package(
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",
 			.upToNextMajor(from: "4.2.0")),
+		.package(url: "https://github.com/apple/swift-http-types.git", from: "1.5.1"),
 	],
 	targets: [
 		// Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -32,6 +33,7 @@ let package = Package(
 			dependencies: [
 				"Base32",
 				"GermConvenience",
+				.product(name: "HTTPTypes", package: "swift-http-types"),
 				.product(name: "Crypto", package: "swift-crypto"),
 			]
 		),
