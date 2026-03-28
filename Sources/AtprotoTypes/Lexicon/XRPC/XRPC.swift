@@ -30,10 +30,12 @@ public protocol XRPCProcedure: XRPC {
 	associatedtype BodyParameters: HTTPBodyEncodable
 }
 
-public enum EmptyParameters: QueryParameters {
+public struct EmptyParameters: QueryParameters {
 	public func asQueryItems() -> [URLQueryItem] {
 		[]
 	}
+
+	public init() {}
 }
 
 public protocol HTTPBodyEncodable: Sendable {
