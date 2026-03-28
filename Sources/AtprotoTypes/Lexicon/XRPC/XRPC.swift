@@ -12,13 +12,12 @@ public protocol XRPC: Sendable {
 	static var nsid: Atproto.NSID { get }
 	static var acceptValue: String { get }
 
-	associatedtype Result: Decodable, Mockable, Sendable
+	associatedtype Parameters: QueryParameters
+	associatedtype Output: Decodable, Mockable, Sendable
 }
 
 //these are GET queries
-public protocol XRPCRequest: XRPC {
-	associatedtype Parameters: QueryParameters
-}
+public protocol XRPCRequest: XRPC {}
 
 public protocol QueryParameters: Sendable {
 	func asQueryItems() -> [URLQueryItem]
@@ -28,9 +27,15 @@ public protocol QueryParameters: Sendable {
 public protocol XRPCProcedure: XRPC {
 	static var contentTypeValue: String { get }
 
-	associatedtype Parameters: ProcedureParameters
+	associatedtype BodyParameters: HTTPBodyEncodable
 }
 
-public protocol ProcedureParameters: Sendable {
+public enum EmptyParameters: QueryParameters {
+	public func asQueryItems() -> [URLQueryItem] {
+		[]
+	}
+}
+
+public protocol HTTPBodyEncodable: Sendable {
 	func httpBody() throws -> Data
 }

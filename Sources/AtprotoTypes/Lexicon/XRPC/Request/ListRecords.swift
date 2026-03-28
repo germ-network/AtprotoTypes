@@ -14,7 +14,7 @@ extension Lexicon.Com.Atproto.Repo {
 	public static let listRecordsNSID: Atproto.NSID = "com.atproto.repo.listRecords"
 
 	public enum ListRecords<Result: AtprotoRecord>: XRPCRequest {
-		public struct Result: Sendable, Codable {
+		public struct Output: Sendable, Codable {
 			public let cursor: String?
 			public let records: [Record]
 
@@ -79,7 +79,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.ListRecords.Result: Mockable {
+extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
 	public static func mock() -> Self {
 		.init(
 			cursor: UUID().uuidString,

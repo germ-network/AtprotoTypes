@@ -17,9 +17,10 @@ extension Lexicon.Com.Atproto.Repo {
 		public static var acceptValue: String { "application/json" }
 		public static var contentTypeValue: String { "application/json" }
 
-		public typealias Result = PutRecordResult
+		public typealias Output = PutRecordResult
+		public typealias Parameters = EmptyParameters
 
-		public struct Parameters: Encodable, ProcedureParameters {
+		public struct BodyParameters: Encodable, HTTPBodyEncodable {
 			let repo: AtIdentifier
 			let collection: Atproto.NSID
 			let rkey: Atproto.RecordKey
@@ -59,7 +60,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.PutRecord.Result: Mockable {
+extension Lexicon.Com.Atproto.Repo.PutRecord.Output: Mockable {
 	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordResult {
 		.init(uri: "example", cid: "example", validationStatus: "unknown")
 	}
