@@ -15,7 +15,7 @@ import GermConvenience
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/sync/getBlob.json
 extension Lexicon.Com.Atproto.Sync {
 	public enum GetBlob: XRPCRequest {
-		public typealias Result = Data?
+		public typealias Output = Data?
 		public static var nsid: Atproto.NSID { "com.atproto.sync.getBlob" }
 		public static let acceptValue = "*/*"
 
@@ -44,7 +44,7 @@ extension Lexicon.Com.Atproto.Sync {
 	}
 }
 
-extension Lexicon.Com.Atproto.Sync.GetBlob.Result: Mockable {
+extension Lexicon.Com.Atproto.Sync.GetBlob.Output: Mockable {
 	public static func mock() -> Self {
 		SymmetricKey(size: .bits256).dataRepresentation
 	}
