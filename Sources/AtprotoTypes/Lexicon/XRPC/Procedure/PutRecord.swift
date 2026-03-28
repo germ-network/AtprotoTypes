@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GermConvenience
 
 //https://docs.bsky.app/docs/api/com-atproto-repo-put-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.putRecord
@@ -14,8 +15,8 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public enum PutRecord<Record: AtprotoRecord>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { putRecordNSID }
-		public static var acceptValue: String { "application/json" }
-		public static var contentTypeValue: String { "application/json" }
+		public static var acceptValue: String { HTTPContentType.json.rawValue }
+		public static var contentTypeValue: String { HTTPContentType.json.rawValue }
 
 		public typealias Output = PutRecordResult
 		public typealias Parameters = EmptyParameters
