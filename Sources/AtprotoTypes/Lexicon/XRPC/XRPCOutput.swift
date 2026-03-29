@@ -100,3 +100,10 @@ extension XRPCResponseParsing {
 		}
 	}
 }
+
+//functional handling
+extension HTTPDataResponse {
+	public func parse<X: XRPCResponseParsing>(_ xrpc: X.Type) throws -> X.Output {
+		try X.parse(fullResponse: self).output
+	}
+}
