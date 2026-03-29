@@ -15,11 +15,10 @@ import GermConvenience
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/sync/getBlob.json
 extension Lexicon.Com.Atproto.Sync {
 	public enum GetBlob: XRPCRequest {
-		public typealias Output = Data?
 		public static var nsid: Atproto.NSID { "com.atproto.sync.getBlob" }
-		public static let acceptValue = "*/*"
+		public static let acceptValue: HTTPContentType = .any
 
-		public struct Parameters: QueryParameters {
+		public struct Parameters: QueryParametrizable {
 			/// The DID of the account.
 			let did: AtIdentifier
 
@@ -41,6 +40,7 @@ extension Lexicon.Com.Atproto.Sync {
 				]
 			}
 		}
+		public typealias Output = Data?
 	}
 }
 

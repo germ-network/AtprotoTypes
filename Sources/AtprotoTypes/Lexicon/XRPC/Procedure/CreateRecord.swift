@@ -15,38 +15,44 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public enum CreateRecord<Record: AtprotoRecord>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { createRecordNSID }
-		public static var acceptValue: String { HTTPContentType.json.rawValue }
-		public static var contentTypeValue: String { HTTPContentType.json.rawValue }
+		public static var acceptValue: HTTPContentType { HTTPContentType.json }
 
-		public typealias Output = PutRecordResult
-		public typealias Parameters = EmptyParameters
-
-		public struct BodyParameters: Encodable, HTTPBodyEncodable {
-			let repo: AtIdentifier
-			let collection: Atproto.NSID
-			let rkey: Atproto.RecordKey?
-			let record: Record
-			let validate: Bool?
-			let swapCommit: CID?
-
-			public init(
-				repo: AtIdentifier,
-				rkey: Atproto.RecordKey?,
-				record: Record,
-				validate: Bool? = nil,
-				swapCommit: CID? = nil,
-			) {
-				self.repo = repo
-				self.collection = Record.nsid
-				self.rkey = rkey
-				self.record = record
-				self.validate = validate
-				self.swapCommit = swapCommit
+		public struct Input: XRPCProcedureInput {
+			public static var encoding: HTTPContentType { .json }
+			public static func encode(_ schema: Schema) throws -> Data? {
+				try JSONEncoder().encode(schema)
 			}
 
-			public func httpBody() throws -> Data {
-				try JSONEncoder().encode(self)
+			public struct Schema: Encodable {
+				let repo: AtIdentifier
+				let collection: Atproto.NSID
+				let rkey: Atproto.RecordKey?
+				let record: Record
+				let validate: Bool?
+				let swapCommit: CID?
+
+				public init(
+					repo: AtIdentifier,
+					rkey: Atproto.RecordKey?,
+					record: Record,
+					validate: Bool? = nil,
+					swapCommit: CID? = nil,
+				) {
+					self.repo = repo
+					self.collection = Record.nsid
+					self.rkey = rkey
+					self.record = record
+					self.validate = validate
+					self.swapCommit = swapCommit
+				}
+
+				public func httpBody() throws -> Data {
+					try JSONEncoder().encode(self)
+				}
 			}
 		}
+
+		public typealias Parameters = EmptyXRPCParameters
+		public typealias Output = PutRecordResult
 	}
 }
