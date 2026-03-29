@@ -1,5 +1,5 @@
 //
-//  Test.swift
+//  CIDTests.swift
 //  AtprotoTypes
 //
 //  Created by Mark @ Germ on 2/18/26.
