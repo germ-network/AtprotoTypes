@@ -11,6 +11,7 @@ public enum AtprotoTypeError: Error {
 	case invalidRecordType
 	case invalidPrefix
 	case invalidBase32Data
+	case invalidStringInput
 }
 
 extension AtprotoTypeError: LocalizedError {
@@ -19,6 +20,7 @@ extension AtprotoTypeError: LocalizedError {
 		case .invalidRecordType: "Invalid Record type"
 		case .invalidPrefix: "Invalid prefix"
 		case .invalidBase32Data: "Invalid Base32 data"
+		case .invalidStringInput: "Invalid string input"
 		}
 	}
 }

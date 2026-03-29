@@ -17,6 +17,16 @@ public struct ProxyService {
 		self.endpoint = endpoint
 	}
 	
+	public init(string: String) throws {
+		let components = string.split(separator: "#")
+		guard components.count == 2 else {
+			throw AtprotoTypeError.invalidStringInput
+		}
+		
+		self.did = try Atproto.DID(string: String(components[0]))
+		self.endpoint = String(components[1])
+	}
+	
 	public var headerValue: String {
 		did.stringRepresentation + "#" + endpoint
 	}
