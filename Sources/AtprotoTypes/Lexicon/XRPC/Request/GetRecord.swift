@@ -8,6 +8,7 @@
 
 import Foundation
 import GermConvenience
+import HTTPTypes
 
 //https://docs.bsky.app/docs/api/com-atproto-repo-get-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.getRecord/docs
@@ -65,6 +66,12 @@ extension Lexicon.Com.Atproto.Repo {
 				return base
 			}
 		}
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.GetRecord: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(["RecordNotFound"])
 	}
 }
 
