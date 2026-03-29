@@ -9,12 +9,11 @@ import Foundation
 import GermConvenience
 
 ///https://atproto.com/specs/xrpc
-public protocol XRPC: Sendable {
+public protocol XRPC: XRPCResponseParsing {
 	static var nsid: Atproto.NSID { get }
 	static var acceptValue: HTTPContentType { get }
 
 	associatedtype Parameters: QueryParametrizable
-	associatedtype Output: Decodable, Mockable, Sendable
 }
 
 //these are GET queries

@@ -69,45 +69,9 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.GetRecord {
-	//some of this is defined in the lexicon,
-	//some in the api reference https://docs.bsky.app/docs/api/com-atpro
-
-	//Lexicon defines error of RecordNotFound, api doc also specifies
-	//InvalidRequest, ExpiredToken, InvalidToken
-	public enum Response: XRPCResponse {
-		case success(Output)
-		case badRequest(Lexicon.XRPCError)
-		case unauthorized(Lexicon.XRPCError)
-
-		static func parse(
-			fullResponse: HTTPDataResponse
-		) throws -> ParsedXRPCResponse<Output> {
-			do {
-				switch fullResponse.response.status {
-				case .ok:
-					return .ok(
-						try JSONDecoder()
-							.decode(
-								Output.self, from: fullResponse.data
-							)
-					)
-				case .badRequest, .unauthorized:
-					return .error(
-						status: fullResponse.response.status,
-						error: try JSONDecoder()
-							.decode(
-								Lexicon.XRPCError.self,
-								from: fullResponse.data
-							)
-					)
-				default:
-					return .unrecognized(fullResponse.response)
-				}
-			} catch {
-				return .unrecognized(fullResponse.response)
-			}
-		}
+extension Lexicon.Com.Atproto.Repo.GetRecord: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(["RecordNotFound"])
 	}
 }
 
