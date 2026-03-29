@@ -29,8 +29,32 @@ extension XRPCResponseParsing {
 
 public enum ParsedXRPCResponse<Output: Decodable> {
 	case ok(Output)
-	case error(status: HTTPResponse.Status, error: Lexicon.XRPCError)
+	case error(ParseXRPCError)
+
+	public var output: Output {
+		get throws {
+			switch self {
+			case .ok(let output):
+				output
+			case .error(let parseXRPCError):
+				throw parseXRPCError
+			}
+		}
+	}
+}
+
+public enum ParseXRPCError: LocalizedError {
+	case xrpcError(status: HTTPResponse.Status, error: Lexicon.XRPCError)
 	case unrecognized(HTTPResponse)
+
+	public var errorDescription: String? {
+		switch self {
+		case .xrpcError(let status, let error):
+			"\(status): \(error.error)"
+		case .unrecognized(let response):
+			"Unrecognized response: \(response)"
+		}
+	}
 }
 
 extension XRPCResponseParsing {
@@ -53,7 +77,9 @@ extension XRPCResponseParsing {
 						from: fullResponse.data
 					)
 				if Self.badRequestErrors.contains(errorObject.error) {
-					return .error(status: .badRequest, error: errorObject)
+					return .error(
+						.xrpcError(status: .badRequest, error: errorObject)
+					)
 				}
 			case let status where Self.recognizedStatuses.contains(status):
 				let errorObject = try JSONDecoder()
@@ -61,14 +87,16 @@ extension XRPCResponseParsing {
 						Lexicon.XRPCError.self,
 						from: fullResponse.data
 					)
-				return .error(status: status, error: errorObject)
+				return .error(
+					.xrpcError(status: status, error: errorObject)
+				)
 			default:
 				break
 			}
 
-			return .unrecognized(fullResponse.response)
+			return .error(.unrecognized(fullResponse.response))
 		} catch {
-			return .unrecognized(fullResponse.response)
+			return .error(.unrecognized(fullResponse.response))
 		}
 	}
 }
