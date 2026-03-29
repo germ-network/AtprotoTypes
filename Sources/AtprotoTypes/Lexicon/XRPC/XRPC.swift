@@ -38,12 +38,14 @@ public struct EmptyXRPCParameters: QueryParametrizable {
 
 public protocol XRPCProcedureInput: Sendable {
 	static var encoding: HTTPContentType { get }
-	associatedtype Schema
+	associatedtype Schema: Sendable
 	static func encode(_: Schema) throws -> Data?
+	var schema: Schema { get }
 }
 
 public struct EmptyXRPCInput: XRPCProcedureInput {
 	public static var encoding: HTTPContentType { .none }
 	public static func encode(_: Schema) throws -> Data? { nil }
-	public struct Schema {}
+	public struct Schema: Sendable {}
+	public var schema: Schema { .init() }
 }

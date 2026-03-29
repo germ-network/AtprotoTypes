@@ -24,7 +24,7 @@ extension Lexicon.Com.Atproto.Repo {
 				try JSONEncoder().encode(schema)
 			}
 
-			public struct Schema: Encodable {
+			public struct Schema: Encodable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Atproto.RecordKey?
@@ -46,11 +46,8 @@ extension Lexicon.Com.Atproto.Repo {
 					self.validate = validate
 					self.swapCommit = swapCommit
 				}
-
-				public func httpBody() throws -> Data {
-					try JSONEncoder().encode(self)
-				}
 			}
+			public let schema: Schema
 		}
 
 		public typealias Parameters = EmptyXRPCParameters
