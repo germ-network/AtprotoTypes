@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GermConvenience
 
 //https://docs.bsky.app/docs/api/com-atproto-repo-put-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.putRecord
@@ -14,41 +15,49 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public enum PutRecord<Record: AtprotoRecord>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { putRecordNSID }
-		public static var acceptValue: String { "application/json" }
-		public static var contentTypeValue: String { "application/json" }
+		public static var acceptValue: HTTPContentType { .json }
+		public static var contentTypeValue: HTTPContentType { .json }
 
-		public typealias Result = PutRecordResult
-
-		public struct Parameters: Encodable, ProcedureParameters {
-			let repo: AtIdentifier
-			let collection: Atproto.NSID
-			let rkey: Atproto.RecordKey
-			let record: Record
-			let validate: Bool?
-			let swapCommit: CID?
-			let swapRecord: CID?
-
-			public init(
-				repo: AtIdentifier,
-				rkey: Atproto.RecordKey,
-				record: Record,
-				validate: Bool? = nil,
-				swapCommit: CID? = nil,
-				swapRecord: CID? = nil,
-			) {
-				self.repo = repo
-				self.collection = Record.nsid
-				self.rkey = rkey
-				self.record = record
-				self.validate = validate
-				self.swapCommit = swapCommit
-				self.swapRecord = swapRecord
+		public struct Input: XRPCProcedureInput {
+			public static var encoding: HTTPContentType { .json }
+			public static func encode(_ schema: Schema) throws -> Data? {
+				try JSONEncoder().encode(schema)
 			}
 
-			public func httpBody() throws -> Data {
-				try JSONEncoder().encode(self)
+			public struct Schema: Encodable {
+				let repo: AtIdentifier
+				let collection: Atproto.NSID
+				let rkey: Atproto.RecordKey
+				let record: Record
+				let validate: Bool?
+				let swapCommit: CID?
+				let swapRecord: CID?
+
+				public init(
+					repo: AtIdentifier,
+					rkey: Atproto.RecordKey,
+					record: Record,
+					validate: Bool? = nil,
+					swapCommit: CID? = nil,
+					swapRecord: CID? = nil,
+				) {
+					self.repo = repo
+					self.collection = Record.nsid
+					self.rkey = rkey
+					self.record = record
+					self.validate = validate
+					self.swapCommit = swapCommit
+					self.swapRecord = swapRecord
+				}
+
+				public func httpBody() throws -> Data {
+					try JSONEncoder().encode(self)
+				}
 			}
 		}
+
+		public typealias Parameters = EmptyXRPCParameters
+		public typealias Output = PutRecordResult
 	}
 
 	public struct PutRecordResult: Decodable, Sendable {
@@ -59,7 +68,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.PutRecord.Result: Mockable {
+extension Lexicon.Com.Atproto.Repo.PutRecord.Output: Mockable {
 	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordResult {
 		.init(uri: "example", cid: "example", validationStatus: "unknown")
 	}

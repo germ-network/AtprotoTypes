@@ -6,27 +6,20 @@
 //
 
 import Foundation
+import GermConvenience
 
 /// https://docs.bsky.app/docs/api/com-atproto-repo-list-records
 /// https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.listRecords/docs
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/listRecords.json
 extension Lexicon.Com.Atproto.Repo {
+	//want this to be accessible without specifying the result type
 	public static let listRecordsNSID: Atproto.NSID = "com.atproto.repo.listRecords"
 
 	public enum ListRecords<Result: AtprotoRecord>: XRPCRequest {
-		public struct Result: Sendable, Codable {
-			public let cursor: String?
-			public let records: [Record]
-
-			public init(cursor: String?, records: [Record]) {
-				self.cursor = cursor
-				self.records = records
-			}
-		}
 		public static var nsid: Atproto.NSID { listRecordsNSID }
-		public static var acceptValue: String { "application/json" }
+		public static var acceptValue: HTTPContentType { .json }
 
-		public struct Parameters: QueryParameters {
+		public struct Parameters: QueryParametrizable {
 			let repo: AtIdentifier
 			// TODO: Enforce min/max (1-100)?
 			let limit: Int?
@@ -64,6 +57,16 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 		}
 
+		public struct Output: Sendable, Codable {
+			public let cursor: String?
+			public let records: [Record]
+
+			public init(cursor: String?, records: [Record]) {
+				self.cursor = cursor
+				self.records = records
+			}
+		}
+
 		/// From https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/listRecords.json
 		/// Same as the GetRecord output, but they're defined separately, so I'll leave them separate
 		public struct Record: Sendable, Codable {
@@ -79,7 +82,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.ListRecords.Result: Mockable {
+extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
 	public static func mock() -> Self {
 		.init(
 			cursor: UUID().uuidString,

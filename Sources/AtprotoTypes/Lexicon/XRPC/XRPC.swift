@@ -6,31 +6,45 @@
 //
 
 import Foundation
+import GermConvenience
 
 ///https://atproto.com/specs/xrpc
 public protocol XRPC: Sendable {
 	static var nsid: Atproto.NSID { get }
-	static var acceptValue: String { get }
+	static var acceptValue: HTTPContentType { get }
 
-	associatedtype Result: Decodable, Mockable, Sendable
+	associatedtype Parameters: QueryParametrizable
+	associatedtype Output: Decodable, Mockable, Sendable
 }
 
 //these are GET queries
-public protocol XRPCRequest: XRPC {
-	associatedtype Parameters: QueryParameters
-}
+public protocol XRPCRequest: XRPC {}
 
-public protocol QueryParameters: Sendable {
+public protocol QueryParametrizable: Sendable {
 	func asQueryItems() -> [URLQueryItem]
 }
 
 //these are POST
 public protocol XRPCProcedure: XRPC {
-	static var contentTypeValue: String { get }
-
-	associatedtype Parameters: ProcedureParameters
+	associatedtype Input: XRPCProcedureInput
 }
 
-public protocol ProcedureParameters: Sendable {
-	func httpBody() throws -> Data
+public struct EmptyXRPCParameters: QueryParametrizable {
+	public func asQueryItems() -> [URLQueryItem] {
+		[]
+	}
+
+	public init() {}
+}
+
+public protocol XRPCProcedureInput: Sendable {
+	static var encoding: HTTPContentType { get }
+	associatedtype Schema
+	static func encode(_: Schema) throws -> Data?
+}
+
+public struct EmptyXRPCInput: XRPCProcedureInput {
+	public static var encoding: HTTPContentType { .none }
+	public static func encode(_: Schema) throws -> Data? { nil }
+	public struct Schema {}
 }
