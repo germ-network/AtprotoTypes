@@ -7,6 +7,7 @@
 
 import Foundation
 import GermConvenience
+import HTTPTypes
 
 ///https://docs.bsky.app/docs/api/com-atproto-repo-create-record
 ///https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.createRecord/docs
@@ -54,5 +55,11 @@ extension Lexicon.Com.Atproto.Repo {
 
 		public typealias Parameters = EmptyXRPCParameters
 		public typealias Output = PutRecordResult
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.CreateRecord: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(["InvalidSwap"])
 	}
 }
