@@ -22,7 +22,7 @@ extension XRPCResponseParsing {
 		[.badRequest, .unauthorized]
 	}
 
-	static var defaultErrors: Set<String> {
+	static public var defaultErrors: Set<String> {
 		["InvalidRequest", "ExpiredToken", "InvalidToken"]
 	}
 }
