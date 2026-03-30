@@ -48,6 +48,10 @@ extension Lexicon.Com.Atproto.Repo {
 				}
 			}
 			public let schema: Schema
+
+			public init(schema: Schema) {
+				self.schema = schema
+			}
 		}
 
 		public typealias Parameters = EmptyXRPCParameters

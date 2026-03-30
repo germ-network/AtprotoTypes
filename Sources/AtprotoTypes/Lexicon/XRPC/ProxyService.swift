@@ -11,12 +11,12 @@ import Foundation
 public struct ProxyService {
 	public let did: Atproto.DID
 	public let endpoint: String
-	
+
 	public init(did: Atproto.DID, endpoint: String) {
 		self.did = did
 		self.endpoint = endpoint
 	}
-	
+
 	public var headerValue: String {
 		did.stringRepresentation + "#" + endpoint
 	}
