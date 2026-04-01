@@ -8,3 +8,4 @@ In this PR:
 - Procedures get an `Input` type
 - We define an empty query params (which most procedures will use)
 - Rename the xrpc` Result` to `Output`
+- rename xrpc `acceptValue` -> `outputEncoding`

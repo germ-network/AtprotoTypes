@@ -35,7 +35,7 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 		}
 		public static var nsid: Atproto.NSID { getRecordNSID }
-		public static var acceptValue: HTTPContentType { .json }
+		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Parameters: QueryParametrizable {
 			let repo: AtIdentifier

@@ -16,7 +16,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Sync {
 	public enum GetBlob: XRPCRequest {
 		public static var nsid: Atproto.NSID { "com.atproto.sync.getBlob" }
-		public static let acceptValue: HTTPContentType = .any
+		public static let outputEncoding: HTTPContentType = .any
 
 		public struct Parameters: QueryParametrizable {
 			/// The DID of the account.

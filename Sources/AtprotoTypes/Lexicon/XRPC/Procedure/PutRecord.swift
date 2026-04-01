@@ -15,7 +15,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public enum PutRecord<Record: AtprotoRecord>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { putRecordNSID }
-		public static var acceptValue: HTTPContentType { .json }
+		public static var outputEncoding: HTTPContentType { .json }
 		public static var contentTypeValue: HTTPContentType { .json }
 
 		public struct Input: XRPCProcedureInput {

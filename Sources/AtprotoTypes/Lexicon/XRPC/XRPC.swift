@@ -11,7 +11,7 @@ import GermConvenience
 ///https://atproto.com/specs/xrpc
 public protocol XRPC: Sendable {
 	static var nsid: Atproto.NSID { get }
-	static var acceptValue: HTTPContentType { get }
+	static var outputEncoding: HTTPContentType { get }
 
 	associatedtype Parameters: QueryParametrizable
 	associatedtype Output: Decodable, Mockable, Sendable
