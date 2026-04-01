@@ -44,6 +44,20 @@ extension Lexicon.Com.Atproto.Sync {
 	}
 }
 
+extension Lexicon.Com.Atproto.Sync.GetBlob: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(
+			[
+				"BlobNotFound",
+				"RepoNotFound",
+				"RepoTakendown",
+				"RepoSuspended",
+				"RepoDeactivated",
+			]
+		)
+	}
+}
+
 extension Lexicon.Com.Atproto.Sync.GetBlob.Output: Mockable {
 	public static func mock() -> Self {
 		SymmetricKey(size: .bits256).dataRepresentation

@@ -24,7 +24,7 @@ extension Lexicon.Com.Atproto.Repo {
 				try JSONEncoder().encode(schema)
 			}
 
-			public struct Schema: Encodable {
+			public struct Schema: Encodable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Atproto.RecordKey
@@ -49,10 +49,11 @@ extension Lexicon.Com.Atproto.Repo {
 					self.swapCommit = swapCommit
 					self.swapRecord = swapRecord
 				}
+			}
+			public let schema: Schema
 
-				public func httpBody() throws -> Data {
-					try JSONEncoder().encode(self)
-				}
+			public init(schema: Schema) {
+				self.schema = schema
 			}
 		}
 
@@ -65,6 +66,12 @@ extension Lexicon.Com.Atproto.Repo {
 		public let cid: String
 		//commit: CommitMeta
 		public let validationStatus: String
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.PutRecord: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(["InvalidSwap"])
 	}
 }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import GermConvenience
+import HTTPTypes
 
 ///https://docs.bsky.app/docs/api/com-atproto-repo-create-record
 ///https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.createRecord/docs
@@ -23,7 +24,7 @@ extension Lexicon.Com.Atproto.Repo {
 				try JSONEncoder().encode(schema)
 			}
 
-			public struct Schema: Encodable {
+			public struct Schema: Encodable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Atproto.RecordKey?
@@ -45,14 +46,21 @@ extension Lexicon.Com.Atproto.Repo {
 					self.validate = validate
 					self.swapCommit = swapCommit
 				}
+			}
+			public let schema: Schema
 
-				public func httpBody() throws -> Data {
-					try JSONEncoder().encode(self)
-				}
+			public init(schema: Schema) {
+				self.schema = schema
 			}
 		}
 
 		public typealias Parameters = EmptyXRPCParameters
 		public typealias Output = PutRecordResult
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.CreateRecord: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(["InvalidSwap"])
 	}
 }

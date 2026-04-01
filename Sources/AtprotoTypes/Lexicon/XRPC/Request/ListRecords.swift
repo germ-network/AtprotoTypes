@@ -82,6 +82,12 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
+extension Lexicon.Com.Atproto.Repo.ListRecords: XRPCResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors
+	}
+}
+
 extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
 	public static func mock() -> Self {
 		.init(
