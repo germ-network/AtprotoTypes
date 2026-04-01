@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.1.1
+
+### Patch Changes
+
+- [#7](https://github.com/germ-network/AtprotoTypes/pull/7) [`4f3cc4b`](https://github.com/germ-network/AtprotoTypes/commit/4f3cc4bf65ab21834c2dfc74e1ffdc3779a567c0) Thanks [@germ-mark](https://github.com/germ-mark)! - correctly point to version 0.1.1 of GermConvenience instead of a branch
+
 ## 0.1.0
 
 ### Minor Changes
