@@ -7,15 +7,17 @@
 //
 
 import Foundation
+import GermConvenience
 
 //https://docs.bsky.app/docs/api/com-atproto-repo-get-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.getRecord/docs
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/getRecord.json
 extension Lexicon.Com.Atproto.Repo {
+	//want this to be accessible without specifying the result type
 	public static let getRecordNSID: Atproto.NSID = "com.atproto.repo.getRecord"
 
 	public enum GetRecord<Result: AtprotoRecord>: XRPCRequest {
-		public struct Result: Sendable, Codable {
+		public struct Output: Sendable, Codable {
 
 			/// The URI of the record.
 			public let uri: String
@@ -33,9 +35,9 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 		}
 		public static var nsid: Atproto.NSID { getRecordNSID }
-		public static var acceptValue: String { "application/json" }
+		public static var outputEncoding: HTTPContentType { .json }
 
-		public struct Parameters: QueryParameters {
+		public struct Parameters: QueryParametrizable {
 			let repo: AtIdentifier
 			let rkey: Atproto.RecordKey
 			let cid: CID?
@@ -66,7 +68,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.GetRecord.Result: Mockable {
+extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable {
 	public static func mock() -> Self {
 		.init(
 			uri: UUID().uuidString,

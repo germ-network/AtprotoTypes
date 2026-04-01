@@ -15,11 +15,10 @@ import GermConvenience
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/sync/getBlob.json
 extension Lexicon.Com.Atproto.Sync {
 	public enum GetBlob: XRPCRequest {
-		public typealias Result = Data?
 		public static var nsid: Atproto.NSID { "com.atproto.sync.getBlob" }
-		public static let acceptValue = "*/*"
+		public static let outputEncoding: HTTPContentType = .any
 
-		public struct Parameters: QueryParameters {
+		public struct Parameters: QueryParametrizable {
 			/// The DID of the account.
 			let did: AtIdentifier
 
@@ -41,10 +40,11 @@ extension Lexicon.Com.Atproto.Sync {
 				]
 			}
 		}
+		public typealias Output = Data?
 	}
 }
 
-extension Lexicon.Com.Atproto.Sync.GetBlob.Result: Mockable {
+extension Lexicon.Com.Atproto.Sync.GetBlob.Output: Mockable {
 	public static func mock() -> Self {
 		SymmetricKey(size: .bits256).dataRepresentation
 	}
