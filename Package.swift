@@ -17,8 +17,7 @@ let package = Package(
 		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2"),
 		.package(
 			url: "https://github.com/germ-network/GermConvenience.git",
-			//			from: "0.1.0"
-			branch: "mark/add-any-content-type"
+			from: "0.1.1"
 		),
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",
