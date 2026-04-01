@@ -8,7 +8,7 @@
 
 extension Atproto {
 	/// https://atproto.com/specs/blob
-	public struct Blob: Sendable, Codable {
+	public struct Blob: Sendable, Codable, Equatable {
 
 		/// Type of the blob.
 		public let type: String?
@@ -35,7 +35,7 @@ extension Atproto {
 		public struct Reference: Sendable, Codable, Equatable, Hashable {
 
 			/// The link of the blob reference.
-			public let link: String
+			public let link: CID
 
 			enum CodingKeys: String, CodingKey {
 				case link = "$link"

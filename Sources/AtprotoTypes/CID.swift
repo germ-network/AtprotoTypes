@@ -10,7 +10,7 @@ import Foundation
 
 //https://dasl.ing/cid.html
 
-public struct CID: Sendable, Equatable {
+public struct CID: Sendable, Equatable, Hashable {
 	//todo: further parse components of the CID data such as the hash
 	let bytes: Data
 
