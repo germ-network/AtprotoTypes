@@ -91,6 +91,8 @@ extension Atproto.DID {
 			identifier: .init(
 				(1..<length)
 					.compactMap { _ in domainSet.randomElement() }
+
+					+ ".test"
 			)
 		)
 	}
