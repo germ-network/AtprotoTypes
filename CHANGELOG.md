@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.1.2
+
+### Patch Changes
+
+- [#9](https://github.com/germ-network/AtprotoTypes/pull/9) [`1c53ffa`](https://github.com/germ-network/AtprotoTypes/commit/1c53ffa69759fd022ca5fbf82a34d50da6c8244d) Thanks [@germ-mark](https://github.com/germ-mark)! - add a public init for Atproto.DiDDocument
+
 ## 0.1.1
 
 ### Patch Changes
