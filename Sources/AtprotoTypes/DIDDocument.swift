@@ -134,6 +134,12 @@ extension Atproto {
 
 		/// The endpoint URL for the service, specifying the location of the service.
 		public let serviceEndpoint: URL
+		
+		public init(id: String, type: String, serviceEndpoint: URL) {
+			self.id = id
+			self.type = type
+			self.serviceEndpoint = serviceEndpoint
+		}
 	}
 }
 
