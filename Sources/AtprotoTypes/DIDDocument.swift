@@ -87,6 +87,20 @@ extension Atproto {
 				//TODO: filter for "no path or other URI parts."
 				.first
 		}
+		
+		public init(
+			context: [String],
+			id: String,
+			alsoKnownAs: [String]?,
+			verificationMethod: [VerificationMethod],
+			service: [Service]
+		) {
+			self.context = context
+			self.id = id
+			self.alsoKnownAs = alsoKnownAs
+			self.verificationMethod = verificationMethod
+			self.service = service
+		}
 	}
 
 	/// Describes a method for verifying digital signatures in the AT Protocol, including the public
