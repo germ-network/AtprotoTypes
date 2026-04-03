@@ -54,11 +54,11 @@ extension Lexicon.Com.Atproto.Repo {
 		public typealias Parameters = EmptyXRPCParameters
 		public typealias Output = DeleteRecordResult
 	}
-	
+
 	public struct DeleteRecordResult: Decodable, Sendable {
 		public let commit: CommitMeta
 	}
-	
+
 	public struct CommitMeta: Decodable, Sendable {
 		public let cid: String
 		public let rev: String
