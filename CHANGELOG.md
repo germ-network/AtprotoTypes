@@ -1,5 +1,29 @@
 # @germ-network/atprototypes
 
+## 0.2.0
+
+### Minor Changes
+
+- [#11](https://github.com/germ-network/AtprotoTypes/pull/11) [`36c5500`](https://github.com/germ-network/AtprotoTypes/commit/36c5500959137da32d8ec8cbe9e00dfd4991725a) Thanks [@anna-germ](https://github.com/anna-germ)! - Add support for deleting records from repos
+
+  This adds support for the com.atproto.repo.deleteRecord lexicon procedure. When using this package with AtprotoClient, the following code can be used to delete a record from the authenticated account's repository:
+
+  ```
+  try await call(
+  	Lexicon.App.Bsky.Actor.GetProfile.self,
+  	parameters: .init(
+  		repo: .did(did),
+  		rkey: rkey
+  	)
+  )
+  ```
+
+- [#11](https://github.com/germ-network/AtprotoTypes/pull/11) [`586171e`](https://github.com/germ-network/AtprotoTypes/commit/586171e020d409644ebfb4ce92773e893774b380) Thanks [@anna-germ](https://github.com/anna-germ)! - Add record key struct and replace record key typealias
+
+### Patch Changes
+
+- [#11](https://github.com/germ-network/AtprotoTypes/pull/11) [`290c344`](https://github.com/germ-network/AtprotoTypes/commit/290c3447e2c24ffa6545fde353ab574f43636e71) Thanks [@anna-germ](https://github.com/anna-germ)! - Add Atproto TID type
+
 ## 0.1.2
 
 ### Patch Changes
