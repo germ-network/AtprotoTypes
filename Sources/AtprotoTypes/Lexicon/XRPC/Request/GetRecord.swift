@@ -57,7 +57,7 @@ extension Lexicon.Com.Atproto.Repo {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.wireFormat),
 					.init(name: "collection", value: Result.nsid),
-					.init(name: "rkey", value: rkey),
+					.init(name: "rkey", value: rkey.rawValue),
 				]
 				if let cid {
 					base.append(.init(name: "cid", value: cid.string))
