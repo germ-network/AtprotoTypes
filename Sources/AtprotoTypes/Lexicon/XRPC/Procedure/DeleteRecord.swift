@@ -52,12 +52,27 @@ extension Lexicon.Com.Atproto.Repo {
 		}
 
 		public typealias Parameters = EmptyXRPCParameters
-		public typealias Output = PutRecordResult
+		public typealias Output = DeleteRecordResult
+	}
+	
+	public struct DeleteRecordResult: Decodable, Sendable {
+		public let commit: CommitMeta
+	}
+	
+	public struct CommitMeta: Decodable, Sendable {
+		public let cid: String
+		public let rev: String
 	}
 }
 
 extension Lexicon.Com.Atproto.Repo.DeleteRecord: XRPCResponseParsing {
 	public static var badRequestErrors: Set<String> {
 		defaultErrors.union(["InvalidSwap"])
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
+	public static func mock() -> Lexicon.Com.Atproto.Repo.DeleteRecordResult {
+		.init(commit: .init(cid: "example", rev: "example"))
 	}
 }
