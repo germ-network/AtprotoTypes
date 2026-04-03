@@ -60,8 +60,8 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 
 	public struct CommitMeta: Decodable, Sendable {
-		public let cid: String
-		public let rev: String
+		public let cid: CID
+		public let rev: Atproto.TID
 	}
 }
 
@@ -73,6 +73,6 @@ extension Lexicon.Com.Atproto.Repo.DeleteRecord: XRPCResponseParsing {
 
 extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
 	public static func mock() -> Lexicon.Com.Atproto.Repo.DeleteRecordResult {
-		.init(commit: .init(cid: "example", rev: "example"))
+		.init(commit: .init(cid: .mock(), rev: .mock()))
 	}
 }

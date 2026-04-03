@@ -2,48 +2,68 @@
 //  Tid.swift
 //  AtprotoTypes
 //
-//  Created by Mark @ Germ on 4/3/26.
+//  Created by Anna and Mark on 4/3/26.
 //
 
 import Base32
 import Foundation
 
-//https://atproto.com/specs/record-key
+extension Atproto {
+	public struct TID: Sendable, Equatable, Hashable {
+		// TODO: parse it as an int64
+		private let stringEncoded: String
 
-public struct TID: Sendable, Equatable, Hashable {
-	//todo: further parse components of the CID data such as the hash
-	let bytes: Data
+		private static let allowedCharacters = CharacterSet(
+			charactersIn: "234567abcdefghijklmnopqrstuvwxyz")
+		private static let allowedPrefixCharacters = "234567abcdefghij"
+		private static let expectedLength = 13
 
-	private init(bytes: Data) {
-		self.bytes = bytes
-	}
+		public init(string: String) throws {
+			guard let prefix = string.first,
+				Self.allowedPrefixCharacters.contains(prefix)
+			else {
+				throw Atproto.TIDError.wrongPrefix
+			}
 
-	public init(string: String) throws {
-		guard let prefix = string.first, prefix == "b" else {
-			throw AtprotoTypeError.invalidPrefix
+			guard string.count == Self.expectedLength else {
+				throw Atproto.TIDError.wrongLength
+			}
+
+			guard
+				Self.allowedCharacters.isSuperset(
+					of: CharacterSet(charactersIn: string))
+			else {
+				throw Atproto.TIDError.disallowedCharacter
+			}
+
+			self.stringEncoded = string
 		}
-		let body = String(string.dropFirst())
 
-		//cautious about the force unwraps in the Base32 module
-		guard !body.isEmpty else {
-			throw AtprotoTypeError.invalidBase32Data
+		private init(knownValue: String) {
+			self.stringEncoded = knownValue
 		}
 
-		guard let decoded = body.base32DecodedData else {
-			throw AtprotoTypeError.invalidBase32Data
-		}
-
-		bytes = decoded
-	}
-
-	public var string: String {
-		// CID is DASL-compatible (https://atproto.com/specs/data-model)
-		// and DASL CID uses lowercase base-32 (https://dasl.ing/cid.html)
-		"b" + bytes.base32EncodedStringNoPadding.lowercased()
+		public var stringRepresentation: String { stringEncoded }
 	}
 }
 
-extension CID: Codable {
+extension Atproto {
+	public enum TIDError: LocalizedError {
+		case wrongLength
+		case wrongPrefix
+		case disallowedCharacter
+
+		public var errorDescription: String? {
+			switch self {
+			case .wrongLength: "Wrong length"
+			case .wrongPrefix: "Wrong prefix"
+			case .disallowedCharacter: "Disallowed character"
+			}
+		}
+	}
+}
+
+extension Atproto.TID: Codable {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.singleValueContainer()
 		self = try .init(string: container.decode(String.self))
@@ -51,13 +71,18 @@ extension CID: Codable {
 
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
-		try container.encode(self.string)
+		try container.encode(self.stringEncoded)
 	}
 }
 
-extension CID {
+extension Atproto.TID: Mockable {
+	static let base32SortableCharacters = "234567abcdefghijklmnopqrstuvwxyz"
+
 	static public func mock() -> Self {
-		//TODO, mock the internal mechanics of CID
-		.init(bytes: Data("mock".utf8))
+		let prefix = Self.allowedPrefixCharacters.randomElement() ?? "2"
+		let suffix = String(
+			(1..<13).map { _ in base32SortableCharacters.randomElement() ?? "2" }
+		)
+		return .init(knownValue: .init(prefix) + suffix)
 	}
 }
