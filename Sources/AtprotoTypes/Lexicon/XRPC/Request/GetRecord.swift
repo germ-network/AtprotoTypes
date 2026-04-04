@@ -40,12 +40,12 @@ extension Lexicon.Com.Atproto.Repo {
 
 		public struct Parameters: QueryParametrizable {
 			let repo: AtIdentifier
-			let rkey: Atproto.RecordKey
+			let rkey: Result.Key
 			let cid: CID?
 
 			public init(
 				repo: AtIdentifier,
-				rkey: Atproto.RecordKey,
+				rkey: Result.Key,
 				cid: CID?
 			) {
 				self.repo = repo
@@ -57,7 +57,7 @@ extension Lexicon.Com.Atproto.Repo {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.wireFormat),
 					.init(name: "collection", value: Result.nsid),
-					.init(name: "rkey", value: rkey.rawValue),
+					.init(name: "rkey", value: rkey.stringRepresentation),
 				]
 				if let cid {
 					base.append(.init(name: "cid", value: cid.string))
