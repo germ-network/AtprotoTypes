@@ -19,6 +19,8 @@ extension Lexicon {
 		public var stringRepresentation: String {
 			Self.fixedValue
 		}
+		
+		public init() {}
 	}
 }
 
