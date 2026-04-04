@@ -32,7 +32,7 @@ extension Atproto {
 			self.rawValue = rawValue
 		}
 
-		private init(knownValue: String) {
+		init(knownValue: String) {
 			self.rawValue = knownValue
 		}
 	}
