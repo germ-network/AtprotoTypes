@@ -24,9 +24,20 @@ public enum AtIdentifier: Sendable {
 	}
 }
 
-extension AtIdentifier: Encodable {
+extension AtIdentifier: Codable {
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(self.wireFormat)
+	}
+
+	public init(from decoder: any Decoder) throws {
+		let container = try decoder.singleValueContainer()
+		let string = try container.decode(String.self)
+
+		if let did = try? Atproto.DID(string: string) {
+			self = .did(did)
+		} else {
+			self = .handle(string)
+		}
 	}
 }
