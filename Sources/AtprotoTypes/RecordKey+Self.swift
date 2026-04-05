@@ -8,7 +8,7 @@
 import Foundation
 
 extension Atproto.RecordKey {
-	static let literalSelf = Atproto.RecordKey(knownValue: "self")
+	public static let literalSelf = Atproto.RecordKey(knownValue: "self")
 }
 
 public protocol SelfIdentifiedRecord: AtprotoRecord {}
