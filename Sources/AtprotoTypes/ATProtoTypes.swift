@@ -7,4 +7,7 @@ public enum Atproto {
 
 	///https://atproto.com/specs/handle
 	public typealias Handle = String
+	
+	///https://atproto.com/specs/at-uri-scheme
+	public typealias ATURI = String
 }
