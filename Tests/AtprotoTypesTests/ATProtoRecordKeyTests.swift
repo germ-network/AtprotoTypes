@@ -11,11 +11,11 @@ import Testing
 
 struct AtprotoRecordKeyTests {
 	@Test func testParse() throws {
-		#expect(throws: Atproto.RecordKeyError.wrongLength) {
+		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
 			let _ = try Lexicon.AnyRecordKey(rawValue: "")
 		}
 
-		#expect(throws: Atproto.RecordKeyError.wrongLength) {
+		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
 			let _ = try Lexicon.AnyRecordKey(
 				rawValue: String(repeating: "a", count: 513))
 		}
