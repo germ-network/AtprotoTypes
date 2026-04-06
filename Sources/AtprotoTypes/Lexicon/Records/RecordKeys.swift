@@ -9,6 +9,7 @@ import Foundation
 
 extension Lexicon {
 	public protocol RecordKey: Codable, Sendable {
+		init(string: String) throws
 		var stringRepresentation: String { get }
 	}
 
@@ -36,14 +37,28 @@ extension Lexicon.LiteralRecordKey {
 	static public func defaultValue() -> Self {
 		.init()
 	}
+	
+	public init(string: String) throws {
+		guard string == Self.fixedValue else {
+			throw Lexicon.RecordKeyError.incorrectLiteral
+		}
+		self.init()
+	}
 }
 
 extension Lexicon.AnyRecordKey: Lexicon.RecordKey {
 	public var stringRepresentation: String { rawValue }
+	public init(string: String) throws {
+		try self.init(rawValue: string)
+	}
 }
 extension Atproto.TID: Lexicon.RecordKey {}
 extension Atproto.NSID: Lexicon.RecordKey {
 	public var stringRepresentation: String {
 		self
+	}
+	
+	public init(string: String) throws {
+		self = string
 	}
 }

@@ -20,13 +20,13 @@ extension Lexicon {
 				Self.allowedCharacters.isSuperset(
 					of: CharacterSet(charactersIn: rawValue))
 			else {
-				throw Atproto.RecordKeyError.disallowedCharacter
+				throw Lexicon.RecordKeyError.disallowedCharacter
 			}
 			guard (1...512).contains(rawValue.count) else {
-				throw Atproto.RecordKeyError.wrongLength
+				throw Lexicon.RecordKeyError.wrongLength
 			}
 			guard ![".", ".."].contains(rawValue) else {
-				throw Atproto.RecordKeyError.disallowedKeyValue
+				throw Lexicon.RecordKeyError.disallowedKeyValue
 			}
 			self.rawValue = rawValue
 		}
@@ -74,17 +74,19 @@ extension Lexicon.AnyRecordKey: Mockable {
 	}
 }
 
-extension Atproto {
+extension Lexicon {
 	public enum RecordKeyError: LocalizedError {
 		case wrongLength
 		case disallowedCharacter
 		case disallowedKeyValue
+		case incorrectLiteral
 
 		public var errorDescription: String? {
 			switch self {
 			case .wrongLength: "Wrong length"
 			case .disallowedCharacter: "Disallowed character"
 			case .disallowedKeyValue: "Disallowed key value"
+			case .incorrectLiteral: "Incorrect literal"
 			}
 		}
 	}
