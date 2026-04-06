@@ -11,16 +11,30 @@ extension Lexicon {
 	public protocol RecordKey: Codable, Sendable {
 		var stringRepresentation: String { get }
 	}
-	public protocol LiteralRecordKey: RecordKey {
+
+	//may be dynamic as in a TID or a single fixed value as in a Literal
+	public protocol DefaultableRecordKey: RecordKey {
+		static func defaultValue() -> Self
+	}
+
+	public protocol LiteralRecordKey: DefaultableRecordKey {
+		init()
 		static var fixedValue: String { get }
 	}
+
 	public struct LiteralSelfRecordKey: LiteralRecordKey {
-		public static let fixedValue: String = "self"
+		public static var fixedValue: String { "self" }
 		public var stringRepresentation: String {
 			Self.fixedValue
 		}
-		
+
 		public init() {}
+	}
+}
+
+extension Lexicon.LiteralRecordKey {
+	static public func defaultValue() -> Self {
+		.init()
 	}
 }
 
