@@ -24,7 +24,7 @@ extension Lexicon.Com.Atproto.Repo {
 				try JSONEncoder().encode(schema)
 			}
 
-			public struct Schema: Encodable, Sendable {
+			public struct Schema: Codable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Record.Key
