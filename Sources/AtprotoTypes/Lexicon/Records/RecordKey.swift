@@ -2,75 +2,58 @@
 //  RecordKey.swift
 //  AtprotoTypes
 //
-//  Created by Anna on 4/3/26.
+//  Created by Mark @ Germ on 4/3/26.
 //
 
 import Foundation
 
-///https://atproto.com/specs/record-key
 extension Lexicon {
-	public struct AnyRecordKey: Sendable, Equatable {
-		public let rawValue: String
+	public protocol RecordKey: Codable, Sendable {
+		init(string: String) throws
+		var stringRepresentation: String { get }
+	}
 
-		private static let allowedCharacters = CharacterSet.alphanumerics.union(
-			CharacterSet(charactersIn: ".-_:~"))
+	//may be dynamic as in a TID or a single fixed value as in a Literal
+	public protocol DefaultableRecordKey: RecordKey {
+		static func defaultValue() -> Self
+	}
 
-		public init(rawValue: String) throws {
-			guard
-				Self.allowedCharacters.isSuperset(
-					of: CharacterSet(charactersIn: rawValue))
-			else {
-				throw Lexicon.RecordKeyError.disallowedCharacter
-			}
-			guard (1...512).contains(rawValue.count) else {
-				throw Lexicon.RecordKeyError.wrongLength
-			}
-			guard ![".", ".."].contains(rawValue) else {
-				throw Lexicon.RecordKeyError.disallowedKeyValue
-			}
-			self.rawValue = rawValue
+	public protocol LiteralRecordKey: DefaultableRecordKey {
+		init()
+		static var fixedValue: String { get }
+	}
+
+	public struct LiteralSelfRecordKey: LiteralRecordKey {
+		public static var fixedValue: String { "self" }
+		public var stringRepresentation: String {
+			Self.fixedValue
 		}
-
-		init(knownValue: String) {
-			self.rawValue = knownValue
-		}
+		public init() {}
 	}
 }
 
-//code it as the bare string so we can type fields
-extension Lexicon.AnyRecordKey: Codable {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		self = try .init(rawValue: container.decode(String.self))
+extension Lexicon.LiteralRecordKey {
+	static public func defaultValue() -> Self {
+		.init()
 	}
 
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(rawValue)
+	public init(string: String) throws {
+		guard string == Self.fixedValue else {
+			throw Lexicon.RecordKeyError.incorrectLiteral
+		}
+		self.init()
 	}
 }
 
-extension Lexicon.AnyRecordKey: Mockable {
-	//generate test did per the spec https://github.com/did-method-plc/did-method-plc
-	static let lowercaseAlpha = (UInt8(ascii: "a")...UInt8(ascii: "z"))
-		.map { Character(UnicodeScalar($0)) }
+extension Atproto.TID: Lexicon.RecordKey {}
 
-	static let numeric = (UInt8(ascii: "0")...UInt8(ascii: "9"))
-		.map { Character(UnicodeScalar($0)) }
-	static let base32Set: [Character] = lowercaseAlpha + numeric
+extension Atproto.NSID: Lexicon.RecordKey {
+	public var stringRepresentation: String {
+		self
+	}
 
-	//for web
-	static let uppercaseAlpha = (UInt8(ascii: "A")...UInt8(ascii: "Z"))
-		.map { Character(UnicodeScalar($0)) }
-	static let domainSet =
-		lowercaseAlpha + uppercaseAlpha + numeric + [".", "-", "_", ":", "~"]
-
-	public static func mock() -> Lexicon.AnyRecordKey {
-		.init(
-			knownValue: String(
-				(3...512).compactMap { _ in domainSet.randomElement() }
-			)
-		)
+	public init(string: String) throws {
+		self = string
 	}
 }
 
