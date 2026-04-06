@@ -1,5 +1,19 @@
 # @germ-network/atprototypes
 
+## 0.2.1
+
+### Patch Changes
+
+- [#13](https://github.com/germ-network/AtprotoTypes/pull/13) [`b23c992`](https://github.com/germ-network/AtprotoTypes/commit/b23c99210d22187d6b1aa115fb1f167405cc89ce) Thanks [@anna-germ](https://github.com/anna-germ)! - Add AT URI type
+
+- [#13](https://github.com/germ-network/AtprotoTypes/pull/13) [`0746bcc`](https://github.com/germ-network/AtprotoTypes/commit/0746bcc67b2ccbbdce8629d84300c47a82c30422) Thanks [@anna-germ](https://github.com/anna-germ)! - Make AtIdentifier Decodable
+
+- [#15](https://github.com/germ-network/AtprotoTypes/pull/15) [`17e2176`](https://github.com/germ-network/AtprotoTypes/commit/17e21768474c3c80ed960b9d2fa6b975855c7891) Thanks [@germ-mark](https://github.com/germ-mark)! - Add a DefaultableRecordKey protocol for literal and TID record keys
+
+- [#14](https://github.com/germ-network/AtprotoTypes/pull/14) [`eff8af3`](https://github.com/germ-network/AtprotoTypes/commit/eff8af3b115ae848fac1ce0ca82c05cf359bac4c) Thanks [@germ-mark](https://github.com/germ-mark)! - Change to a RecordKey Protocol, which has
+  - a LiteralRecordKey protocol for literals
+  - conformance for the AnyRecordKey, NSID, and TID Record key types
+
 ## 0.2.0
 
 ### Minor Changes
