@@ -2,4 +2,6 @@
 "@germ-network/atprototypes": patch
 ---
 
-Add literal self RecordKey and a SelfIdentifiedRecord protocol for Atproto records
+Change to a RecordKey Protocol, which has
+* a LiteralRecordKey protocol for literals
+* conformance for the AnyRecordKey, NSID, and TID Record key types
