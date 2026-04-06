@@ -27,14 +27,14 @@ extension Lexicon.Com.Atproto.Repo {
 			public struct Schema: Encodable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
-				let rkey: Atproto.RecordKey?
+				let rkey: Record.Key?
 				let record: Record
 				let validate: Bool?
 				let swapCommit: CID?
 
 				public init(
 					repo: AtIdentifier,
-					rkey: Atproto.RecordKey?,
+					rkey: Record.Key?,
 					record: Record,
 					validate: Bool? = nil,
 					swapCommit: CID? = nil,

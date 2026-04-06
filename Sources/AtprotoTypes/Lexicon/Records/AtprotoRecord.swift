@@ -10,6 +10,7 @@ import Foundation
 ///define the interface needed to get/put a record
 public protocol AtprotoRecord: Sendable, Codable, Mockable {
 	static var nsid: String { get }
+	associatedtype Key: Lexicon.RecordKey
 }
 
 public protocol Mockable {
