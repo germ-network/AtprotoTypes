@@ -11,19 +11,20 @@ import Testing
 
 struct AtprotoRecordKeyTests {
 	@Test func testParse() throws {
-		#expect(throws: Atproto.RecordKeyError.wrongLength) {
-			let _ = try Atproto.RecordKey(rawValue: "")
+		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
+			let _ = try Lexicon.AnyRecordKey(rawValue: "")
 		}
 
-		#expect(throws: Atproto.RecordKeyError.wrongLength) {
-			let _ = try Atproto.RecordKey(rawValue: String(repeating: "a", count: 513))
+		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
+			let _ = try Lexicon.AnyRecordKey(
+				rawValue: String(repeating: "a", count: 513))
 		}
 	}
 
 	@Test func testEncodingDecoding() throws {
-		let rkey = Atproto.RecordKey.mock()
+		let rkey = Lexicon.AnyRecordKey.mock()
 		let encoded = try JSONEncoder().encode(rkey)
-		let decoded = try JSONDecoder().decode(Atproto.RecordKey.self, from: encoded)
+		let decoded = try JSONDecoder().decode(Lexicon.AnyRecordKey.self, from: encoded)
 		#expect(rkey == decoded)
 	}
 
