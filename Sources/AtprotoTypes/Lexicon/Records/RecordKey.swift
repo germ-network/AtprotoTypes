@@ -8,9 +8,8 @@
 import Foundation
 
 ///https://atproto.com/specs/record-key
-
-extension Atproto {
-	public struct RecordKey: Sendable, Equatable {
+extension Lexicon {
+	public struct AnyRecordKey: Sendable, Equatable {
 		public let rawValue: String
 
 		private static let allowedCharacters = CharacterSet.alphanumerics.union(
@@ -21,13 +20,13 @@ extension Atproto {
 				Self.allowedCharacters.isSuperset(
 					of: CharacterSet(charactersIn: rawValue))
 			else {
-				throw Atproto.RecordKeyError.disallowedCharacter
+				throw Lexicon.RecordKeyError.disallowedCharacter
 			}
 			guard (1...512).contains(rawValue.count) else {
-				throw Atproto.RecordKeyError.wrongLength
+				throw Lexicon.RecordKeyError.wrongLength
 			}
 			guard ![".", ".."].contains(rawValue) else {
-				throw Atproto.RecordKeyError.disallowedKeyValue
+				throw Lexicon.RecordKeyError.disallowedKeyValue
 			}
 			self.rawValue = rawValue
 		}
@@ -39,7 +38,7 @@ extension Atproto {
 }
 
 //code it as the bare string so we can type fields
-extension Atproto.RecordKey: Codable {
+extension Lexicon.AnyRecordKey: Codable {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.singleValueContainer()
 		self = try .init(rawValue: container.decode(String.self))
@@ -51,7 +50,7 @@ extension Atproto.RecordKey: Codable {
 	}
 }
 
-extension Atproto.RecordKey: Mockable {
+extension Lexicon.AnyRecordKey: Mockable {
 	//generate test did per the spec https://github.com/did-method-plc/did-method-plc
 	static let lowercaseAlpha = (UInt8(ascii: "a")...UInt8(ascii: "z"))
 		.map { Character(UnicodeScalar($0)) }
@@ -66,7 +65,7 @@ extension Atproto.RecordKey: Mockable {
 	static let domainSet =
 		lowercaseAlpha + uppercaseAlpha + numeric + [".", "-", "_", ":", "~"]
 
-	public static func mock() -> Atproto.RecordKey {
+	public static func mock() -> Lexicon.AnyRecordKey {
 		.init(
 			knownValue: String(
 				(3...512).compactMap { _ in domainSet.randomElement() }
@@ -75,17 +74,19 @@ extension Atproto.RecordKey: Mockable {
 	}
 }
 
-extension Atproto {
+extension Lexicon {
 	public enum RecordKeyError: LocalizedError {
 		case wrongLength
 		case disallowedCharacter
 		case disallowedKeyValue
+		case incorrectLiteral
 
 		public var errorDescription: String? {
 			switch self {
 			case .wrongLength: "Wrong length"
 			case .disallowedCharacter: "Disallowed character"
 			case .disallowedKeyValue: "Disallowed key value"
+			case .incorrectLiteral: "Incorrect literal"
 			}
 		}
 	}
