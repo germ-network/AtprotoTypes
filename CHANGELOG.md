@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.2.2
+
+### Patch Changes
+
+- [#17](https://github.com/germ-network/AtprotoTypes/pull/17) [`2676c83`](https://github.com/germ-network/AtprotoTypes/commit/2676c831876836d61c504b40c0c6e4079ed7b195) Thanks [@germ-mark](https://github.com/germ-mark)! - allow PutRecordResult encoding, access to PutRecord Input Schema properties for testing, remove duplicate PutRecord lexicon definiton
+
 ## 0.2.1
 
 ### Patch Changes
