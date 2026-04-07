@@ -25,10 +25,10 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 
 			public struct Schema: Codable, Sendable {
-				let repo: AtIdentifier
-				let collection: Atproto.NSID
-				let rkey: Record.Key
-				let record: Record
+				public let repo: AtIdentifier
+				public let collection: Atproto.NSID
+				public let rkey: Record.Key
+				public let record: Record
 				let validate: Bool?
 				let swapCommit: CID?
 				let swapRecord: CID?
@@ -61,11 +61,22 @@ extension Lexicon.Com.Atproto.Repo {
 		public typealias Output = PutRecordResult
 	}
 
-	public struct PutRecordResult: Decodable, Sendable {
+	public struct PutRecordResult: Codable, Sendable {
 		public let uri: String
 		public let cid: String
 		//commit: CommitMeta
 		public let validationStatus: String
+		
+		enum ValidationStatus: String {
+			case valid
+			case unknown
+		}
+		
+		public init(uri: String, cid: String, validationStatus: String) {
+			self.uri = uri
+			self.cid = cid
+			self.validationStatus = validationStatus
+		}
 	}
 }
 
