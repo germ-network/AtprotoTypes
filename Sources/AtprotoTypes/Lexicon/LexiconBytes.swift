@@ -14,7 +14,7 @@ public struct LexiconBytes: Codable, Equatable, Hashable, Sendable {
 		self.bytes = bytes
 	}
 
-	enum CodingKeys: String, CodingKey {
+	public enum CodingKeys: String, CodingKey {
 		case bytes = "$bytes"
 	}
 }
