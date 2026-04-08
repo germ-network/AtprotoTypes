@@ -18,20 +18,32 @@ extension Lexicon {
 		static func defaultValue() -> Self
 	}
 
-	public protocol LiteralRecordKey: DefaultableRecordKey {
+	public protocol LiteralRecordKey: Equatable, DefaultableRecordKey {
 		init()
 		static var fixedValue: String { get }
 	}
 
 	public struct LiteralSelfRecordKey: LiteralRecordKey {
 		public static var fixedValue: String { "self" }
-		public var stringRepresentation: String {
-			Self.fixedValue
-		}
 		public init() {}
 	}
 }
 
+//default implementation of codable
+extension Lexicon.LiteralRecordKey {
+	public init(from decoder: any Decoder) throws {
+		let container = try decoder.singleValueContainer()
+		let string = try container.decode(String.self)
+		try self.init(string: string)
+	}
+
+	public func encode(to encoder: any Encoder) throws {
+		var container = encoder.singleValueContainer()
+		try container.encode(stringRepresentation)
+	}
+}
+
+//default implementations to comform to RecordKey /
 extension Lexicon.LiteralRecordKey {
 	static public func defaultValue() -> Self {
 		.init()
@@ -42,6 +54,10 @@ extension Lexicon.LiteralRecordKey {
 			throw Lexicon.RecordKeyError.incorrectLiteral
 		}
 		self.init()
+	}
+
+	public var stringRepresentation: String {
+		Self.fixedValue
 	}
 }
 
