@@ -1,5 +1,15 @@
 # @germ-network/atprototypes
 
+## 0.2.3
+
+### Patch Changes
+
+- [#19](https://github.com/germ-network/AtprotoTypes/pull/19) [`289cc57`](https://github.com/germ-network/AtprotoTypes/commit/289cc5759dd28284942b6ea0097e55af388b4d2f) Thanks [@germ-mark](https://github.com/germ-mark)! - Make LexiconBytes' CodingKeys public
+  Make LiteralRecordKey Equatable
+  Add default implementation of Codable to LiteralRecordKey
+  Import HTTPTypes as a dependency
+  Add LiteralRecordKey tests
+
 ## 0.2.2
 
 ### Patch Changes
