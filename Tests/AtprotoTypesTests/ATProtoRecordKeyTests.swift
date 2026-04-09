@@ -28,4 +28,33 @@ struct AtprotoRecordKeyTests {
 		#expect(rkey == decoded)
 	}
 
+	@Test func testLiteralSelf() throws {
+		let rkey = Lexicon.LiteralSelfRecordKey()
+		let encoded = try JSONEncoder().encode(rkey)
+
+		#expect(encoded == "\"\(Lexicon.LiteralSelfRecordKey.fixedValue)\"".utf8Data)
+
+		let decoded = try JSONDecoder().decode(
+			Lexicon.LiteralSelfRecordKey.self,
+			from: encoded
+		)
+		#expect(rkey == decoded)
+	}
+
+	struct MockLiteralKey: Lexicon.LiteralRecordKey {
+		static var fixedValue: String { "mock" }
+	}
+
+	@Test func testCustomLiteral() throws {
+		let rkey = MockLiteralKey()
+		let encoded = try JSONEncoder().encode(rkey)
+
+		#expect(encoded == "\"\(MockLiteralKey.fixedValue)\"".utf8Data)
+
+		let decoded = try JSONDecoder().decode(
+			MockLiteralKey.self,
+			from: encoded
+		)
+		#expect(rkey == decoded)
+	}
 }

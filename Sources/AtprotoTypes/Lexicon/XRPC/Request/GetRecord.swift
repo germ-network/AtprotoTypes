@@ -8,7 +8,6 @@
 
 import Foundation
 import GermConvenience
-import HTTPTypes
 
 //https://docs.bsky.app/docs/api/com-atproto-repo-get-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.getRecord/docs

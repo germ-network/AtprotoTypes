@@ -66,12 +66,12 @@ extension Lexicon.Com.Atproto.Repo {
 		public let cid: String
 		//commit: CommitMeta
 		public let validationStatus: String
-		
+
 		enum ValidationStatus: String {
 			case valid
 			case unknown
 		}
-		
+
 		public init(uri: String, cid: String, validationStatus: String) {
 			self.uri = uri
 			self.cid = cid
