@@ -54,13 +54,21 @@ extension Lexicon.Com.Atproto.Repo {
 		public typealias Output = DeleteRecordResult
 	}
 
-	public struct DeleteRecordResult: Decodable, Sendable {
+	public struct DeleteRecordResult: Codable, Sendable {
 		public let commit: CommitMeta
+		
+		public init(commit: CommitMeta) {
+			self.commit = commit
+		}
 	}
 
-	public struct CommitMeta: Decodable, Sendable {
+	public struct CommitMeta: Codable, Sendable {
 		public let cid: CID
 		public let rev: Atproto.TID
+		public init(cid: CID, rev: Atproto.TID) {
+			self.cid = cid
+			self.rev = rev
+		}
 	}
 }
 
