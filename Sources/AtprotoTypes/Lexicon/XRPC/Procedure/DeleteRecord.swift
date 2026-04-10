@@ -26,7 +26,7 @@ extension Lexicon.Com.Atproto.Repo {
 			public struct Schema: Encodable, Sendable {
 				let repo: AtIdentifier
 				let collection: Atproto.NSID
-				let rkey: Record.Key?
+				let rkey: Record.Key
 				let swapRecord: CID?
 				let swapCommit: CID?
 
