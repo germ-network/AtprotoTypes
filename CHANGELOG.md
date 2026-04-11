@@ -1,5 +1,13 @@
 # @germ-network/atprototypes
 
+## 0.3.0
+
+### Minor Changes
+
+- [#21](https://github.com/germ-network/AtprotoTypes/pull/21) [`abb4eaa`](https://github.com/germ-network/AtprotoTypes/commit/abb4eaacbb0aaed5fa9ed587781fec9cd267da7e) Thanks [@germ-mark](https://github.com/germ-mark)! - remove duplicate AtIdentifier.Handle typealias
+
+- [#21](https://github.com/germ-network/AtprotoTypes/pull/21) [`3405f4b`](https://github.com/germ-network/AtprotoTypes/commit/3405f4bd684a205395d7bffdfca78f650dca5f77) Thanks [@germ-mark](https://github.com/germ-mark)! - fix schema for Lexicon.Com.Atproto.Repo.DeleteRecord to specify required rkey
+
 ## 0.2.3
 
 ### Patch Changes
