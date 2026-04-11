@@ -10,9 +10,7 @@ import Foundation
 ///parameters take a did or handle
 ///https://atproto.com/specs/lexicon#string-formats
 public enum AtIdentifier: Sendable {
-	public typealias Handle = String
-
-	case handle(Handle)
+	case handle(Atproto.Handle)
 	case did(Atproto.DID)
 
 	//over the wire, passed as a string
