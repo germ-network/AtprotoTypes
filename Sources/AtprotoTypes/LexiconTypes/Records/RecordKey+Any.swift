@@ -8,7 +8,7 @@
 import Foundation
 
 ///https://atproto.com/specs/record-key
-extension Lexicon {
+extension LexiconTypes {
 	public struct AnyRecordKey: Sendable, Equatable {
 		public let rawValue: String
 
@@ -37,7 +37,7 @@ extension Lexicon {
 	}
 }
 
-extension Lexicon.AnyRecordKey: Lexicon.RecordKey {
+extension LexiconTypes.AnyRecordKey: LexiconTypes.RecordKey {
 	public var stringRepresentation: String { rawValue }
 	public init(string: String) throws {
 		try self.init(rawValue: string)
@@ -45,7 +45,7 @@ extension Lexicon.AnyRecordKey: Lexicon.RecordKey {
 }
 
 //code it as the bare string so we can type fields
-extension Lexicon.AnyRecordKey: Codable {
+extension LexiconTypes.AnyRecordKey: Codable {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.singleValueContainer()
 		self = try .init(rawValue: container.decode(String.self))
@@ -57,7 +57,7 @@ extension Lexicon.AnyRecordKey: Codable {
 	}
 }
 
-extension Lexicon.AnyRecordKey: Mockable {
+extension LexiconTypes.AnyRecordKey: Mockable {
 	//generate test did per the spec https://github.com/did-method-plc/did-method-plc
 	static let lowercaseAlpha = (UInt8(ascii: "a")...UInt8(ascii: "z"))
 		.map { Character(UnicodeScalar($0)) }
@@ -72,7 +72,7 @@ extension Lexicon.AnyRecordKey: Mockable {
 	static let domainSet =
 		lowercaseAlpha + uppercaseAlpha + numeric + [".", "-", "_", ":", "~"]
 
-	public static func mock() -> Lexicon.AnyRecordKey {
+	public static func mock() -> LexiconTypes.AnyRecordKey {
 		.init(
 			knownValue: String(
 				(3...512).compactMap { _ in domainSet.randomElement() }

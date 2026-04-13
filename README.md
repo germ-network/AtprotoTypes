@@ -8,6 +8,11 @@ Applications are expected to define their own lexicon types, see [AtprotoOAuth](
 
 We intend to demonstrate codegen for defining swift types from lexicon.
 
+# Namespacing
+
+* The `Lexicon` namespace is for lexicon types in reverse DNS format
+
+
 ### Linting and Practices
 The repo has a .editorconfig and .swift-format setup. We use both swift
 formatter and linter:

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Lexicon {
+public enum LexiconTypes {
 	public protocol RecordKey: Codable, Sendable {
 		init(string: String) throws
 		var stringRepresentation: String { get }
@@ -23,14 +23,14 @@ extension Lexicon {
 		static var fixedValue: String { get }
 	}
 
-	public struct LiteralSelfRecordKey: LiteralRecordKey {
+	public struct LiteralSelfRecordKey: LexiconTypes.LiteralRecordKey {
 		public static var fixedValue: String { "self" }
 		public init() {}
 	}
 }
 
 //default implementation of codable
-extension Lexicon.LiteralRecordKey {
+extension LexiconTypes.LiteralRecordKey {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.singleValueContainer()
 		let string = try container.decode(String.self)
@@ -44,7 +44,7 @@ extension Lexicon.LiteralRecordKey {
 }
 
 //default implementations to comform to RecordKey /
-extension Lexicon.LiteralRecordKey {
+extension LexiconTypes.LiteralRecordKey {
 	static public func defaultValue() -> Self {
 		.init()
 	}
@@ -61,9 +61,9 @@ extension Lexicon.LiteralRecordKey {
 	}
 }
 
-extension Atproto.TID: Lexicon.RecordKey {}
+extension Atproto.TID: LexiconTypes.RecordKey {}
 
-extension Atproto.NSID: Lexicon.RecordKey {
+extension Atproto.NSID: LexiconTypes.RecordKey {
 	public var stringRepresentation: String {
 		self
 	}

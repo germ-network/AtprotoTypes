@@ -13,7 +13,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public static let deleteRecordNSID: Atproto.NSID = "com.atproto.repo.deleteRecord"
 
-	public enum DeleteRecord<Record: AtprotoRecord>: XRPCProcedure {
+	public enum DeleteRecord<Record: Atproto.Record>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { deleteRecordNSID }
 		public static var outputEncoding: HTTPContentType { .json }
 
@@ -24,14 +24,14 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 
 			public struct Schema: Encodable, Sendable {
-				let repo: AtIdentifier
+				let repo: LexiconString.AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Record.Key
 				let swapRecord: CID?
 				let swapCommit: CID?
 
 				public init(
-					repo: AtIdentifier,
+					repo: LexiconString.AtIdentifier,
 					rkey: Record.Key,
 					swapRecord: CID? = nil,
 					swapCommit: CID? = nil,
@@ -56,7 +56,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public struct DeleteRecordResult: Codable, Sendable {
 		public let commit: CommitMeta
-		
+
 		public init(commit: CommitMeta) {
 			self.commit = commit
 		}

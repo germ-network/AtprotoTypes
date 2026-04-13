@@ -13,7 +13,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public static let putRecordNSID: Atproto.NSID = "com.atproto.repo.putRecord"
 
-	public enum PutRecord<Record: AtprotoRecord>: XRPCProcedure {
+	public enum PutRecord<Record: Atproto.Record>: XRPCProcedure {
 		public static var nsid: Atproto.NSID { putRecordNSID }
 		public static var outputEncoding: HTTPContentType { .json }
 		public static var contentTypeValue: HTTPContentType { .json }
@@ -25,7 +25,7 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 
 			public struct Schema: Codable, Sendable {
-				public let repo: AtIdentifier
+				public let repo: LexiconString.AtIdentifier
 				public let collection: Atproto.NSID
 				public let rkey: Record.Key
 				public let record: Record
@@ -34,7 +34,7 @@ extension Lexicon.Com.Atproto.Repo {
 				let swapRecord: CID?
 
 				public init(
-					repo: AtIdentifier,
+					repo: LexiconString.AtIdentifier,
 					rkey: Record.Key,
 					record: Record,
 					validate: Bool? = nil,

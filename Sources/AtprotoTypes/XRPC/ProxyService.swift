@@ -28,6 +28,6 @@ public struct ProxyService: Equatable {
 	}
 
 	public var headerValue: String {
-		did.stringRepresentation + "#" + endpoint
+		did.string + "#" + endpoint
 	}
 }

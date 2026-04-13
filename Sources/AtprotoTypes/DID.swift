@@ -23,7 +23,7 @@ extension Atproto {
 		public let identifier: String
 		public let method: Methods
 
-		public var stringRepresentation: String {
+		public var string: String {
 			Constants.prefix + method.rawValue + ":" + identifier
 		}
 
@@ -120,7 +120,7 @@ extension Atproto.DID: Codable {
 
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
-		try container.encode(stringRepresentation)
+		try container.encode(string)
 	}
 }
 

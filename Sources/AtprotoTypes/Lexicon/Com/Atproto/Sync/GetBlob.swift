@@ -20,13 +20,13 @@ extension Lexicon.Com.Atproto.Sync {
 
 		public struct Parameters: QueryParametrizable {
 			/// The DID of the account.
-			let did: AtIdentifier
+			let did: LexiconString.AtIdentifier
 
 			/// The CID of the blob to fetch.
 			let cid: CID
 
 			public init(
-				did: AtIdentifier,
+				did: LexiconString.AtIdentifier,
 				cid: CID
 			) {
 				self.did = did
@@ -35,7 +35,7 @@ extension Lexicon.Com.Atproto.Sync {
 
 			public func asQueryItems() -> [URLQueryItem] {
 				return [
-					.init(name: "did", value: did.wireFormat),
+					.init(name: "did", value: did.string),
 					.init(name: "cid", value: cid.string),
 				]
 			}

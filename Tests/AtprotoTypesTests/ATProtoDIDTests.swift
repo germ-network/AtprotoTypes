@@ -30,7 +30,7 @@ struct AtprotoDIDTests {
 
 		let decoded = try JSONDecoder().decode(Wrapper.self, from: Data(raw.utf8))
 
-		#expect(decoded.did.stringRepresentation == Self.exampleDidString)
+		#expect(decoded.did.string == Self.exampleDidString)
 	}
 
 	@Test func testDirectEncoding() throws {

@@ -15,19 +15,19 @@ extension Lexicon.Com.Atproto.Repo {
 	//want this to be accessible without specifying the result type
 	public static let listRecordsNSID: Atproto.NSID = "com.atproto.repo.listRecords"
 
-	public enum ListRecords<Result: AtprotoRecord>: XRPCRequest {
+	public enum ListRecords<Result: Atproto.Record>: XRPCRequest {
 		public static var nsid: Atproto.NSID { listRecordsNSID }
 		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Parameters: QueryParametrizable {
-			let repo: AtIdentifier
+			let repo: LexiconString.AtIdentifier
 			// TODO: Enforce min/max (1-100)?
 			let limit: Int?
 			let cursor: String?
 			let reverse: Bool?
 
 			public init(
-				repo: AtIdentifier,
+				repo: LexiconString.AtIdentifier,
 				limit: Int?,
 				cursor: String?,
 				reverse: Bool?
@@ -40,7 +40,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
-					.init(name: "repo", value: repo.wireFormat),
+					.init(name: "repo", value: repo.string),
 					.init(name: "collection", value: Result.nsid),
 				]
 				if let limit {

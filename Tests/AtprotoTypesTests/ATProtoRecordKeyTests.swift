@@ -12,36 +12,37 @@ import Testing
 struct AtprotoRecordKeyTests {
 	@Test func testParse() throws {
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
-			let _ = try Lexicon.AnyRecordKey(rawValue: "")
+			let _ = try LexiconTypes.AnyRecordKey(rawValue: "")
 		}
 
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
-			let _ = try Lexicon.AnyRecordKey(
+			let _ = try LexiconTypes.AnyRecordKey(
 				rawValue: String(repeating: "a", count: 513))
 		}
 	}
 
 	@Test func testEncodingDecoding() throws {
-		let rkey = Lexicon.AnyRecordKey.mock()
+		let rkey = LexiconTypes.AnyRecordKey.mock()
 		let encoded = try JSONEncoder().encode(rkey)
-		let decoded = try JSONDecoder().decode(Lexicon.AnyRecordKey.self, from: encoded)
+		let decoded = try JSONDecoder().decode(
+			LexiconTypes.AnyRecordKey.self, from: encoded)
 		#expect(rkey == decoded)
 	}
 
 	@Test func testLiteralSelf() throws {
-		let rkey = Lexicon.LiteralSelfRecordKey()
+		let rkey = LexiconTypes.LiteralSelfRecordKey()
 		let encoded = try JSONEncoder().encode(rkey)
 
-		#expect(encoded == "\"\(Lexicon.LiteralSelfRecordKey.fixedValue)\"".utf8Data)
+		#expect(encoded == "\"\(LexiconTypes.LiteralSelfRecordKey.fixedValue)\"".utf8Data)
 
 		let decoded = try JSONDecoder().decode(
-			Lexicon.LiteralSelfRecordKey.self,
+			LexiconTypes.LiteralSelfRecordKey.self,
 			from: encoded
 		)
 		#expect(rkey == decoded)
 	}
 
-	struct MockLiteralKey: Lexicon.LiteralRecordKey {
+	struct MockLiteralKey: LexiconTypes.LiteralRecordKey {
 		static var fixedValue: String { "mock" }
 	}
 

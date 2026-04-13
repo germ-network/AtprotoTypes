@@ -16,7 +16,7 @@ extension Lexicon.Com.Atproto.Repo {
 	//want this to be accessible without specifying the result type
 	public static let getRecordNSID: Atproto.NSID = "com.atproto.repo.getRecord"
 
-	public enum GetRecord<Result: AtprotoRecord>: XRPCRequest {
+	public enum GetRecord<Result: Atproto.Record>: XRPCRequest {
 		public struct Output: Sendable, Codable {
 
 			/// The URI of the record.
@@ -38,12 +38,12 @@ extension Lexicon.Com.Atproto.Repo {
 		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Parameters: QueryParametrizable {
-			let repo: AtIdentifier
+			let repo: LexiconString.AtIdentifier
 			let rkey: Result.Key
 			let cid: CID?
 
 			public init(
-				repo: AtIdentifier,
+				repo: LexiconString.AtIdentifier,
 				rkey: Result.Key,
 				cid: CID?
 			) {
@@ -54,7 +54,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
-					.init(name: "repo", value: repo.wireFormat),
+					.init(name: "repo", value: repo.string),
 					.init(name: "collection", value: Result.nsid),
 					.init(name: "rkey", value: rkey.stringRepresentation),
 				]
