@@ -85,9 +85,3 @@ extension Lexicon.Com.Atproto.Repo.PutRecord: XRPCResponseParsing {
 		defaultErrors.union(["InvalidSwap"])
 	}
 }
-
-extension Lexicon.Com.Atproto.Repo.PutRecord.Output: Mockable {
-	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordResult {
-		.init(uri: "example", cid: "example", validationStatus: "unknown")
-	}
-}

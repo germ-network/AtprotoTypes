@@ -6,6 +6,7 @@
 //
 
 import AtprotoTypes
+import AtprotoTypesMocks
 import Foundation
 import Testing
 

@@ -77,9 +77,3 @@ extension Lexicon.Com.Atproto.Repo.DeleteRecord: XRPCResponseParsing {
 		defaultErrors.union(["InvalidSwap"])
 	}
 }
-
-extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
-	public static func mock() -> Lexicon.Com.Atproto.Repo.DeleteRecordResult {
-		.init(commit: .init(cid: .mock(), rev: .mock()))
-	}
-}

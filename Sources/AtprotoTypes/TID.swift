@@ -15,7 +15,7 @@ extension Atproto {
 
 		private static let allowedCharacters = CharacterSet(
 			charactersIn: "234567abcdefghijklmnopqrstuvwxyz")
-		private static let allowedPrefixCharacters = "234567abcdefghij"
+		public static let allowedPrefixCharacters = "234567abcdefghij"
 		private static let expectedLength = 13
 
 		public init(string: String) throws {
@@ -72,17 +72,5 @@ extension Atproto.TID: Codable {
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(self.stringEncoded)
-	}
-}
-
-extension Atproto.TID: Mockable {
-	static let base32SortableCharacters = "234567abcdefghijklmnopqrstuvwxyz"
-
-	static public func mock() -> Self {
-		let prefix = Self.allowedPrefixCharacters.randomElement() ?? "2"
-		let suffix = String(
-			(1..<13).map { _ in base32SortableCharacters.randomElement() ?? "2" }
-		)
-		return .init(knownValue: .init(prefix) + suffix)
 	}
 }

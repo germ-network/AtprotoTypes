@@ -57,9 +57,3 @@ extension Lexicon.Com.Atproto.Sync.GetBlob: XRPCResponseParsing {
 		)
 	}
 }
-
-extension Lexicon.Com.Atproto.Sync.GetBlob.Output: Mockable {
-	public static func mock() -> Self {
-		SymmetricKey(size: .bits256).dataRepresentation
-	}
-}

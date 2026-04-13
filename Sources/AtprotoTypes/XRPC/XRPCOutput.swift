@@ -10,7 +10,7 @@ import GermConvenience
 import HTTPTypes
 
 public protocol XRPCResponseParsing: Sendable {
-	associatedtype Output: Decodable, Mockable, Sendable
+	associatedtype Output: Decodable, Sendable
 	//this is defined in the lexicon, and additionally in the api spec
 	static var badRequestErrors: Set<String> { get }
 	static var recognizedStatuses: Set<HTTPResponse.Status> { get }

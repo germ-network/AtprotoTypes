@@ -78,6 +78,12 @@ extension Lexicon.Com.Atproto.Repo {
 
 			/// The value for the record. Codable for later conversion
 			public let value: Result
+
+			public init(uri: String, cid: String, value: Result) {
+				self.uri = uri
+				self.cid = cid
+				self.value = value
+			}
 		}
 	}
 }
@@ -85,20 +91,5 @@ extension Lexicon.Com.Atproto.Repo {
 extension Lexicon.Com.Atproto.Repo.ListRecords: XRPCResponseParsing {
 	public static var badRequestErrors: Set<String> {
 		defaultErrors
-	}
-}
-
-extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
-	public static func mock() -> Self {
-		.init(
-			cursor: UUID().uuidString,
-			records: [
-				.init(
-					uri: UUID().uuidString,
-					cid: CID.mock().string,
-					value: Result.mock()
-				)
-			]
-		)
 	}
 }

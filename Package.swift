@@ -11,7 +11,8 @@ let package = Package(
 		.library(
 			name: "AtprotoTypes",
 			targets: ["AtprotoTypes"]
-		)
+		),
+		.library(name: "AtprotoTypesMocks", targets: ["AtprotoTypesMocks"]),
 	],
 	dependencies: [
 		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2"),
@@ -36,9 +37,17 @@ let package = Package(
 				.product(name: "Crypto", package: "swift-crypto"),
 			]
 		),
+		.target(
+			name: "Mockable",
+			dependencies: []
+		),
+		.target(
+			name: "AtprotoTypesMocks",
+			dependencies: ["AtprotoTypes", "Mockable"]
+		),
 		.testTarget(
 			name: "AtprotoTypesTests",
-			dependencies: ["AtprotoTypes"]
+			dependencies: ["AtprotoTypes", "AtprotoTypesMocks", "Mockable"]
 		),
 	]
 )

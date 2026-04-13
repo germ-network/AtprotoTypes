@@ -73,13 +73,3 @@ extension Lexicon.Com.Atproto.Repo.GetRecord: XRPCResponseParsing {
 		defaultErrors.union(["RecordNotFound"])
 	}
 }
-
-extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable {
-	public static func mock() -> Self {
-		.init(
-			uri: UUID().uuidString,
-			cid: CID.mock().string,
-			value: .mock()
-		)
-	}
-}
