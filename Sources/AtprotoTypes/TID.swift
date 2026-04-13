@@ -39,7 +39,7 @@ extension Atproto {
 			self.stringEncoded = string
 		}
 
-		private init(knownValue: String) {
+		package init(knownValue: String) {
 			self.stringEncoded = knownValue
 		}
 

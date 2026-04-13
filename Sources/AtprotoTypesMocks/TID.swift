@@ -12,11 +12,11 @@ import Mockable
 extension Atproto.TID: Mockable {
 	static let base32SortableCharacters = "234567abcdefghijklmnopqrstuvwxyz"
 
-	static public func mock() throws -> Self {
+	static public func mock() -> Self {
 		let prefix = Self.allowedPrefixCharacters.randomElement() ?? "2"
 		let suffix = String(
 			(1..<13).map { _ in base32SortableCharacters.randomElement() ?? "2" }
 		)
-		return try .init(string: [prefix] + suffix)
+		return .init(knownValue: [prefix] + suffix)
 	}
 }
