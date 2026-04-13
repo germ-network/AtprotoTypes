@@ -26,7 +26,7 @@ struct ProxyServiceTests {
 			let _ = try ProxyService(string: "did:web:example.com#b#c")
 		}
 
-		#expect(throws: AtprotoDIDError.invalidPrefix) {
+		#expect(throws: Atproto.DID.Errors.invalidPrefix) {
 			let _ = try ProxyService(string: "a#b")
 		}
 	}

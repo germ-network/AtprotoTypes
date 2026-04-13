@@ -47,7 +47,7 @@ extension Atproto {
 			let services = self.service
 
 			guard services.count > 0 else {
-				throw DIDDocumentError.emptyArray
+				throw Errors.emptyArray
 			}
 
 			for service in services {
@@ -56,7 +56,7 @@ extension Atproto {
 				}
 			}
 
-			throw DIDDocumentError.noAtprotoPDSValue
+			throw Errors.noAtprotoPDSValue
 		}
 
 		enum CodingKeys: String, CodingKey {
@@ -68,7 +68,7 @@ extension Atproto {
 		}
 
 		/// Errors relating to the DID Document.
-		public enum DIDDocumentError: Error {
+		public enum Errors: Error {
 
 			/// The ``DIDDocument/service`` array is empty.
 			case emptyArray
@@ -154,7 +154,7 @@ extension Atproto.DIDDocument {
 					$0.type == "AtprotoPersonalDataServer"
 				})
 			else {
-				throw DIDDocumentError.missingServiceUrl
+				throw Errors.missingServiceUrl
 			}
 			return service.serviceEndpoint
 		}
@@ -165,7 +165,7 @@ extension Atproto.DIDDocument {
 	public static func mock() throws -> Self {
 		guard let serviceEndpoint = URL(string: "https://blusher.us-east.host.bsky.network")
 		else {
-			throw DIDDocumentError.urlConstructionError
+			throw Errors.urlConstructionError
 		}
 		return .init(
 			context: [

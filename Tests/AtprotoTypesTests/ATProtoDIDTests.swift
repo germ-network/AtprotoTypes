@@ -11,11 +11,11 @@ import Testing
 
 struct AtprotoDIDTests {
 	@Test func testParse() throws {
-		#expect(throws: AtprotoDIDError.invalidPrefix) {
+		#expect(throws: Atproto.DID.Errors.invalidPrefix) {
 			let _ = try Atproto.DID(string: "di:plc:example.com")
 		}
 
-		#expect(throws: AtprotoDIDError.invalidMethod) {
+		#expect(throws: Atproto.DID.Errors.invalidMethod) {
 			let _ = try Atproto.DID(string: "did:method:example.com")
 		}
 	}

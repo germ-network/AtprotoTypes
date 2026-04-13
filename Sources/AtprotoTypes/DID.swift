@@ -45,7 +45,7 @@ extension Atproto {
 						)
 					}
 				}
-				throw AtprotoDIDError.invalidMethod
+				throw Atproto.DID.Errors.invalidMethod
 			}
 		}
 
@@ -56,7 +56,7 @@ extension Atproto {
 
 		public init(string: String) throws {
 			guard string.hasPrefix(Constants.prefix) else {
-				throw AtprotoDIDError.invalidPrefix
+				throw Atproto.DID.Errors.invalidPrefix
 			}
 			let remainder = string.dropFirst(Constants.prefix.count)
 			(method, identifier) = try Methods.parse(remainder)
@@ -77,12 +77,14 @@ extension Atproto.DID: Codable {
 	}
 }
 
-public enum AtprotoDIDError: Error {
-	case invalidPrefix
-	case invalidMethod
+extension Atproto.DID {
+	public enum Errors: Error {
+		case invalidPrefix
+		case invalidMethod
+	}
 }
 
-extension AtprotoDIDError: LocalizedError {
+extension Atproto.DID.Errors: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .invalidPrefix: "Invalid prefix"
