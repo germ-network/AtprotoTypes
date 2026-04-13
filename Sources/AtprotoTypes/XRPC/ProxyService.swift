@@ -20,7 +20,7 @@ public struct ProxyService: Equatable {
 	public init(string: String) throws {
 		let components = string.split(separator: "#")
 		guard components.count == 2 else {
-			throw AtprotoTypeError.invalidStringInput
+			throw Atproto.Errors.invalidStringInput
 		}
 
 		self.did = try Atproto.DID(string: String(components[0]))

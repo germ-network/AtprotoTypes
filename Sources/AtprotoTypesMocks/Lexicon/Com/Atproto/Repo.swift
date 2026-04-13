@@ -13,7 +13,7 @@ extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable {
 	public static func mock() throws -> Self {
 		.init(
 			uri: UUID().uuidString,
-			cid: CID.mock().string,
+			cid: Atproto.CID.mock().string,
 			value: try .mock()
 		)
 	}
@@ -21,7 +21,7 @@ extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable {
 
 extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
 	public static func mock() throws -> Lexicon.Com.Atproto.Repo.DeleteRecordResult {
-		.init(commit: .init(cid: .mock(), rev: try .mock()))
+		.init(commit: .init(cid: .mock(), rev: .mock()))
 	}
 }
 extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
@@ -31,7 +31,7 @@ extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable {
 			records: [
 				.init(
 					uri: UUID().uuidString,
-					cid: CID.mock().string,
+					cid: Atproto.CID.mock().string,
 					value: try .mock()
 				)
 			]

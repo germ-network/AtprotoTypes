@@ -6,19 +6,23 @@
 //  Created by Christopher Jr Riley on 5/20/24.
 //
 
-extension Atproto {
+//Possible TODO: support legacy blob format
+
+extension Atproto.Primitive {
 	/// https://atproto.com/specs/blob
 	public struct Blob: Sendable, Codable, Equatable {
+		static var type: String { "blob" }
 
-		/// Type of the blob.
-		public let type: String?
+		//for encoding
+		private(set) var type = Self.type
 
 		/// The strong reference of the blob.
-		public let ref: Atproto.Blob.Reference
+		public let ref: Atproto.Primitive.Link
 
 		/// The the MIME type.
 		///
 		/// This can be a `.jpg`, `.png`, and `.gif`.
+		/// required not empty
 		public let mimeType: String
 
 		/// The size of the blob.
@@ -29,17 +33,6 @@ extension Atproto {
 			case ref
 			case mimeType
 			case size
-		}
-
-		/// A data model for a blob reference definition.
-		public struct Reference: Sendable, Codable, Equatable, Hashable {
-
-			/// The link of the blob reference.
-			public let link: CID
-
-			enum CodingKeys: String, CodingKey {
-				case link = "$link"
-			}
 		}
 	}
 }

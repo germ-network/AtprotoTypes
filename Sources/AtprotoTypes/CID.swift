@@ -9,41 +9,44 @@ import Base32
 import Foundation
 
 //https://dasl.ing/cid.html
+//https://atproto.com/specs/data-model#link-and-cid-formats
 
-public struct CID: Sendable, Equatable, Hashable {
-	//todo: further parse components of the CID data such as the hash
-	let bytes: Data
+extension Atproto {
+	public struct CID: Sendable, Equatable, Hashable {
+		//todo: further parse components of the CID data such as the hash
+		let bytes: Data
 
-	private init(bytes: Data) {
-		self.bytes = bytes
-	}
-
-	public init(string: String) throws {
-		guard let prefix = string.first, prefix == "b" else {
-			throw AtprotoTypeError.invalidPrefix
-		}
-		let body = String(string.dropFirst())
-
-		//cautious about the force unwraps in the Base32 module
-		guard !body.isEmpty else {
-			throw AtprotoTypeError.invalidBase32Data
+		private init(bytes: Data) {
+			self.bytes = bytes
 		}
 
-		guard let decoded = body.base32DecodedData else {
-			throw AtprotoTypeError.invalidBase32Data
+		public init(string: String) throws {
+			guard let prefix = string.first, prefix == "b" else {
+				throw Atproto.Errors.invalidPrefix
+			}
+			let body = String(string.dropFirst())
+
+			//cautious about the force unwraps in the Base32 module
+			guard !body.isEmpty else {
+				throw Atproto.Errors.invalidBase32Data
+			}
+
+			guard let decoded = body.base32DecodedData else {
+				throw Atproto.Errors.invalidBase32Data
+			}
+
+			bytes = decoded
 		}
 
-		bytes = decoded
-	}
-
-	public var string: String {
-		// CID is DASL-compatible (https://atproto.com/specs/data-model)
-		// and DASL CID uses lowercase base-32 (https://dasl.ing/cid.html)
-		"b" + bytes.base32EncodedStringNoPadding.lowercased()
+		public var string: String {
+			// CID is DASL-compatible (https://atproto.com/specs/data-model)
+			// and DASL CID uses lowercase base-32 (https://dasl.ing/cid.html)
+			"b" + bytes.base32EncodedStringNoPadding.lowercased()
+		}
 	}
 }
 
-extension CID: Codable {
+extension Atproto.CID: Codable {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.singleValueContainer()
 		self = try .init(string: container.decode(String.self))
@@ -55,7 +58,7 @@ extension CID: Codable {
 	}
 }
 
-extension CID {
+extension Atproto.CID {
 	static public func mock() -> Self {
 		//TODO, mock the internal mechanics of CID
 		.init(bytes: Data("mock".utf8))

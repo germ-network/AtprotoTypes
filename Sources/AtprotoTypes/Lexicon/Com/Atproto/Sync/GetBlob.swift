@@ -23,11 +23,11 @@ extension Lexicon.Com.Atproto.Sync {
 			let did: LexiconString.AtIdentifier
 
 			/// The CID of the blob to fetch.
-			let cid: CID
+			let cid: Atproto.CID
 
 			public init(
 				did: LexiconString.AtIdentifier,
-				cid: CID
+				cid: Atproto.CID
 			) {
 				self.did = did
 				self.cid = cid

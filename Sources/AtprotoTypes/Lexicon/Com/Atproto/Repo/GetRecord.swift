@@ -40,12 +40,12 @@ extension Lexicon.Com.Atproto.Repo {
 		public struct Parameters: QueryParametrizable {
 			let repo: LexiconString.AtIdentifier
 			let rkey: Result.Key
-			let cid: CID?
+			let cid: Atproto.CID?
 
 			public init(
 				repo: LexiconString.AtIdentifier,
 				rkey: Result.Key,
-				cid: CID?
+				cid: Atproto.CID?
 			) {
 				self.repo = repo
 				self.rkey = rkey

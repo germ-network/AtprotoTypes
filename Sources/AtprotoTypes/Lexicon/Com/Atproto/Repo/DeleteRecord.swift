@@ -27,14 +27,14 @@ extension Lexicon.Com.Atproto.Repo {
 				let repo: LexiconString.AtIdentifier
 				let collection: Atproto.NSID
 				let rkey: Record.Key
-				let swapRecord: CID?
-				let swapCommit: CID?
+				let swapRecord: Atproto.CID?
+				let swapCommit: Atproto.CID?
 
 				public init(
 					repo: LexiconString.AtIdentifier,
 					rkey: Record.Key,
-					swapRecord: CID? = nil,
-					swapCommit: CID? = nil,
+					swapRecord: Atproto.CID? = nil,
+					swapCommit: Atproto.CID? = nil,
 				) {
 					self.repo = repo
 					self.collection = Record.nsid
@@ -63,9 +63,9 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 
 	public struct CommitMeta: Codable, Sendable {
-		public let cid: CID
+		public let cid: Atproto.CID
 		public let rev: Atproto.TID
-		public init(cid: CID, rev: Atproto.TID) {
+		public init(cid: Atproto.CID, rev: Atproto.TID) {
 			self.cid = cid
 			self.rev = rev
 		}

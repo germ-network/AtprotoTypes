@@ -30,16 +30,16 @@ extension Lexicon.Com.Atproto.Repo {
 				public let rkey: Record.Key
 				public let record: Record
 				let validate: Bool?
-				let swapCommit: CID?
-				let swapRecord: CID?
+				let swapCommit: Atproto.CID?
+				let swapRecord: Atproto.CID?
 
 				public init(
 					repo: LexiconString.AtIdentifier,
 					rkey: Record.Key,
 					record: Record,
 					validate: Bool? = nil,
-					swapCommit: CID? = nil,
-					swapRecord: CID? = nil,
+					swapCommit: Atproto.CID? = nil,
+					swapRecord: Atproto.CID? = nil,
 				) {
 					self.repo = repo
 					self.collection = Record.nsid

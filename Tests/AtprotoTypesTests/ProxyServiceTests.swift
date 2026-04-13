@@ -22,7 +22,7 @@ struct ProxyServiceTests {
 	}
 
 	@Test func testDecodeFailures() throws {
-		#expect(throws: AtprotoTypeError.invalidStringInput) {
+		#expect(throws: Atproto.Errors.invalidStringInput) {
 			let _ = try ProxyService(string: "did:web:example.com#b#c")
 		}
 
