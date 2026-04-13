@@ -11,8 +11,6 @@ import Foundation
 
 extension Atproto.Primitive {
 	public struct Link: Sendable, Codable, Equatable {
-		static let type = "link"
-
 		public let link: Atproto.CID
 
 		enum CodingKeys: String, CodingKey {

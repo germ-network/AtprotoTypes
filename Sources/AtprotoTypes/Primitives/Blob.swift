@@ -11,10 +11,12 @@
 extension Atproto.Primitive {
 	/// https://atproto.com/specs/blob
 	public struct Blob: Sendable, Codable, Equatable {
-		static var type: String { "blob" }
+		struct TypeValue: FixedString {
+			static var fixedValue: String { "blob" }
+		}
 
 		//for encoding
-		private(set) var type = Self.type
+		private let type = TypeValue()
 
 		/// The strong reference of the blob.
 		public let ref: Atproto.Primitive.Link

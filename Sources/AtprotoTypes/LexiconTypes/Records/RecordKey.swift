@@ -18,33 +18,14 @@ public enum LexiconTypes {
 		static func defaultValue() -> Self
 	}
 
-	public protocol LiteralRecordKey: Equatable, DefaultableRecordKey {
-		init()
-		static var fixedValue: String { get }
-	}
-
-	public struct LiteralSelfRecordKey: LexiconTypes.LiteralRecordKey {
+	public struct LiteralSelfRecordKey: FixedString {
 		public static var fixedValue: String { "self" }
 		public init() {}
 	}
 }
 
-//default implementation of codable
-extension LexiconTypes.LiteralRecordKey {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		let string = try container.decode(String.self)
-		try self.init(string: string)
-	}
-
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(stringRepresentation)
-	}
-}
-
 //default implementations to comform to RecordKey /
-extension LexiconTypes.LiteralRecordKey {
+extension FixedString {
 	static public func defaultValue() -> Self {
 		.init()
 	}

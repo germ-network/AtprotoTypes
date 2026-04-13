@@ -43,7 +43,7 @@ struct AtprotoRecordKeyTests {
 		#expect(rkey == decoded)
 	}
 
-	struct MockLiteralKey: LexiconTypes.LiteralRecordKey {
+	struct MockLiteralKey: FixedString {
 		static var fixedValue: String { "mock" }
 	}
 

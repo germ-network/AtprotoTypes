@@ -1,5 +1,5 @@
 //
-//  AtprotoTypeError.swift
+//  ATProtoErrors.swift
 //  AtprotoTypes
 //
 //  Created by Mark @ Germ on 2/18/26.
@@ -13,6 +13,7 @@ extension Atproto {
 		case invalidPrefix
 		case invalidBase32Data
 		case invalidStringInput
+		case fixedStringMismatch
 	}
 }
 
@@ -23,6 +24,7 @@ extension Atproto.Errors: LocalizedError {
 		case .invalidPrefix: "Invalid prefix"
 		case .invalidBase32Data: "Invalid Base32 data"
 		case .invalidStringInput: "Invalid string input"
+		case .fixedStringMismatch: "Fixed string mismatch"
 		}
 	}
 }
