@@ -13,6 +13,7 @@ let package = Package(
 			targets: ["AtprotoTypes"]
 		),
 		.library(name: "AtprotoTypesMocks", targets: ["AtprotoTypesMocks"]),
+		.library(name: "Mockable", targets: ["Mockable"]),
 	],
 	dependencies: [
 		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2"),
