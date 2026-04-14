@@ -14,22 +14,22 @@ import Testing
 struct ProxyServiceTests {
 
 	@Test func testEncode() throws {
-		let proxy = ProxyService(
+		let proxy = Atproto.ProxyService(
 			did: .mock(method: .web),
 			endpoint: UUID().uuidString
 		)
 
-		let parsed = try ProxyService(string: proxy.headerValue)
+		let parsed = try Atproto.ProxyService(string: proxy.headerValue)
 		#expect(parsed == proxy)
 	}
 
 	@Test func testDecodeFailures() throws {
 		#expect(throws: Atproto.Errors.invalidStringInput) {
-			let _ = try ProxyService(string: "did:web:example.com#b#c")
+			let _ = try Atproto.ProxyService(string: "did:web:example.com#b#c")
 		}
 
 		#expect(throws: UnwrapError.missing("DID")) {
-			let _ = try ProxyService(string: "a#b")
+			let _ = try Atproto.ProxyService(string: "a#b")
 		}
 	}
 }

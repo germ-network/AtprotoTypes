@@ -9,7 +9,7 @@ import Foundation
 
 ///parameters take a did or handle
 ///https://atproto.com/specs/lexicon#string-formats
-
+///Like RecordKey, want a family of types representing the fomat restrictions
 public enum LexiconString {}
 
 extension LexiconString {

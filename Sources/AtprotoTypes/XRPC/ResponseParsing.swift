@@ -16,7 +16,7 @@ extension Atproto.XRPC {
 		static var badRequestErrors: Set<String> { get }
 		static var recognizedStatuses: Set<HTTPResponse.Status> { get }
 	}
-	
+
 	public struct EmptyOutput: Decodable, Sendable {
 		public init() {}
 	}
