@@ -2,9 +2,6 @@
 // https://docs.swift.org/swift-book
 
 public enum Atproto {
-	///https://atproto.com/specs/at-uri-scheme
-	public typealias ATURI = String
-
 	public protocol Record: Sendable, Codable {
 		associatedtype Id: RecordId
 		associatedtype Key: RecordKey
