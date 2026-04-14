@@ -11,6 +11,7 @@ import GermConvenience
 ///https://atproto.com/specs/xrpc
 extension Atproto {
 	public enum XRPC {
+		//https://atproto.com/specs/lexicon#query-and-procedure-http-api
 		public protocol Endpoint: ResponseParsing {
 			//	static var nsid: Atproto.NSID { get }
 			associatedtype Id: EndpointId
@@ -35,6 +36,7 @@ extension Atproto {
 			associatedtype Input: ProcedureInput
 		}
 
+		//In the XRPC lexicon, parameter is optional
 		public struct EmptyParameters: QueryParametrizable {
 			public func asQueryItems() -> [URLQueryItem] {
 				[]
