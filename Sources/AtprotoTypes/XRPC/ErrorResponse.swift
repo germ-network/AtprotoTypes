@@ -1,12 +1,12 @@
 //
-//  XRPCError.swift
+//  ErrorResponse.swift
 //  AtprotoTypes
 //
 //  Created by Mark @ Germ on 2/26/26.
 //
 
-extension Lexicon {
-	public struct XRPCError: Sendable, Codable {
+extension Atproto.XRPC {
+	public struct ErrorResponse: Sendable, Codable {
 		public let error: String
 		public let message: String
 

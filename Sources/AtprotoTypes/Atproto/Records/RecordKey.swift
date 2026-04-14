@@ -42,8 +42,6 @@ extension FixedString {
 
 extension Atproto.TID: Atproto.RecordKey {}
 
-//extension Atproto.NSID: LexiconTypes.RecordKey {}
-
 extension Lexicon {
 	public enum RecordKeyError: LocalizedError {
 		case wrongLength

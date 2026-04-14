@@ -1,5 +1,5 @@
 //
-//  XRPCOutput.swift
+//  ResponseParsing.swift
 //  AtprotoTypes
 //
 //  Created by Mark @ Germ on 3/29/26.
@@ -32,7 +32,7 @@ extension Atproto.XRPC.ResponseParsing {
 extension Atproto.XRPC {
 	public enum ParsedResponse<Output: Decodable> {
 		case ok(Output)
-		case error(ParseXRPCError)
+		case error(ParseError)
 
 		public var output: Output {
 			get throws {
@@ -47,16 +47,21 @@ extension Atproto.XRPC {
 	}
 }
 
-public enum ParseXRPCError: LocalizedError {
-	case xrpcError(status: HTTPResponse.Status, error: Lexicon.XRPCError)
-	case unrecognized(HTTPResponse)
+extension Atproto.XRPC {
+	public enum ParseError: LocalizedError {
+		case xrpcError(
+			status: HTTPResponse.Status,
+			error: ErrorResponse
+		)
+		case unrecognized(HTTPResponse)
 
-	public var errorDescription: String? {
-		switch self {
-		case .xrpcError(let status, let error):
-			"\(status): \(error.error)"
-		case .unrecognized(let response):
-			"Unrecognized response: \(response)"
+		public var errorDescription: String? {
+			switch self {
+			case .xrpcError(let status, let error):
+				"\(status): \(error.error)"
+			case .unrecognized(let response):
+				"Unrecognized response: \(response)"
+			}
 		}
 	}
 }
@@ -77,7 +82,7 @@ extension Atproto.XRPC.ResponseParsing {
 			case .badRequest:
 				let errorObject = try JSONDecoder()
 					.decode(
-						Lexicon.XRPCError.self,
+						Atproto.XRPC.ErrorResponse.self,
 						from: fullResponse.data
 					)
 				if Self.badRequestErrors.contains(errorObject.error) {
@@ -88,7 +93,7 @@ extension Atproto.XRPC.ResponseParsing {
 			case let status where Self.recognizedStatuses.contains(status):
 				let errorObject = try JSONDecoder()
 					.decode(
-						Lexicon.XRPCError.self,
+						Atproto.XRPC.ErrorResponse.self,
 						from: fullResponse.data
 					)
 				return .error(

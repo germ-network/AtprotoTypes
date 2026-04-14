@@ -24,6 +24,7 @@ extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
 		.init(commit: .init(cid: .mock(), rev: .mock()))
 	}
 }
+
 extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable where Result: Mockable {
 	public static func mock() throws -> Self {
 		.init(
