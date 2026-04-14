@@ -9,43 +9,62 @@ import Foundation
 import GermConvenience
 
 ///https://atproto.com/specs/xrpc
-public protocol XRPC: XRPCResponseParsing {
-	static var nsid: Atproto.NSID { get }
-	static var outputEncoding: HTTPContentType { get }
+extension Atproto {
+	public enum XRPC {
+		public protocol Endpoint: ResponseParsing {
+			//	static var nsid: Atproto.NSID { get }
+			associatedtype Id: EndpointId
+			static var outputEncoding: HTTPContentType { get }
 
-	associatedtype Parameters: QueryParametrizable
+			associatedtype Parameters: QueryParametrizable
+		}
+
+		//Like RecordId, a NSID format used as an XRPC endpoint id
+		//For procedures it's helpful for the collection to be a FixedString
+		//for coding/decoding
+		public protocol EndpointId: FixedString {
+			static var nsid: NSID { get }
+			init()
+		}
+
+		//these are GET queries
+		public protocol Request: Endpoint {}
+
+		//these are POST
+		public protocol Procedure: Endpoint {
+			associatedtype Input: ProcedureInput
+		}
+
+		public struct EmptyParameters: QueryParametrizable {
+			public func asQueryItems() -> [URLQueryItem] {
+				[]
+			}
+
+			public init() {}
+		}
+
+		public protocol ProcedureInput: Sendable {
+			static var encoding: HTTPContentType { get }
+			associatedtype Schema: Sendable
+			static func encode(_: Schema) throws -> Data?
+			var schema: Schema { get }
+		}
+
+		public struct EmptyInput: ProcedureInput {
+			public static var encoding: HTTPContentType { .none }
+			public static func encode(_: Schema) throws -> Data? { nil }
+			public struct Schema: Sendable {}
+			public var schema: Schema { .init() }
+		}
+	}
 }
 
-//these are GET queries
-public protocol XRPCRequest: XRPC {}
+extension Atproto.XRPC.EndpointId {
+	public static var fixedValue: String {
+		nsid.rawValue
+	}
+}
 
 public protocol QueryParametrizable: Sendable {
 	func asQueryItems() -> [URLQueryItem]
-}
-
-//these are POST
-public protocol XRPCProcedure: XRPC {
-	associatedtype Input: XRPCProcedureInput
-}
-
-public struct EmptyXRPCParameters: QueryParametrizable {
-	public func asQueryItems() -> [URLQueryItem] {
-		[]
-	}
-
-	public init() {}
-}
-
-public protocol XRPCProcedureInput: Sendable {
-	static var encoding: HTTPContentType { get }
-	associatedtype Schema: Sendable
-	static func encode(_: Schema) throws -> Data?
-	var schema: Schema { get }
-}
-
-public struct EmptyXRPCInput: XRPCProcedureInput {
-	public static var encoding: HTTPContentType { .none }
-	public static func encode(_: Schema) throws -> Data? { nil }
-	public struct Schema: Sendable {}
-	public var schema: Schema { .init() }
 }

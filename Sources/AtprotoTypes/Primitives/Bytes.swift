@@ -8,7 +8,7 @@
 import Foundation
 
 extension Atproto.Primitive {
-	public struct LexiconBytes: Codable, Equatable, Hashable, Sendable {
+	public struct LexiconBytes: Codable, Hashable, Sendable {
 		public let bytes: Data
 
 		public init(bytes: Data) {

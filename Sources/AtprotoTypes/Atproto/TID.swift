@@ -9,7 +9,7 @@ import Base32
 import Foundation
 
 extension Atproto {
-	public struct TID: Sendable, Equatable, Hashable {
+	public struct TID: RawRepresentable, Sendable, Equatable, Hashable {
 		// TODO: parse it as an int64
 		private let stringEncoded: String
 
@@ -18,32 +18,32 @@ extension Atproto {
 		public static let allowedPrefixCharacters = "234567abcdefghij"
 		private static let expectedLength = 13
 
-		public init(string: String) throws {
-			guard let prefix = string.first,
+		public init?(rawValue: String) {
+			guard let prefix = rawValue.first,
 				Self.allowedPrefixCharacters.contains(prefix)
 			else {
-				throw Atproto.TIDError.wrongPrefix
+				return nil
 			}
 
-			guard string.count == Self.expectedLength else {
-				throw Atproto.TIDError.wrongLength
+			guard rawValue.count == Self.expectedLength else {
+				return nil
 			}
 
 			guard
 				Self.allowedCharacters.isSuperset(
-					of: CharacterSet(charactersIn: string))
+					of: CharacterSet(charactersIn: rawValue))
 			else {
-				throw Atproto.TIDError.disallowedCharacter
+				return nil
 			}
 
-			self.stringEncoded = string
+			self.stringEncoded = rawValue
 		}
+
+		public var rawValue: String { stringEncoded }
 
 		package init(knownValue: String) {
 			self.stringEncoded = knownValue
 		}
-
-		public var stringRepresentation: String { stringEncoded }
 	}
 }
 
@@ -60,17 +60,5 @@ extension Atproto {
 			case .disallowedCharacter: "Disallowed character"
 			}
 		}
-	}
-}
-
-extension Atproto.TID: Codable {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		self = try .init(string: container.decode(String.self))
-	}
-
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(self.stringEncoded)
 	}
 }

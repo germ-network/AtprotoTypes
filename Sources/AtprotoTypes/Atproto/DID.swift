@@ -15,7 +15,7 @@ import Foundation
 //can implement more checks later
 
 extension Atproto {
-	public struct DID: Equatable, Hashable, Sendable {
+	public struct DID: RawRepresentable, Codable, Hashable, Sendable {
 		enum Constants {
 			static let prefix = "did:"
 		}
@@ -23,8 +23,20 @@ extension Atproto {
 		public let identifier: String
 		public let method: Methods
 
-		public var string: String {
+		public var rawValue: String {
 			Constants.prefix + method.rawValue + ":" + identifier
+		}
+
+		public init?(rawValue: String) {
+			guard rawValue.hasPrefix(Constants.prefix) else {
+				return nil
+			}
+			let remainder = rawValue.dropFirst(Constants.prefix.count)
+			do {
+				(method, identifier) = try Methods.parse(remainder)
+			} catch {
+				return nil
+			}
 		}
 
 		public enum Methods: String, CaseIterable, Sendable {
@@ -53,27 +65,6 @@ extension Atproto {
 			self.method = method
 			self.identifier = identifier
 		}
-
-		public init(string: String) throws {
-			guard string.hasPrefix(Constants.prefix) else {
-				throw Atproto.DID.Errors.invalidPrefix
-			}
-			let remainder = string.dropFirst(Constants.prefix.count)
-			(method, identifier) = try Methods.parse(remainder)
-		}
-	}
-}
-
-//code it as the bare string so we can type fields
-extension Atproto.DID: Codable {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		self = try .init(string: container.decode(String.self))
-	}
-
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(string)
 	}
 }
 

@@ -7,7 +7,8 @@
 
 import Foundation
 
-///We have several places where JSON encoding expects a single value. This protocol allows
+///We have several places where JSON encoding expects a single value. This protocol
+///is a hack on Codable that allows
 ///us to define a type that always encodes to the fixed value and only successfully decodes
 ///if the corresponding JSON value is equal to the fixed value
 

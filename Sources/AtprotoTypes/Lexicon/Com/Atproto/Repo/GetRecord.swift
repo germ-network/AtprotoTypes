@@ -14,9 +14,16 @@ import GermConvenience
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/getRecord.json
 extension Lexicon.Com.Atproto.Repo {
 	//want this to be accessible without specifying the result type
-	public static let getRecordNSID: Atproto.NSID = "com.atproto.repo.getRecord"
+	public struct GetRecordNSID: Atproto.XRPC.EndpointId {
+		public static var nsid: Atproto.NSID {
+			.init(rawValue: "com.atproto.repo.getRecord")
+		}
 
-	public enum GetRecord<Result: Atproto.Record>: XRPCRequest {
+		public init() {}
+	}
+
+	public enum GetRecord<Result: Atproto.Record>: Atproto.XRPC.Request {
+		public typealias Id = GetRecordNSID
 		public struct Output: Sendable, Codable {
 
 			/// The URI of the record.
@@ -34,7 +41,6 @@ extension Lexicon.Com.Atproto.Repo {
 				self.value = value
 			}
 		}
-		public static var nsid: Atproto.NSID { getRecordNSID }
 		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Parameters: QueryParametrizable {
@@ -54,9 +60,9 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
-					.init(name: "repo", value: repo.string),
-					.init(name: "collection", value: Result.nsid),
-					.init(name: "rkey", value: rkey.stringRepresentation),
+					.init(name: "repo", value: repo.rawValue),
+					.init(name: "collection", value: Result.Id.fixedValue),
+					.init(name: "rkey", value: rkey.rawValue),
 				]
 				if let cid {
 					base.append(.init(name: "cid", value: cid.string))
@@ -68,7 +74,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.GetRecord: XRPCResponseParsing {
+extension Lexicon.Com.Atproto.Repo.GetRecord: Atproto.XRPC.ResponseParsing {
 	public static var badRequestErrors: Set<String> {
 		defaultErrors.union(["RecordNotFound"])
 	}

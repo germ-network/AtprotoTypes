@@ -11,13 +11,9 @@ import Testing
 
 struct AtprotoDIDTests {
 	@Test func testParse() throws {
-		#expect(throws: Atproto.DID.Errors.invalidPrefix) {
-			let _ = try Atproto.DID(string: "di:plc:example.com")
-		}
+		#expect(try Atproto.DID(rawValue: "di:plc:example.com") == nil)
 
-		#expect(throws: Atproto.DID.Errors.invalidMethod) {
-			let _ = try Atproto.DID(string: "did:method:example.com")
-		}
+		#expect(try Atproto.DID(rawValue: "did:method:example.com") == nil)
 	}
 
 	struct Wrapper: Codable {
@@ -30,14 +26,16 @@ struct AtprotoDIDTests {
 
 		let decoded = try JSONDecoder().decode(Wrapper.self, from: Data(raw.utf8))
 
-		#expect(decoded.did.string == Self.exampleDidString)
+		#expect(decoded.did.rawValue == Self.exampleDidString)
 	}
 
 	@Test func testDirectEncoding() throws {
 		struct Wrapper: Codable {
 			let did: Atproto.DID
 		}
-		let wrapped = try Wrapper(did: .init(string: Self.exampleDidString))
+		let wrapped = try Wrapper(
+			did: .init(rawValue: Self.exampleDidString).tryUnwrap
+		)
 		let encoded = try JSONEncoder().encode(wrapped)
 		let decoded = try JSONSerialization.jsonObject(with: encoded)
 

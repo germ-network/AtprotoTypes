@@ -9,7 +9,7 @@ import AtprotoTypes
 import Foundation
 import Mockable
 
-extension LexiconTypes.AnyRecordKey: Mockable {
+extension Atproto.AnyRecordKey: Mockable {
 	//generate test did per the spec https://github.com/did-method-plc/did-method-plc
 	static let lowercaseAlpha = (UInt8(ascii: "a")...UInt8(ascii: "z"))
 		.map { Character(UnicodeScalar($0)) }
@@ -24,7 +24,7 @@ extension LexiconTypes.AnyRecordKey: Mockable {
 	static let domainSet =
 		lowercaseAlpha + uppercaseAlpha + numeric + [".", "-", "_", ":", "~"]
 
-	public static func mock() -> LexiconTypes.AnyRecordKey {
+	public static func mock() -> Atproto.AnyRecordKey {
 		.init(
 			knownValue: String(
 				(3...512).compactMap { _ in domainSet.randomElement() }

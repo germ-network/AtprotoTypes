@@ -7,10 +7,8 @@
 
 import Foundation
 
-public enum LexiconTypes {
-	public protocol RecordKey: Codable, Sendable {
-		init(string: String) throws
-		var stringRepresentation: String { get }
+extension Atproto {
+	public protocol RecordKey: Codable, Sendable, RawRepresentable where RawValue == String {
 	}
 
 	//may be dynamic as in a TID or a single fixed value as in a Literal
@@ -42,17 +40,9 @@ extension FixedString {
 	}
 }
 
-extension Atproto.TID: LexiconTypes.RecordKey {}
+extension Atproto.TID: Atproto.RecordKey {}
 
-extension Atproto.NSID: LexiconTypes.RecordKey {
-	public var stringRepresentation: String {
-		self
-	}
-
-	public init(string: String) throws {
-		self = string
-	}
-}
+//extension Atproto.NSID: LexiconTypes.RecordKey {}
 
 extension Lexicon {
 	public enum RecordKeyError: LocalizedError {

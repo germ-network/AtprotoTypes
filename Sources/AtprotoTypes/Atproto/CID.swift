@@ -12,7 +12,7 @@ import Foundation
 //https://atproto.com/specs/data-model#link-and-cid-formats
 
 extension Atproto {
-	public struct CID: Sendable, Equatable, Hashable {
+	public struct CID: Sendable, Hashable {
 		//todo: further parse components of the CID data such as the hash
 		let bytes: Data
 

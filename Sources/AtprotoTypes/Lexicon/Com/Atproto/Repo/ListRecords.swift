@@ -12,11 +12,16 @@ import GermConvenience
 /// https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.listRecords/docs
 /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/listRecords.json
 extension Lexicon.Com.Atproto.Repo {
-	//want this to be accessible without specifying the result type
-	public static let listRecordsNSID: Atproto.NSID = "com.atproto.repo.listRecords"
+	public struct ListRecordsNSID: Atproto.XRPC.EndpointId {
+		public static var nsid: Atproto.NSID {
+			.init(rawValue: "com.atproto.repo.listRecords")
+		}
 
-	public enum ListRecords<Result: Atproto.Record>: XRPCRequest {
-		public static var nsid: Atproto.NSID { listRecordsNSID }
+		public init() {}
+	}
+
+	public enum ListRecords<Result: Atproto.Record>: Atproto.XRPC.Request {
+		public typealias Id = ListRecordsNSID
 		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Parameters: QueryParametrizable {
@@ -40,8 +45,8 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
-					.init(name: "repo", value: repo.string),
-					.init(name: "collection", value: Result.nsid),
+					.init(name: "repo", value: repo.rawValue),
+					.init(name: "collection", value: Result.Id.fixedValue),
 				]
 				if let limit {
 					base.append(.init(name: "limit", value: limit.description))
@@ -88,7 +93,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.ListRecords: XRPCResponseParsing {
+extension Lexicon.Com.Atproto.Repo.ListRecords: Atproto.XRPC.ResponseParsing {
 	public static var badRequestErrors: Set<String> {
 		defaultErrors
 	}

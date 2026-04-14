@@ -23,11 +23,12 @@ public struct ProxyService: Equatable {
 			throw Atproto.Errors.invalidStringInput
 		}
 
-		self.did = try Atproto.DID(string: String(components[0]))
+		self.did = try Atproto.DID(rawValue: String(components[0]))
+			.tryUnwrap
 		self.endpoint = String(components[1])
 	}
 
 	public var headerValue: String {
-		did.string + "#" + endpoint
+		did.rawValue + "#" + endpoint
 	}
 }

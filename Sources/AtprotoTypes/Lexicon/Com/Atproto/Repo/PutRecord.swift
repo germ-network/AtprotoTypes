@@ -11,14 +11,20 @@ import GermConvenience
 //https://docs.bsky.app/docs/api/com-atproto-repo-put-record
 //https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.repo.putRecord
 extension Lexicon.Com.Atproto.Repo {
-	public static let putRecordNSID: Atproto.NSID = "com.atproto.repo.putRecord"
+	public struct PutRecordNSID: Atproto.XRPC.EndpointId {
+		public static var nsid: Atproto.NSID {
+			.init(rawValue: "com.atproto.repo.putRecord")
+		}
 
-	public enum PutRecord<Record: Atproto.Record>: XRPCProcedure {
-		public static var nsid: Atproto.NSID { putRecordNSID }
+		public init() {}
+	}
+
+	public enum PutRecord<Record: Atproto.Record>: Atproto.XRPC.Procedure {
+		public typealias Id = PutRecordNSID
 		public static var outputEncoding: HTTPContentType { .json }
 		public static var contentTypeValue: HTTPContentType { .json }
 
-		public struct Input: XRPCProcedureInput {
+		public struct Input: Atproto.XRPC.ProcedureInput {
 			public static var encoding: HTTPContentType { .json }
 			public static func encode(_ schema: Schema) throws -> Data? {
 				try JSONEncoder().encode(schema)
@@ -26,7 +32,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public struct Schema: Codable, Sendable {
 				public let repo: LexiconString.AtIdentifier
-				public let collection: Atproto.NSID
+				public let collection: Id
 				public let rkey: Record.Key
 				public let record: Record
 				let validate: Bool?
@@ -42,7 +48,7 @@ extension Lexicon.Com.Atproto.Repo {
 					swapRecord: Atproto.CID? = nil,
 				) {
 					self.repo = repo
-					self.collection = Record.nsid
+					self.collection = .init()
 					self.rkey = rkey
 					self.record = record
 					self.validate = validate
@@ -57,7 +63,7 @@ extension Lexicon.Com.Atproto.Repo {
 			}
 		}
 
-		public typealias Parameters = EmptyXRPCParameters
+		public typealias Parameters = Atproto.XRPC.EmptyParameters
 		public typealias Output = PutRecordResult
 	}
 
@@ -80,7 +86,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.PutRecord: XRPCResponseParsing {
+extension Lexicon.Com.Atproto.Repo.PutRecord: Atproto.XRPC.ResponseParsing {
 	public static var badRequestErrors: Set<String> {
 		defaultErrors.union(["InvalidSwap"])
 	}

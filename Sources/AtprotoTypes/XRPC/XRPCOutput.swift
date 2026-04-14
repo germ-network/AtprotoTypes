@@ -9,15 +9,17 @@ import Foundation
 import GermConvenience
 import HTTPTypes
 
-public protocol XRPCResponseParsing: Sendable {
-	associatedtype Output: Decodable, Sendable
-	//this is defined in the lexicon, and additionally in the api spec
-	static var badRequestErrors: Set<String> { get }
-	static var recognizedStatuses: Set<HTTPResponse.Status> { get }
+extension Atproto.XRPC {
+	public protocol ResponseParsing: Sendable {
+		associatedtype Output: Decodable, Sendable
+		//this is defined in the lexicon, and additionally in the api spec
+		static var badRequestErrors: Set<String> { get }
+		static var recognizedStatuses: Set<HTTPResponse.Status> { get }
+	}
 }
 
 //default
-extension XRPCResponseParsing {
+extension Atproto.XRPC.ResponseParsing {
 	static public var recognizedStatuses: Set<HTTPResponse.Status> {
 		[.badRequest, .unauthorized]
 	}
@@ -27,17 +29,19 @@ extension XRPCResponseParsing {
 	}
 }
 
-public enum ParsedXRPCResponse<Output: Decodable> {
-	case ok(Output)
-	case error(ParseXRPCError)
+extension Atproto.XRPC {
+	public enum ParsedResponse<Output: Decodable> {
+		case ok(Output)
+		case error(ParseXRPCError)
 
-	public var output: Output {
-		get throws {
-			switch self {
-			case .ok(let output):
-				output
-			case .error(let parseXRPCError):
-				throw parseXRPCError
+		public var output: Output {
+			get throws {
+				switch self {
+				case .ok(let output):
+					output
+				case .error(let parseXRPCError):
+					throw parseXRPCError
+				}
 			}
 		}
 	}
@@ -57,10 +61,10 @@ public enum ParseXRPCError: LocalizedError {
 	}
 }
 
-extension XRPCResponseParsing {
+extension Atproto.XRPC.ResponseParsing {
 	public static func parse(
 		fullResponse: HTTPDataResponse
-	) throws -> ParsedXRPCResponse<Output> {
+	) throws -> Atproto.XRPC.ParsedResponse<Output> {
 		do {
 			switch fullResponse.response.status {
 			case .ok:
@@ -103,7 +107,7 @@ extension XRPCResponseParsing {
 
 //functional handling
 extension HTTPDataResponse {
-	public func parse<X: XRPCResponseParsing>(_ xrpc: X.Type) throws -> X.Output {
+	public func parse<X: Atproto.XRPC.ResponseParsing>(_ xrpc: X.Type) throws -> X.Output {
 		try X.parse(fullResponse: self).output
 	}
 }

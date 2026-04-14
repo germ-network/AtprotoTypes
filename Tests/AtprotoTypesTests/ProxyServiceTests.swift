@@ -9,6 +9,8 @@ import AtprotoTypes
 import Foundation
 import Testing
 
+@testable import GermConvenience
+
 struct ProxyServiceTests {
 
 	@Test func testEncode() throws {
@@ -26,7 +28,7 @@ struct ProxyServiceTests {
 			let _ = try ProxyService(string: "did:web:example.com#b#c")
 		}
 
-		#expect(throws: Atproto.DID.Errors.invalidPrefix) {
+		#expect(throws: UnwrapError.missing("DID")) {
 			let _ = try ProxyService(string: "a#b")
 		}
 	}
