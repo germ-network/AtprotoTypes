@@ -20,7 +20,7 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 
 	public enum DeleteRecord<Record: Atproto.Record>: Atproto.XRPC.Procedure {
-		public typealias Id = CreateRecordNSID
+		public typealias Id = DeleteRecordNSID
 		public static var outputEncoding: HTTPContentType { .json }
 
 		public struct Input: Atproto.XRPC.ProcedureInput {
