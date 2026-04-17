@@ -1,5 +1,5 @@
 //
-//  ProxyService.swift
+//  Service.swift
 //  AtprotoTypes
 //
 //  Created by Mark @ Germ on 3/29/26.
@@ -9,7 +9,7 @@ import Foundation
 
 ///https://atproto.com/specs/xrpc#service-proxying
 extension Atproto {
-	public struct ProxyService: Equatable {
+	public struct Service: Equatable {
 		public let did: Atproto.DID
 		public let endpoint: String
 
