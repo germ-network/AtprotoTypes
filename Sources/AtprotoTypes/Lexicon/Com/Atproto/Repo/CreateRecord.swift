@@ -59,6 +59,9 @@ extension Lexicon.Com.Atproto.Repo {
 		}
 
 		public typealias Parameters = Atproto.XRPC.EmptyParameters
+		
+		//technically defined in the CreateRecord lexicon but is
+		//for now identical to PutRecordResult
 		public typealias Output = PutRecordResult
 	}
 }
