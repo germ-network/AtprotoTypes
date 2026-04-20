@@ -76,7 +76,7 @@ extension Lexicon.Com.Atproto.Repo {
 		/// Same as the GetRecord output, but they're defined separately, so I'll leave them separate
 		public struct Record: Sendable, Codable {
 			/// The URI of the record.
-			public let uri: String
+			public let uri: Atproto.ATURI
 
 			/// The CID hash for the record.
 			public let cid: String
@@ -84,7 +84,7 @@ extension Lexicon.Com.Atproto.Repo {
 			/// The value for the record. Codable for later conversion
 			public let value: Result
 
-			public init(uri: String, cid: String, value: Result) {
+			public init(uri: Atproto.ATURI, cid: String, value: Result) {
 				self.uri = uri
 				self.cid = cid
 				self.value = value
