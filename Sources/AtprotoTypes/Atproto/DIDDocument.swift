@@ -82,10 +82,16 @@ extension Atproto {
 		}
 
 		public var handle: String? {
-			(alsoKnownAs ?? [])
-				.filter { $0.hasPrefix("at://") }
-				//TODO: filter for "no path or other URI parts."
-				.first
+			if let atHandle =
+				((alsoKnownAs ?? [])
+					.filter { $0.hasPrefix("at://") }
+					//TODO: filter for "no path or other URI parts."
+					.first)
+			{
+				return String(atHandle.trimmingPrefix("at://"))
+			} else {
+				return nil
+			}
 		}
 
 		public init(
