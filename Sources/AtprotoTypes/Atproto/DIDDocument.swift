@@ -81,14 +81,14 @@ extension Atproto {
 			case missingServiceUrl
 		}
 
-		public var handle: String? {
-			if let atHandle =
+		public var handle: Handle? {
+			if let atHandleString =
 				((alsoKnownAs ?? [])
 					.filter { $0.hasPrefix("at://") }
 					//TODO: filter for "no path or other URI parts."
 					.first)
 			{
-				return String(atHandle.trimmingPrefix("at://"))
+				return Handle(atURI: ATURI(rawValue: atHandleString))
 			} else {
 				return nil
 			}

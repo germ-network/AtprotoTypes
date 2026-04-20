@@ -17,6 +17,10 @@ extension Atproto {
 			self.rawValue = rawValue
 		}
 
+		public init(atURI: ATURI) {
+			self.rawValue = String(atURI.rawValue.trimmingPrefix("at://"))
+		}
+
 		var string: String {
 			rawValue
 		}
