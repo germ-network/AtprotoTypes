@@ -12,7 +12,7 @@ import Mockable
 extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable where Result: Mockable {
 	public static func mock() throws -> Self {
 		.init(
-			uri: UUID().uuidString,
+			uri: .mock(),
 			cid: Atproto.CID.mock().string,
 			value: try .mock()
 		)
@@ -31,8 +31,8 @@ extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable where Result: Mo
 			cursor: UUID().uuidString,
 			records: [
 				.init(
-					uri: UUID().uuidString,
-					cid: Atproto.CID.mock().string,
+					uri: .mock(),
+					cid: Atproto.CID.mock(),
 					value: try .mock()
 				)
 			]

@@ -108,7 +108,9 @@ extension Atproto {
 			self.service = service
 		}
 	}
+}
 
+extension Atproto.DIDDocument {
 	/// Describes a method for verifying digital signatures in the AT Protocol, including the public
 	/// signing key.
 	public struct VerificationMethod: Sendable, Codable, Equatable {
