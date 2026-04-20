@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.3.1
+
+### Patch Changes
+
+- [#24](https://github.com/germ-network/AtprotoTypes/pull/24) [`7fd9ad0`](https://github.com/germ-network/AtprotoTypes/commit/7fd9ad0ddb245d937acebf26d14a403e6b919b57) Thanks [@anna-germ](https://github.com/anna-germ)! - Remove at:// from DID Doc handle getter
+
 ## 0.3.0
 
 ### Minor Changes
