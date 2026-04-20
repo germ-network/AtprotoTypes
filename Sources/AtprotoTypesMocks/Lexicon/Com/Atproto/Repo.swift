@@ -32,7 +32,7 @@ extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable where Result: Mo
 			records: [
 				.init(
 					uri: .mock(),
-					cid: Atproto.CID.mock().string,
+					cid: Atproto.CID.mock(),
 					value: try .mock()
 				)
 			]

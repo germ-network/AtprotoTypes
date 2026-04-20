@@ -79,12 +79,12 @@ extension Lexicon.Com.Atproto.Repo {
 			public let uri: Atproto.ATURI
 
 			/// The CID hash for the record.
-			public let cid: String
+			public let cid: Atproto.CID
 
 			/// The value for the record. Codable for later conversion
 			public let value: Result
 
-			public init(uri: Atproto.ATURI, cid: String, value: Result) {
+			public init(uri: Atproto.ATURI, cid: Atproto.CID, value: Result) {
 				self.uri = uri
 				self.cid = cid
 				self.value = value
