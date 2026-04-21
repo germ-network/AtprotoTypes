@@ -11,9 +11,9 @@ import Testing
 
 struct AtprotoDIDTests {
 	@Test func testParse() throws {
-		#expect(try Atproto.DID(rawValue: "di:plc:example.com") == nil)
+		#expect(Atproto.DID(rawValue: "di:plc:example.com") == nil)
 
-		#expect(try Atproto.DID(rawValue: "did:method:example.com") == nil)
+		#expect(Atproto.DID(rawValue: "did:method:example.com") == nil)
 	}
 
 	struct Wrapper: Codable {

@@ -62,6 +62,11 @@ extension Atproto {
 			self.method = method
 			self.identifier = identifier
 		}
+
+		package init(knownIdentifier: String, knownMethod: Methods) {
+			self.identifier = knownIdentifier
+			self.method = knownMethod
+		}
 	}
 }
 
