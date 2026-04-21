@@ -13,12 +13,12 @@ import Testing
 struct AtprotoRecordKeyTests {
 	@Test func testParse() throws {
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
-			let _ = try Atproto.AnyRecordKey(unchecked: "")
+			let _ = try Atproto.AnyRecordKey(string: "")
 		}
 
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
 			let _ = try Atproto.AnyRecordKey(
-				unchecked: String(repeating: "a", count: 513))
+				string: String(repeating: "a", count: 513))
 		}
 	}
 

@@ -16,20 +16,20 @@ extension Atproto {
 		private static let allowedCharacters = CharacterSet.alphanumerics.union(
 			CharacterSet(charactersIn: ".-_:~"))
 
-		public init(unchecked: String) throws {
+		public init(string: String) throws {
 			guard
 				Self.allowedCharacters.isSuperset(
-					of: CharacterSet(charactersIn: unchecked))
+					of: CharacterSet(charactersIn: string))
 			else {
 				throw Lexicon.RecordKeyError.disallowedCharacter
 			}
-			guard (1...512).contains(unchecked.count) else {
+			guard (1...512).contains(string.count) else {
 				throw Lexicon.RecordKeyError.wrongLength
 			}
-			guard ![".", ".."].contains(unchecked) else {
+			guard ![".", ".."].contains(string) else {
 				throw Lexicon.RecordKeyError.disallowedKeyValue
 			}
-			self.rawValue = unchecked
+			self.rawValue = string
 		}
 
 		package init(knownValue: String) {
@@ -38,27 +38,4 @@ extension Atproto {
 	}
 }
 
-extension Atproto.AnyRecordKey: Atproto.RecordKey {
-	public init?(rawValue: String) {
-		do {
-			try self.init(unchecked: rawValue)
-		} catch {
-			Logger(label: "Atproto.AnyRecordKey")
-				.log(level: .error, "Error parsing RecordKey: \(error)")
-			return nil
-		}
-	}
-}
-
-//code it as the bare string so we can type fields
-extension Atproto.AnyRecordKey: Codable {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		self = try .init(unchecked: container.decode(String.self))
-	}
-
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(rawValue)
-	}
-}
+extension Atproto.AnyRecordKey: Atproto.RecordKey {}

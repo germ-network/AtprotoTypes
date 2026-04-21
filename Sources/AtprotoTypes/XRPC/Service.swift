@@ -24,8 +24,8 @@ extension Atproto {
 				throw Atproto.Errors.invalidStringInput
 			}
 
-			self.did = try Atproto.DID(rawValue: String(components[0]))
-				.tryUnwrap
+			self.did = try Atproto.DID(string: String(components[0]))
+
 			self.endpoint = String(components[1])
 		}
 

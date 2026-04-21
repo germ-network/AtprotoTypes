@@ -13,7 +13,7 @@ import Foundation
 public enum LexiconString {}
 
 extension LexiconString {
-	public enum AtIdentifier: RawRepresentable, Codable, Sendable {
+	public enum AtIdentifier: Atproto.StringRepresentable, Codable, Sendable {
 		case handle(Atproto.Handle)
 		case did(Atproto.DID)
 
@@ -25,13 +25,24 @@ extension LexiconString {
 			}
 		}
 
-		public init?(rawValue: String) {
-			if let did = Atproto.DID(rawValue: rawValue) {
+		public init(string: String) throws {
+			if let did = Atproto.DID(rawValue: string) {
 				self = .did(did)
-			} else if let handle = Atproto.Handle(rawValue: rawValue) {
+			} else if let handle = Atproto.Handle(rawValue: string) {
 				self = .handle(handle)
 			} else {
-				return nil
+				throw Errors.unrecognizedStringFormat
+			}
+		}
+	}
+
+	enum Errors: LocalizedError {
+		case unrecognizedStringFormat
+
+		var errorDescription: String? {
+			switch self {
+			case .unrecognizedStringFormat:
+				"Unrecognized string format"
 			}
 		}
 	}

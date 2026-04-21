@@ -17,7 +17,7 @@ extension Lexicon.Com.Atproto.Sync {
 	public enum GetBlob: Atproto.XRPC.Request {
 		public struct Id: Atproto.XRPC.EndpointId {
 			public static var nsid: Atproto.NSID {
-				.init(rawValue: "com.atproto.sync.getBlob")
+				.init(string: "com.atproto.sync.getBlob")
 			}
 
 			public init() {}

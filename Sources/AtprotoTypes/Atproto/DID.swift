@@ -15,7 +15,7 @@ import Foundation
 //can implement more checks later
 
 extension Atproto {
-	public struct DID: RawRepresentable, Codable, Hashable, Sendable {
+	public struct DID: StringRepresentable, Codable, Hashable, Sendable {
 		enum Constants {
 			static let prefix = "did:"
 		}
@@ -27,16 +27,13 @@ extension Atproto {
 			Constants.prefix + method.rawValue + ":" + identifier
 		}
 
-		public init?(rawValue: String) {
-			guard rawValue.hasPrefix(Constants.prefix) else {
-				return nil
+		public init(string: String) throws {
+			guard string.hasPrefix(Constants.prefix) else {
+				throw Errors.invalidPrefix
 			}
-			let remainder = rawValue.dropFirst(Constants.prefix.count)
-			do {
-				(method, identifier) = try Methods.parse(remainder)
-			} catch {
-				return nil
-			}
+			let remainder = string.dropFirst(Constants.prefix.count)
+
+			(method, identifier) = try Methods.parse(remainder)
 		}
 
 		public enum Methods: String, CaseIterable, Sendable {

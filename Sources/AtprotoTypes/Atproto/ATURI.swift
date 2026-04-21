@@ -10,11 +10,11 @@ import Foundation
 extension Atproto {
 	///https://atproto.com/specs/at-uri-scheme
 
-	public struct ATURI: RawRepresentable, Sendable, Codable {
+	public struct ATURI: StringRepresentable, Sendable, Codable {
 		public let rawValue: String
 
-		public init(rawValue: String) {
-			self.rawValue = rawValue
+		public init(string: String) {
+			self.rawValue = string
 		}
 	}
 }

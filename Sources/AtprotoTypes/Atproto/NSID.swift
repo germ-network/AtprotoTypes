@@ -13,9 +13,9 @@ import Foundation
 ///This type expresses the structure and semantics of the NSID. It may be used in several different settings:
 ///Lexicon schemas for records, XRPC endpoints, and more.
 extension Atproto {
-	public struct NSID: RawRepresentable, Sendable {
-		public init(rawValue: String) {
-			self.rawValue = rawValue
+	public struct NSID: StringRepresentable, Sendable {
+		public init(string: String) {
+			self.rawValue = string
 		}
 		public var rawValue: String
 		//TODO: parse into domain authority and name, if needed

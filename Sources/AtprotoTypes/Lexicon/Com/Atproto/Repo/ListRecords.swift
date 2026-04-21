@@ -14,7 +14,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public struct ListRecordsNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.listRecords")
+			.init(string: "com.atproto.repo.listRecords")
 		}
 
 		public init() {}

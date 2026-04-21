@@ -13,7 +13,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public struct DeleteRecordNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.deleteRecord")
+			.init(string: "com.atproto.repo.deleteRecord")
 		}
 
 		public init() {}
