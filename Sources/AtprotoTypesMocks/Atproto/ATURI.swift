@@ -12,7 +12,14 @@ import Mockable
 extension Atproto.ATURI: Mockable {
 	public static func mock() -> Atproto.ATURI {
 		.init(
-			string: "at://did:web:example.com/example.collection.nsid/"
-				+ UUID().uuidString)
+			authority: .init(
+				knownDID: .init(
+					knownIdentifier: "example.com",
+					knownMethod: .web
+				)
+			),
+			collection: .init(rawValue: "example.collection.nsid"),
+			recordKey: .init(knownValue: UUID().uuidString)
+		)
 	}
 }

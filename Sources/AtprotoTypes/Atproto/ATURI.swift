@@ -63,6 +63,16 @@ extension Atproto {
 				: nil
 		}
 
+		package init(
+			authority: LexiconString.AtIdentifier,
+			collection: NSID?,
+			recordKey: AnyRecordKey?
+		) {
+			self.authority = authority
+			self.collection = collection
+			self.recordKey = recordKey
+		}
+
 		public enum Errors: Error, LocalizedError {
 			case missingAtPrefix
 			case missingAuthority
