@@ -61,19 +61,10 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 
 	public struct DeleteRecordResult: Codable, Sendable {
-		public let commit: CommitMeta
+		public let commit: Defs.CommitMeta
 
-		public init(commit: CommitMeta) {
+		public init(commit: Defs.CommitMeta) {
 			self.commit = commit
-		}
-	}
-
-	public struct CommitMeta: Codable, Sendable {
-		public let cid: Atproto.CID
-		public let rev: Atproto.TID
-		public init(cid: Atproto.CID, rev: Atproto.TID) {
-			self.cid = cid
-			self.rev = rev
 		}
 	}
 }
