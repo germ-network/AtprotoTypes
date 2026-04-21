@@ -7,19 +7,19 @@
 
 extension Atproto {
 	public protocol Record: Sendable, Codable {
-		associatedtype Id: RecordId
+		associatedtype Collection: RecordType
 		associatedtype Key: RecordKey
 	}
 
 	//whereas NSID defines a structure, RecordId is a NSID used as
 	//a collection id
-	public protocol RecordId: FixedString {
+	public protocol RecordType: FixedString {
 		static var nsid: NSID { get }
 		init()
 	}
 }
 
 //default implementations for FixedString and Codable
-extension Atproto.RecordId {
+extension Atproto.RecordType {
 	static public var fixedValue: String { nsid.rawValue }
 }
