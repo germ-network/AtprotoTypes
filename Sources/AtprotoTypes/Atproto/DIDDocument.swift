@@ -82,16 +82,20 @@ extension Atproto {
 		}
 
 		public var handle: Handle? {
-			if let atHandleString =
-				((alsoKnownAs ?? [])
-					.filter { $0.hasPrefix("at://") }
-					//TODO: filter for "no path or other URI parts."
-					.first)
-			{
-				return Handle(atURI: ATURI(rawValue: atHandleString))
-			} else {
+			return (alsoKnownAs ?? []).compactMap {
+				// Valid AT URI
+				if let atURI = ATURI(rawValue: $0) {
+					// AT URI for an authority, not a record or collection
+					if atURI.collection == nil, atURI.recordKey == nil {
+						// AT URI for a handle, not a DID
+						if case .handle(let handle) = atURI.authority {
+							return handle
+						}
+					}
+				}
 				return nil
 			}
+			.first
 		}
 
 		public init(
