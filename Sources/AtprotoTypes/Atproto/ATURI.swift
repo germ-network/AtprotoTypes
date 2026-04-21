@@ -19,7 +19,7 @@ extension Atproto {
 	///
 	/// The optional collection part of the path must be a normalized NSID.
 	/// The optional rkey part of the path must be a valid record key.
-	public struct ATURI: RawRepresentable, Sendable, Codable {
+	public struct ATURI: StringRepresentable, Sendable, Codable {
 		public static let prefix: String = "at://"
 
 		public let authority: LexiconString.AtIdentifier
@@ -37,21 +37,13 @@ extension Atproto {
 			return atURI
 		}
 
-		public init?(rawValue: String) {
-			do {
-				try self.init(unchecked: rawValue)
-			} catch {
-				return nil
-			}
-		}
-
-		public init(unchecked: String) throws {
-			guard unchecked.hasPrefix(ATURI.prefix) else {
+		public init(string: String) throws {
+			guard string.hasPrefix(ATURI.prefix) else {
 				throw Errors.missingAtPrefix
 			}
 
 			// Should be [ AUTHORITY, COLLECTION, RKEY ]
-			let components = unchecked.trimmingPrefix(ATURI.prefix)
+			let components = string.trimmingPrefix(ATURI.prefix)
 				.split(separator: "/")
 
 			guard !components.isEmpty else {
@@ -67,7 +59,7 @@ extension Atproto {
 				: nil
 			self.recordKey =
 				components.count >= 3
-				? try AnyRecordKey(unchecked: String(components[2]))
+				? try AnyRecordKey(string: String(components[2]))
 				: nil
 		}
 

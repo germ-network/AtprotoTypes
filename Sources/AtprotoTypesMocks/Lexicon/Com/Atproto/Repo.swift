@@ -20,7 +20,7 @@ extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable where Result: Mock
 }
 
 extension Lexicon.Com.Atproto.Repo.DeleteRecord.Output: Mockable {
-	public static func mock() throws -> Lexicon.Com.Atproto.Repo.DeleteRecordResult {
+	public static func mock() throws -> Lexicon.Com.Atproto.Repo.DeleteRecordOutput {
 		.init(commit: .init(cid: .mock(), rev: .mock()))
 	}
 }
@@ -41,7 +41,7 @@ extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable where Result: Mo
 }
 
 extension Lexicon.Com.Atproto.Repo.PutRecord.Output: Mockable {
-	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordResult {
+	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordOutput {
 		.init(uri: "example", cid: "example", validationStatus: "unknown")
 	}
 }

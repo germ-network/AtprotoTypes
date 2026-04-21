@@ -13,7 +13,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public struct DeleteRecordNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.deleteRecord")
+			.init(string: "com.atproto.repo.deleteRecord")
 		}
 
 		public init() {}
@@ -57,23 +57,14 @@ extension Lexicon.Com.Atproto.Repo {
 		}
 
 		public typealias Parameters = Atproto.XRPC.EmptyParameters
-		public typealias Output = DeleteRecordResult
+		public typealias Output = DeleteRecordOutput
 	}
 
-	public struct DeleteRecordResult: Codable, Sendable {
-		public let commit: CommitMeta
+	public struct DeleteRecordOutput: Codable, Sendable {
+		public let commit: Defs.CommitMeta
 
-		public init(commit: CommitMeta) {
+		public init(commit: Defs.CommitMeta) {
 			self.commit = commit
-		}
-	}
-
-	public struct CommitMeta: Codable, Sendable {
-		public let cid: Atproto.CID
-		public let rev: Atproto.TID
-		public init(cid: Atproto.CID, rev: Atproto.TID) {
-			self.cid = cid
-			self.rev = rev
 		}
 	}
 }

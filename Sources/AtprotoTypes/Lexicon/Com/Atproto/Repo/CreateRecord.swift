@@ -13,7 +13,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public struct CreateRecordNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.createRecord")
+			.init(string: "com.atproto.repo.createRecord")
 		}
 		public init() {}
 	}
@@ -62,7 +62,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 		//technically defined in the CreateRecord lexicon but is
 		//for now identical to PutRecordResult
-		public typealias Output = PutRecordResult
+		public typealias Output = PutRecordOutput
 	}
 }
 

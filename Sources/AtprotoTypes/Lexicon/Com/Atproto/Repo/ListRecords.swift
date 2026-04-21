@@ -14,7 +14,7 @@ import GermConvenience
 extension Lexicon.Com.Atproto.Repo {
 	public struct ListRecordsNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.listRecords")
+			.init(string: "com.atproto.repo.listRecords")
 		}
 
 		public init() {}
@@ -46,7 +46,7 @@ extension Lexicon.Com.Atproto.Repo {
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.rawValue),
-					.init(name: "collection", value: Result.Id.fixedValue),
+					.init(name: "collection", value: Result.Collection.fixedValue),
 				]
 				if let limit {
 					base.append(.init(name: "limit", value: limit.description))

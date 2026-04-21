@@ -10,31 +10,23 @@ import Foundation
 ///https://atproto.com/specs/handle
 ///Define this as a struct and not a typealias so we can add format checking later
 extension Atproto {
-	public struct Handle: RawRepresentable, Sendable {
+	public struct Handle: StringRepresentable, Sendable {
 		public let rawValue: String
 
-		public init?(rawValue: String) {
-			do {
-				try self.init(unchecked: rawValue)
-			} catch {
-				return nil
-			}
-		}
-
 		/// https://atproto.com/specs/handle#handle-identifier-syntax
-		public init(unchecked: String) throws {
-			guard unchecked.count <= 253 else {
+		public init(string: String) throws {
+			guard string.count <= 253 else {
 				throw Errors.tooLong
 			}
 
 			let handleRegex =
 				/^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/
 
-			guard unchecked.wholeMatch(of: handleRegex) != nil else {
+			guard string.wholeMatch(of: handleRegex) != nil else {
 				throw Errors.badHandle
 			}
 
-			self.rawValue = unchecked
+			self.rawValue = string
 		}
 
 		var string: String {

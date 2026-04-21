@@ -9,7 +9,7 @@ import Base32
 import Foundation
 
 extension Atproto {
-	public struct TID: RawRepresentable, Sendable, Equatable, Hashable {
+	public struct TID: StringRepresentable, Sendable, Equatable, Hashable {
 		// TODO: parse it as an int64
 		private let stringEncoded: String
 
@@ -18,25 +18,25 @@ extension Atproto {
 		public static let allowedPrefixCharacters = "234567abcdefghij"
 		private static let expectedLength = 13
 
-		public init?(rawValue: String) {
-			guard let prefix = rawValue.first,
+		public init(string: String) throws {
+			guard let prefix = string.first,
 				Self.allowedPrefixCharacters.contains(prefix)
 			else {
-				return nil
+				throw Errors.wrongPrefix
 			}
 
-			guard rawValue.count == Self.expectedLength else {
-				return nil
+			guard string.count == Self.expectedLength else {
+				throw Errors.wrongLength
 			}
 
 			guard
 				Self.allowedCharacters.isSuperset(
-					of: CharacterSet(charactersIn: rawValue))
+					of: CharacterSet(charactersIn: string))
 			else {
-				return nil
+				throw Errors.disallowedCharacter
 			}
 
-			self.stringEncoded = rawValue
+			self.stringEncoded = string
 		}
 
 		public var rawValue: String { stringEncoded }
@@ -47,8 +47,8 @@ extension Atproto {
 	}
 }
 
-extension Atproto {
-	public enum TIDError: LocalizedError {
+extension Atproto.TID {
+	public enum Errors: LocalizedError {
 		case wrongLength
 		case wrongPrefix
 		case disallowedCharacter

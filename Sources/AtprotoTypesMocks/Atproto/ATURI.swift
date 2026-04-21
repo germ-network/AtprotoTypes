@@ -12,7 +12,7 @@ import Mockable
 extension Atproto.ATURI: Mockable {
 	public static func mock() -> Atproto.ATURI {
 		.init(
-			rawValue: "at://did:web:example.com/example.collection.nsid/"
+			string: "at://did:web:example.com/example.collection.nsid/"
 				+ UUID().uuidString)
 	}
 }

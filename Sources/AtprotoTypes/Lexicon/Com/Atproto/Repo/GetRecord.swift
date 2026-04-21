@@ -16,7 +16,7 @@ extension Lexicon.Com.Atproto.Repo {
 	//want this to be accessible without specifying the result type
 	public struct GetRecordNSID: Atproto.XRPC.EndpointId {
 		public static var nsid: Atproto.NSID {
-			.init(rawValue: "com.atproto.repo.getRecord")
+			.init(string: "com.atproto.repo.getRecord")
 		}
 
 		public init() {}
@@ -61,7 +61,7 @@ extension Lexicon.Com.Atproto.Repo {
 			public func asQueryItems() -> [URLQueryItem] {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.rawValue),
-					.init(name: "collection", value: Result.Id.fixedValue),
+					.init(name: "collection", value: Result.Collection.fixedValue),
 					.init(name: "rkey", value: rkey.rawValue),
 				]
 				if let cid {
