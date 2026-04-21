@@ -62,7 +62,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 		//technically defined in the CreateRecord lexicon but is
 		//for now identical to PutRecordResult
-		public typealias Output = PutRecordResult
+		public typealias Output = PutRecordOutput
 	}
 }
 

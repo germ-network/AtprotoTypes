@@ -64,10 +64,10 @@ extension Lexicon.Com.Atproto.Repo {
 		}
 
 		public typealias Parameters = Atproto.XRPC.EmptyParameters
-		public typealias Output = PutRecordResult
+		public typealias Output = PutRecordOutput
 	}
 
-	public struct PutRecordResult: Codable, Sendable {
+	public struct PutRecordOutput: Codable, Sendable {
 		public let uri: String
 		public let cid: String
 		//commit: CommitMeta
