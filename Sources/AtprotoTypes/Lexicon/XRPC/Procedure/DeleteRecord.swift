@@ -56,7 +56,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 	public struct DeleteRecordResult: Codable, Sendable {
 		public let commit: CommitMeta
-		
+
 		public init(commit: CommitMeta) {
 			self.commit = commit
 		}
