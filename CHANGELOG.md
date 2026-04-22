@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.3.2
+
+### Patch Changes
+
+- [#27](https://github.com/germ-network/AtprotoTypes/pull/27) [`edd73f8`](https://github.com/germ-network/AtprotoTypes/commit/edd73f8cc74432ebc959aa7651e4eafdf59c818c) Thanks [@germ-mark](https://github.com/germ-mark)! - correctly parse bare data when result is a Data
+
 ## 0.3.1
 
 ### Patch Changes
