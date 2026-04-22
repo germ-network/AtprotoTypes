@@ -27,15 +27,6 @@ extension XRPCResponseParsing {
 	}
 }
 
-extension XRPCResponseParsing {
-	public var jsonEncoded: Bool {
-		if Output.self == Data.self || Output.self == Data?.self {
-			return false
-		}
-		return true
-	}
-}
-
 public enum ParsedXRPCResponse<Output: Decodable> {
 	case ok(Output)
 	case error(ParseXRPCError)
@@ -73,15 +64,7 @@ extension XRPCResponseParsing {
 		do {
 			switch fullResponse.response.status {
 			case .ok:
-				if jsonEncoded {
-				}
-				return .ok(
-					
-					try JSONDecoder()
-						.decode(
-							Output.self, from: fullResponse.data
-						)
-				)
+				return .ok(try parseSuccess(body: fullResponse.data))
 			case .badRequest:
 				let errorObject = try JSONDecoder()
 					.decode(
@@ -109,6 +92,19 @@ extension XRPCResponseParsing {
 			return .error(.unrecognized(fullResponse.response))
 		} catch {
 			return .error(.unrecognized(fullResponse.response))
+		}
+	}
+
+	private static func parseSuccess(body: Data) throws -> Output {
+		switch Output.self {
+		case is Data.Type:
+			return try (body as? Output).tryUnwrap
+		case is Data?.Type:
+			let result = body.isEmpty ? nil : body
+			return try (result as? Output).tryUnwrap
+		default:
+			return try JSONDecoder()
+				.decode(Output.self, from: body)
 		}
 	}
 }
