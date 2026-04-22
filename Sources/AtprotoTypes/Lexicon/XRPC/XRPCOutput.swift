@@ -27,6 +27,15 @@ extension XRPCResponseParsing {
 	}
 }
 
+extension XRPCResponseParsing {
+	public var jsonEncoded: Bool {
+		if Output.self == Data.self || Output.self == Data?.self {
+			return false
+		}
+		return true
+	}
+}
+
 public enum ParsedXRPCResponse<Output: Decodable> {
 	case ok(Output)
 	case error(ParseXRPCError)
@@ -64,7 +73,10 @@ extension XRPCResponseParsing {
 		do {
 			switch fullResponse.response.status {
 			case .ok:
+				if jsonEncoded {
+				}
 				return .ok(
+					
 					try JSONDecoder()
 						.decode(
 							Output.self, from: fullResponse.data
