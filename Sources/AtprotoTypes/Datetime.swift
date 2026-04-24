@@ -17,6 +17,14 @@ extension Atproto {
 		public init(date: Date) {
 			self.date = date
 		}
+		
+		public init?(date: Date?) {
+			if let date {
+				self.init(date: date)
+			} else {
+				return nil
+			}
+		}
 	}
 }
 
