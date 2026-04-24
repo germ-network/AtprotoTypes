@@ -11,17 +11,18 @@ import Foundation
 // This is technically ISO 8601 which is similar but not exactly the same.
 
 extension Atproto {
-	public struct Datetime: Equatable, Hashable, Sendable {
-		public var date: Date
+	public struct Datetime: RawRepresentable, Equatable, Hashable, Sendable {
+		public var rawValue: String
 
 		public init(date: Date) {
-			self.date = date
+			self.rawValue = ISO8601DateFormatter().string(from: date)
 		}
 		
-		public init?(date: Date?) {
-			if let date {
+		public init?(rawValue: String) {
+			do {
+				let date = try ISO8601DateFormatter().date(from: rawValue).tryUnwrap
 				self.init(date: date)
-			} else {
+			} catch {
 				return nil
 			}
 		}
@@ -31,20 +32,5 @@ extension Atproto {
 extension Atproto.Datetime {
 	static public func mock() -> Self {
 		.init(date: .now)
-	}
-}
-
-//code it as the bare string so we can type fields
-extension Atproto.Datetime: Codable {
-	public init(from decoder: any Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		let dateString = try container.decode(String.self)
-		let date = try ISO8601DateFormatter().date(from: dateString).tryUnwrap
-		self = .init(date: date)
-	}
-
-	public func encode(to encoder: any Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(ISO8601DateFormatter().string(from: date))
 	}
 }
