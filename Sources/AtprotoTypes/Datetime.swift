@@ -11,7 +11,7 @@ import Foundation
 // This is technically ISO 8601 which is similar but not exactly the same.
 
 extension Atproto {
-	public struct Datetime: RawRepresentable, Equatable, Hashable, Sendable {
+	public struct Datetime: RawRepresentable, Codable, Equatable, Hashable, Sendable {
 		public var rawValue: String
 
 		public init(date: Date) {
