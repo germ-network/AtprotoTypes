@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.3.3
+
+### Patch Changes
+
+- [#29](https://github.com/germ-network/AtprotoTypes/pull/29) [`357543e`](https://github.com/germ-network/AtprotoTypes/commit/357543e67eee86f672d88051492c0ed723026f0d) Thanks [@anna-germ](https://github.com/anna-germ)! - Add Datetime object for ISO 8601 encoding
+
 ## 0.3.2
 
 ### Patch Changes
