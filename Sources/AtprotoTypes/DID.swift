@@ -1,6 +1,6 @@
 //
 //  DID.swift
-//  SwiftAtprotoOAuth
+//  AtprotoTypes
 //
 //  Created by Mark @ Germ on 4/22/25.
 //
