@@ -7,8 +7,8 @@
 
 import Foundation
 
-// An RFC 3339 formatted timestamp.
-// This is technically ISO 8601 which is similar but not exactly the same.
+// Intersecting requirements of RFC 3339, ISO 8601, and WHATWG HTML
+// https://atproto.com/specs/lexicon#datetime
 
 extension Atproto {
 	public struct Datetime: RawRepresentable, Codable, Equatable, Hashable, Sendable {
@@ -17,12 +17,31 @@ extension Atproto {
 		public init(date: Date) {
 			self.rawValue = ISO8601DateFormatter().string(from: date)
 		}
-		
+
 		public init?(rawValue: String) {
-			do {
-				let date = try ISO8601DateFormatter().date(from: rawValue).tryUnwrap
+			let baseFormat = Date.ISO8601FormatStyle()
+				.year()
+				.month()
+				.day()
+				.dateSeparator(.dash)
+				.timeSeparator(.colon)
+
+			if let date =
+				try? baseFormat
+				.time(includingFractionalSeconds: true)
+				.parse(rawValue)
+			{
+				// ISO 8601 with fractional seconds
 				self.init(date: date)
-			} catch {
+			} else if let date =
+				try? baseFormat
+				.time(includingFractionalSeconds: false)
+				.parse(rawValue)
+			{
+				// ISO 8601 without fractional seconds
+				self.init(date: date)
+			} else {
+				// No way to parse this in ISO 8601
 				return nil
 			}
 		}
