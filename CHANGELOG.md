@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.3.4
+
+### Patch Changes
+
+- [#31](https://github.com/germ-network/AtprotoTypes/pull/31) [`d591b88`](https://github.com/germ-network/AtprotoTypes/commit/d591b88d848ebd92e5b9d007ad3626452afd2bd7) Thanks [@anna-germ](https://github.com/anna-germ)! - Adjust datetime formatting rules
+
 ## 0.3.3
 
 ### Patch Changes
