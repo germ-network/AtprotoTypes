@@ -186,7 +186,7 @@ extension Atproto.DIDDocument {
 				"https://w3id.org/security/suites/secp256k1-2019/v1",
 			],
 			id: "did:plc:4yvwfwxfz5sney4twepuzdu7",
-			alsoKnownAs: ["at://germnetwork.com"],
+			alsoKnownAs: ["at://example.com"],
 			verificationMethod: [
 				.init(
 					id: "did:plc:4yvwfwxfz5sney4twepuzdu7#atproto",

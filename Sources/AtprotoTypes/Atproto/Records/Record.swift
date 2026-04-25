@@ -13,7 +13,7 @@ extension Atproto {
 
 	//whereas NSID defines a structure, RecordId is a NSID used as
 	//a collection id
-	public protocol RecordType: FixedString {
+	public protocol RecordType: FixedString, Codable {
 		static var nsid: NSID { get }
 		init()
 	}

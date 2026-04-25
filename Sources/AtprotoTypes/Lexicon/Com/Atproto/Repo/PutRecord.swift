@@ -32,7 +32,7 @@ extension Lexicon.Com.Atproto.Repo {
 
 			public struct Schema: Codable, Sendable {
 				public let repo: LexiconString.AtIdentifier
-				public let collection: Id
+				public let collection: Record.Collection
 				public let rkey: Record.Key
 				public let record: Record
 				let validate: Bool?
