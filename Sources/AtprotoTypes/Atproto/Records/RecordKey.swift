@@ -16,9 +16,11 @@ extension Atproto {
 		static func defaultValue() -> Self
 	}
 
-	public struct LiteralSelfRecordKey: FixedString {
+	public struct LiteralSelfRecordKey: RecordKey, FixedString {
 		public static var fixedValue: String { "self" }
 		public init() {}
+		
+		public var rawValue: String { Self.fixedValue }
 	}
 }
 
