@@ -1,7 +1,7 @@
 {
 	"name": "@germ-network/atprototypes",
 	"private": true,
-	"version": "0.3.1",
+	"version": "0.3.4",
 	"engines": {
 		"node": ">=24"
 	},

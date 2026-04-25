@@ -1,5 +1,23 @@
 # @germ-network/atprototypes
 
+## 0.3.4
+
+### Patch Changes
+
+- [#31](https://github.com/germ-network/AtprotoTypes/pull/31) [`d591b88`](https://github.com/germ-network/AtprotoTypes/commit/d591b88d848ebd92e5b9d007ad3626452afd2bd7) Thanks [@anna-germ](https://github.com/anna-germ)! - Adjust datetime formatting rules
+
+## 0.3.3
+
+### Patch Changes
+
+- [#29](https://github.com/germ-network/AtprotoTypes/pull/29) [`357543e`](https://github.com/germ-network/AtprotoTypes/commit/357543e67eee86f672d88051492c0ed723026f0d) Thanks [@anna-germ](https://github.com/anna-germ)! - Add Datetime object for ISO 8601 encoding
+
+## 0.3.2
+
+### Patch Changes
+
+- [#27](https://github.com/germ-network/AtprotoTypes/pull/27) [`edd73f8`](https://github.com/germ-network/AtprotoTypes/commit/edd73f8cc74432ebc959aa7651e4eafdf59c818c) Thanks [@germ-mark](https://github.com/germ-mark)! - correctly parse bare data when result is a Data
+
 ## 0.3.1
 
 ### Patch Changes
