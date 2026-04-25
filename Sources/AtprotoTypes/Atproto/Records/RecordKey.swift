@@ -8,7 +8,7 @@
 import Foundation
 
 extension Atproto {
-	public protocol RecordKey: Codable, Sendable, StringRepresentable {
+	public protocol RecordKey: StringRepresentable, Codable, Sendable {
 	}
 
 	//may be dynamic as in a TID or a single fixed value as in a Literal
@@ -16,13 +16,27 @@ extension Atproto {
 		static func defaultValue() -> Self
 	}
 
-	public struct LiteralSelfRecordKey: RecordKey, FixedString {
+	public struct LiteralSelfRecordKey: DefaultableRecordKey, FixedString {
 		public static var fixedValue: String { "self" }
 		public init() {}
 		
 		public var rawValue: String { Self.fixedValue }
+		
+		public init(from decoder: any Decoder) throws {
+			let container = try decoder.singleValueContainer()
+			let string = try container.decode(String.self)
+			guard string == Self.fixedValue else {
+				throw Atproto.Errors.fixedStringMismatch
+			}
+		}
+		
+		public func encode(to encoder: any Encoder) throws {
+			var container = encoder.singleValueContainer()
+			try container.encode(Self.fixedValue)
+		}
 	}
 }
+
 
 //default implementations to comform to RecordKey /
 extension FixedString {

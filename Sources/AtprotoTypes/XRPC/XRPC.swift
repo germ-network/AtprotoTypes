@@ -13,7 +13,6 @@ extension Atproto {
 	public enum XRPC {
 		//https://atproto.com/specs/lexicon#query-and-procedure-http-api
 		public protocol Endpoint: ResponseParsing {
-			//	static var nsid: Atproto.NSID { get }
 			associatedtype Id: EndpointId
 			static var outputEncoding: HTTPContentType { get }
 
