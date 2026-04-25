@@ -7,7 +7,7 @@
 
 //https://atproto.com/specs/data-model#data-types
 extension Atproto {
-	enum Primitive {
+	public enum Primitive {
 		//boolean <> Swift boolean
 		//integer (signed, 64-bit) <> Int64
 		//string (Unicode, UTF-8) <> String (see lexicon String)
