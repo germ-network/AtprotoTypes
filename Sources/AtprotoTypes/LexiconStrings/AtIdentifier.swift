@@ -38,10 +38,6 @@ extension LexiconString {
 		package init(knownDID: Atproto.DID) {
 			self = .did(knownDID)
 		}
-
-		package init(knownHandle: Atproto.Handle) {
-			self = .handle(knownHandle)
-		}
 	}
 
 	enum Errors: LocalizedError {

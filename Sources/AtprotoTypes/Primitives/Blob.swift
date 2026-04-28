@@ -16,7 +16,7 @@ extension Atproto.Primitive {
 		}
 
 		//for encoding
-		private let type = TypeValue()
+		private(set) var type = TypeValue()
 
 		/// The strong reference of the blob.
 		public let ref: Atproto.Primitive.Link
