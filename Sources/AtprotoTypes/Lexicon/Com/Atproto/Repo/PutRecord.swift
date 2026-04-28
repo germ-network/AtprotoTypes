@@ -70,17 +70,23 @@ extension Lexicon.Com.Atproto.Repo {
 	public struct PutRecordOutput: Codable, Sendable {
 		public let uri: String
 		public let cid: String
-		//commit: CommitMeta
-		public let validationStatus: String
+		public let commit: Defs.CommitMeta
+		public let validationStatus: ValidationStatus
 
-		enum ValidationStatus: String {
+		public enum ValidationStatus: String, Sendable, Codable {
 			case valid
 			case unknown
 		}
 
-		public init(uri: String, cid: String, validationStatus: String) {
+		public init(
+			uri: String,
+			cid: String,
+			commit: Defs.CommitMeta,
+			validationStatus: ValidationStatus
+		) {
 			self.uri = uri
 			self.cid = cid
+			self.commit = commit
 			self.validationStatus = validationStatus
 		}
 	}

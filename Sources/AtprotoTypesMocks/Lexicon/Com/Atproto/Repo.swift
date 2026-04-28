@@ -41,7 +41,21 @@ extension Lexicon.Com.Atproto.Repo.ListRecords.Output: Mockable where Result: Mo
 }
 
 extension Lexicon.Com.Atproto.Repo.PutRecord.Output: Mockable {
-	public static func mock() -> Lexicon.Com.Atproto.Repo.PutRecordOutput {
-		.init(uri: "example", cid: "example", validationStatus: "unknown")
+	public static func mock() throws -> Lexicon.Com.Atproto.Repo.PutRecordOutput {
+		.init(
+			uri: "example",
+			cid: "example",
+			commit: try .mock(),
+			validationStatus: .unknown
+		)
+	}
+}
+
+extension Lexicon.Com.Atproto.Repo.Defs.CommitMeta: Mockable {
+	public static func mock() throws -> Lexicon.Com.Atproto.Repo.Defs.CommitMeta {
+		.init(
+			cid: try .init(string: "example"),
+			rev: try .init(string: "example")
+		)
 	}
 }

@@ -19,9 +19,9 @@ extension Atproto {
 	public struct LiteralSelfRecordKey: DefaultableRecordKey, FixedString {
 		public static var fixedValue: String { "self" }
 		public init() {}
-		
+
 		public var rawValue: String { Self.fixedValue }
-		
+
 		public init(from decoder: any Decoder) throws {
 			let container = try decoder.singleValueContainer()
 			let string = try container.decode(String.self)
@@ -29,14 +29,13 @@ extension Atproto {
 				throw Atproto.Errors.fixedStringMismatch
 			}
 		}
-		
+
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
 			try container.encode(Self.fixedValue)
 		}
 	}
 }
-
 
 //default implementations to comform to RecordKey /
 extension FixedString {
