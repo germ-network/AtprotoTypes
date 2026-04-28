@@ -6,42 +6,44 @@
 //
 
 import AtprotoTypes
+import AtprotoTypesMocks
 import Foundation
 import Testing
 
 struct AtprotoRecordKeyTests {
 	@Test func testParse() throws {
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
-			let _ = try Lexicon.AnyRecordKey(rawValue: "")
+			let _ = try Atproto.AnyRecordKey(string: "")
 		}
 
 		#expect(throws: Lexicon.RecordKeyError.wrongLength) {
-			let _ = try Lexicon.AnyRecordKey(
-				rawValue: String(repeating: "a", count: 513))
+			let _ = try Atproto.AnyRecordKey(
+				string: String(repeating: "a", count: 513))
 		}
 	}
 
 	@Test func testEncodingDecoding() throws {
-		let rkey = Lexicon.AnyRecordKey.mock()
+		let rkey = Atproto.AnyRecordKey.mock()
 		let encoded = try JSONEncoder().encode(rkey)
-		let decoded = try JSONDecoder().decode(Lexicon.AnyRecordKey.self, from: encoded)
+		let decoded = try JSONDecoder().decode(
+			Atproto.AnyRecordKey.self, from: encoded)
 		#expect(rkey == decoded)
 	}
 
 	@Test func testLiteralSelf() throws {
-		let rkey = Lexicon.LiteralSelfRecordKey()
+		let rkey = Atproto.LiteralSelfRecordKey()
 		let encoded = try JSONEncoder().encode(rkey)
 
-		#expect(encoded == "\"\(Lexicon.LiteralSelfRecordKey.fixedValue)\"".utf8Data)
+		#expect(encoded == "\"\(Atproto.LiteralSelfRecordKey.fixedValue)\"".utf8Data)
 
 		let decoded = try JSONDecoder().decode(
-			Lexicon.LiteralSelfRecordKey.self,
+			Atproto.LiteralSelfRecordKey.self,
 			from: encoded
 		)
 		#expect(rkey == decoded)
 	}
 
-	struct MockLiteralKey: Lexicon.LiteralRecordKey {
+	struct MockLiteralKey: FixedString {
 		static var fixedValue: String { "mock" }
 	}
 

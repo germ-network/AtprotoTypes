@@ -1,0 +1,30 @@
+//
+//  ATProtoErrors.swift
+//  AtprotoTypes
+//
+//  Created by Mark @ Germ on 2/18/26.
+//
+
+import Foundation
+
+extension Atproto {
+	public enum Errors: Error {
+		case invalidRecordType
+		case invalidPrefix
+		case invalidBase32Data
+		case invalidStringInput
+		case fixedStringMismatch
+	}
+}
+
+extension Atproto.Errors: LocalizedError {
+	public var errorDescription: String? {
+		switch self {
+		case .invalidRecordType: "Invalid Record type"
+		case .invalidPrefix: "Invalid prefix"
+		case .invalidBase32Data: "Invalid Base32 data"
+		case .invalidStringInput: "Invalid string input"
+		case .fixedStringMismatch: "Fixed string mismatch"
+		}
+	}
+}
