@@ -16,7 +16,7 @@ extension Atproto {
 		//todo: further parse components of the CID data such as the hash
 		let bytes: Data
 
-		private init(bytes: Data) {
+		package init(bytes: Data) {
 			self.bytes = bytes
 		}
 
@@ -55,12 +55,5 @@ extension Atproto.CID: Codable {
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(self.string)
-	}
-}
-
-extension Atproto.CID {
-	static public func mock() -> Self {
-		//TODO, mock the internal mechanics of CID
-		.init(bytes: Data("mock".utf8))
 	}
 }
