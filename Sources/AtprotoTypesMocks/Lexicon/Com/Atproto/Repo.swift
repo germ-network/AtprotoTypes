@@ -55,7 +55,7 @@ extension Lexicon.Com.Atproto.Repo.Defs.CommitMeta: Mockable {
 	public static func mock() throws -> Lexicon.Com.Atproto.Repo.Defs.CommitMeta {
 		.init(
 			cid: .mock(),
-			rev: try .init(string: "example")
+			rev: .mock()
 		)
 	}
 }
