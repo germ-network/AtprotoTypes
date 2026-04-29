@@ -10,7 +10,7 @@ extension Atproto {
 		associatedtype Collection: RecordType
 		associatedtype Key: RecordKey
 
-		//reminder to make a public private(set) var for encoding/decodind
+		//reminder to make a public private(set) var for encoding/decoding
 		var nsid: Collection { get }
 	}
 
