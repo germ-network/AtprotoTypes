@@ -13,7 +13,7 @@ import Foundation
 ///This type expresses the structure and semantics of the NSID. It may be used in several different settings:
 ///Lexicon schemas for records, XRPC endpoints, and more.
 extension Atproto {
-	public struct NSID: StringRepresentable, Sendable, Hashable, Codable {
+	public struct NSID: StringRepresentable, Codable {
 		public init(string: String) {
 			self.rawValue = string
 		}

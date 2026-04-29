@@ -13,7 +13,7 @@ import Foundation
 public enum LexiconString {}
 
 extension LexiconString {
-	public enum AtIdentifier: Atproto.StringRepresentable, Codable, Sendable {
+	public enum AtIdentifier: Atproto.StringRepresentable, Codable {
 		case handle(Atproto.Handle)
 		case did(Atproto.DID)
 

@@ -9,7 +9,7 @@ import Base32
 import Foundation
 
 extension Atproto {
-	public struct TID: StringRepresentable, Sendable, Equatable, Hashable {
+	public struct TID: StringRepresentable, Equatable {
 		// TODO: parse it as an int64
 		private let stringEncoded: String
 

@@ -12,7 +12,7 @@ import Logging
 ///We want automatically synthesized Codable from RawRepresentable<String>,
 ///but prefer a throwing init
 extension Atproto {
-	public protocol StringRepresentable: RawRepresentable<String> {
+	public protocol StringRepresentable: RawRepresentable<String>, Hashable, Sendable {
 		init(string: String) throws
 	}
 }

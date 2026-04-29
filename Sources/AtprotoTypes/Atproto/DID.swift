@@ -15,7 +15,7 @@ import Foundation
 //can implement more checks later
 
 extension Atproto {
-	public struct DID: StringRepresentable, Codable, Hashable, Sendable {
+	public struct DID: StringRepresentable, Codable {
 		enum Constants {
 			static let prefix = "did:"
 		}

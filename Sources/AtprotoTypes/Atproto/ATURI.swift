@@ -19,7 +19,7 @@ extension Atproto {
 	///
 	/// The optional collection part of the path must be a normalized NSID.
 	/// The optional rkey part of the path must be a valid record key.
-	public struct ATURI: StringRepresentable, Sendable, Codable {
+	public struct ATURI: StringRepresentable, Codable {
 		public static let prefix: String = "at://"
 
 		public let authority: LexiconString.AtIdentifier

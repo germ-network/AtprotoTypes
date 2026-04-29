@@ -8,7 +8,7 @@
 import Foundation
 
 extension Atproto {
-	public protocol RecordKey: StringRepresentable, Codable, Sendable {
+	public protocol RecordKey: StringRepresentable, Codable {
 	}
 
 	//may be dynamic as in a TID or a single fixed value as in a Literal
