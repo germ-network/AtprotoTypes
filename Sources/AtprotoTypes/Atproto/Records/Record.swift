@@ -9,6 +9,9 @@ extension Atproto {
 	public protocol Record: Sendable, Codable {
 		associatedtype Collection: RecordType
 		associatedtype Key: RecordKey
+
+		//reminder to make a public private(set) var for encoding/decodind
+		var nsid: Collection { get }
 	}
 
 	//whereas NSID defines a structure, RecordId is a NSID used as
