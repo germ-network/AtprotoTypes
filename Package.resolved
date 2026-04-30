@@ -1,5 +1,5 @@
 {
-  "originHash" : "ef2be78c19d6d56a7970121bd201f492856fc59b679bb8c5544b55d29f4c1e14",
+  "originHash" : "56e23cd4825b13de08cb1f2459ee4d9a34c89278d8038845eb1f0e1a2089a97a",
   "pins" : [
     {
       "identity" : "base32",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/germ-network/GermConvenience.git",
       "state" : {
-        "branch" : "reorg/rename+mocks",
-        "revision" : "fe02c52f973a240794ec1729b7ff18b9394793c7"
+        "revision" : "11e006791276ceb8236fae210e4ee521f80a0a41",
+        "version" : "0.1.4"
       }
     },
     {
