@@ -47,9 +47,3 @@ extension Atproto {
 		}
 	}
 }
-
-extension Atproto.Datetime {
-	static public func mock() -> Self {
-		.init(date: .now)
-	}
-}
