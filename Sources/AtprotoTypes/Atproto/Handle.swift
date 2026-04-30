@@ -11,6 +11,8 @@ import Foundation
 ///Define this as a struct and not a typealias so we can add format checking later
 extension Atproto {
 	public struct Handle: StringRepresentable {
+		public static let invalid = Handle(knownValue: "handle.invalid")
+
 		public let rawValue: String
 
 		/// https://atproto.com/specs/handle#handle-identifier-syntax
@@ -27,6 +29,10 @@ extension Atproto {
 			}
 
 			self.rawValue = string
+		}
+
+		private init(knownValue: String) {
+			rawValue = knownValue
 		}
 
 		var string: String {
