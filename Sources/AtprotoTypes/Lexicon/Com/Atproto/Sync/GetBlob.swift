@@ -1,0 +1,65 @@
+//
+//  GetBlob.swift
+//  AtprotoTypes
+//
+//  Pulled in by Anna Mistele on 3/3/26.
+//  Created by Christopher Jr Riley on 2024-05-20.
+//
+
+import Crypto
+import Foundation
+import GermConvenience
+
+// https://docs.bsky.app/docs/api/com-atproto-sync-get-blob
+// https://lexicon.garden/lexicon/did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.sync.getBlob/docs
+/// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/sync/getBlob.json
+extension Lexicon.Com.Atproto.Sync {
+	public enum GetBlob: Atproto.XRPC.Request {
+		public struct Id: Atproto.XRPC.EndpointId {
+			public static var nsid: Atproto.NSID {
+				.init(string: "com.atproto.sync.getBlob")
+			}
+
+			public init() {}
+		}
+		public static let outputEncoding: HTTPContentType = .any
+
+		public struct Parameters: QueryParametrizable {
+			/// The DID of the account.
+			let did: LexiconString.AtIdentifier
+
+			/// The CID of the blob to fetch.
+			let cid: Atproto.CID
+
+			public init(
+				did: LexiconString.AtIdentifier,
+				cid: Atproto.CID
+			) {
+				self.did = did
+				self.cid = cid
+			}
+
+			public func asQueryItems() -> [URLQueryItem] {
+				return [
+					.init(name: "did", value: did.rawValue),
+					.init(name: "cid", value: cid.string),
+				]
+			}
+		}
+		public typealias Output = Data?
+	}
+}
+
+extension Lexicon.Com.Atproto.Sync.GetBlob: Atproto.XRPC.ResponseParsing {
+	public static var badRequestErrors: Set<String> {
+		defaultErrors.union(
+			[
+				"BlobNotFound",
+				"RepoNotFound",
+				"RepoTakendown",
+				"RepoSuspended",
+				"RepoDeactivated",
+			]
+		)
+	}
+}

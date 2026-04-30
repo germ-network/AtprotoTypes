@@ -12,7 +12,7 @@ struct CIDTests {
 
 	@Test func testDecode() async throws {
 		let input = "bafyreibmcnkzbxtciyydktbatjlpgh5hollpov4zvpwtaaq353vyzfbxwu"
-		let parsed = try CID(string: input)
+		let parsed = try Atproto.CID(string: input)
 		#expect(parsed.string.lowercased() == input.lowercased())
 	}
 

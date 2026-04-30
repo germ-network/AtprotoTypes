@@ -9,25 +9,27 @@ import AtprotoTypes
 import Foundation
 import Testing
 
+@testable import GermConvenience
+
 struct ProxyServiceTests {
 
 	@Test func testEncode() throws {
-		let proxy = ProxyService(
+		let proxy = Atproto.Service(
 			did: .mock(method: .web),
 			endpoint: UUID().uuidString
 		)
 
-		let parsed = try ProxyService(string: proxy.headerValue)
+		let parsed = try Atproto.Service(string: proxy.headerValue)
 		#expect(parsed == proxy)
 	}
 
 	@Test func testDecodeFailures() throws {
-		#expect(throws: AtprotoTypeError.invalidStringInput) {
-			let _ = try ProxyService(string: "did:web:example.com#b#c")
+		#expect(throws: Atproto.Errors.invalidStringInput) {
+			let _ = try Atproto.Service(string: "did:web:example.com#b#c")
 		}
 
-		#expect(throws: AtprotoDIDError.invalidPrefix) {
-			let _ = try ProxyService(string: "a#b")
+		#expect(throws: Atproto.DID.Errors.invalidPrefix) {
+			let _ = try Atproto.Service(string: "a#b")
 		}
 	}
 }
