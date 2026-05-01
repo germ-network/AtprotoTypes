@@ -14,7 +14,7 @@ extension Lexicon.Com.Atproto {
 
 ///https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/identity/resolveHandle.json
 extension Lexicon.Com.Atproto.Identity {
-	public struct ResolveHandle: Atproto.XRPC.Request {
+	public struct ResolveHandle: Atproto.XRPC.OptionalResultRequest {
 		public struct Id: Atproto.XRPC.EndpointId {
 			public static var nsid: Atproto.NSID {
 				.init(string: "com.atproto.identity.resolveHandle")
@@ -40,8 +40,10 @@ extension Lexicon.Com.Atproto.Identity {
 			public let did: Atproto.DID
 		}
 
+		public static let notFoundCodes = Set(["HandleNotFound"])
+
 		public static var badRequestErrors: Set<String> {
-			defaultErrors.union(["HandleNotFound"])
+			defaultErrors.union(notFoundCodes)
 		}
 	}
 }

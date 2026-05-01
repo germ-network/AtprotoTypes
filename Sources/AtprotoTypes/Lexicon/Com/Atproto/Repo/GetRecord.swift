@@ -76,8 +76,12 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 }
 
-extension Lexicon.Com.Atproto.Repo.GetRecord: Atproto.XRPC.ResponseParsing {
+extension Lexicon.Com.Atproto.Repo.GetRecord: Atproto.XRPC.OptionalResultRequest, Atproto.XRPC
+		.ResponseParsing
+{
+	public static var notFoundCodes: Set<String> { Set(["RecordNotFound"]) }
+
 	public static var badRequestErrors: Set<String> {
-		defaultErrors.union(["RecordNotFound"])
+		defaultErrors.union(notFoundCodes)
 	}
 }

@@ -30,6 +30,10 @@ extension Atproto {
 		//these are GET queries
 		public protocol Request: Endpoint {}
 
+		public protocol OptionalResultRequest: Request {
+			static var notFoundCodes: Set<String> { get }
+		}
+
 		//these are POST
 		public protocol Procedure: Endpoint {
 			associatedtype Input: ProcedureInput
