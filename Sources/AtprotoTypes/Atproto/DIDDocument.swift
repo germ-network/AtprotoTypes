@@ -81,25 +81,6 @@ extension Atproto {
 			case missingServiceUrl
 		}
 
-		//the value we parse still needs to be resolved back to the same
-		//did to verify it
-		public var unverifiedHandle: Handle? {
-			return (alsoKnownAs ?? []).compactMap {
-				// Valid AT URI
-				if let atURI = ATURI(rawValue: $0) {
-					// AT URI for an authority, not a record or collection
-					if atURI.collection == nil, atURI.recordKey == nil {
-						// AT URI for a handle, not a DID
-						if case .handle(let handle) = atURI.authority {
-							return handle
-						}
-					}
-				}
-				return nil
-			}
-			.first
-		}
-
 		public init(
 			context: [String],
 			id: String,
