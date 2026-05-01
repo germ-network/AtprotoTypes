@@ -13,6 +13,16 @@ extension Atproto.DIDDocument {
 		//which may be reserved value "handle.invalid"
 		public let did: Atproto.DID
 		public let verifiedHandle: Atproto.Handle
+
+		package init(
+			document: Atproto.DIDDocument,
+			did: Atproto.DID,
+			verifiedHandle: Atproto.Handle
+		) {
+			self.document = document
+			self.did = did
+			self.verifiedHandle = verifiedHandle
+		}
 	}
 
 	public func verified(
@@ -53,7 +63,7 @@ extension Atproto.DIDDocument {
 
 	//the value we parse still needs to be resolved back to the same
 	//did to verify it
-	private var unverifiedHandle: Atproto.Handle? {
+	package var unverifiedHandle: Atproto.Handle? {
 		(alsoKnownAs ?? []).compactMap {
 			// Valid AT URI
 			if let atURI = Atproto.ATURI(rawValue: $0) {
