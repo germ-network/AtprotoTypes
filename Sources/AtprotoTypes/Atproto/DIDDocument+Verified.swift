@@ -8,7 +8,7 @@
 import Foundation
 
 extension Atproto.DIDDocument {
-	public struct Verified {
+	public struct Verified: Sendable {
 		public let document: Atproto.DIDDocument
 		//which may be reserved value "handle.invalid"
 		public let did: Atproto.DID
