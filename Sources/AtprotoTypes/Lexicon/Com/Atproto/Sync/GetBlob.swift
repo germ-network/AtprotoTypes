@@ -46,7 +46,7 @@ extension Lexicon.Com.Atproto.Sync {
 				]
 			}
 		}
-		public typealias Output = Data?
+		public typealias Output = Data
 	}
 }
 
