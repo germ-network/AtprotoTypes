@@ -13,6 +13,23 @@ extension Atproto.DIDDocument {
 		//which may be reserved value "handle.invalid"
 		public let did: Atproto.DID
 		public let verifiedHandle: Atproto.Handle
+
+		public func check(expectedDid: Atproto.DID) throws -> Self {
+			guard did == expectedDid else {
+				throw ResolverErrors.didMismatch
+			}
+			return self
+		}
+
+		enum ResolverErrors: LocalizedError {
+			case didMismatch
+
+			var errorDescription: String? {
+				switch self {
+				case .didMismatch: "did did not match"
+				}
+			}
+		}
 	}
 
 	public func verified(
