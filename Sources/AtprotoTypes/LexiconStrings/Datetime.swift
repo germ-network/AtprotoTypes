@@ -10,7 +10,7 @@ import Foundation
 // Intersecting requirements of RFC 3339, ISO 8601, and WHATWG HTML
 // https://atproto.com/specs/lexicon#datetime
 
-extension Atproto {
+extension LexiconString {
 	public struct Datetime: RawRepresentable, Codable, Equatable, Hashable, Sendable {
 		public var rawValue: String
 

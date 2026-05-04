@@ -8,7 +8,7 @@
 import AtprotoTypes
 import Mockable
 
-extension Atproto.Datetime: Mockable {
+extension LexiconString.Datetime: Mockable {
 	static public func mock() -> Self {
 		.init(date: .now)
 	}
