@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.4.2
+
+### Patch Changes
+
+- [#36](https://github.com/germ-network/AtprotoTypes/pull/36) [`f625409`](https://github.com/germ-network/AtprotoTypes/commit/f625409e52aaea1d83b58866bacd25b06d9fdd6f) Thanks [@germ-mark](https://github.com/germ-mark)! - Datetime is properly namespaced as a LexiconString
+
 ## 0.4.1
 
 ### Patch Changes
