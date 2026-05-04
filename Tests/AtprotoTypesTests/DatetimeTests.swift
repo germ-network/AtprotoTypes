@@ -11,7 +11,7 @@ import Testing
 struct DatetimeTests {
 	@Test func testDecode() async throws {
 		let input = "2025-06-11T05:45:42.030Z"
-		let parsed = Atproto.Datetime(rawValue: input)
+		let parsed = LexiconString.Datetime(rawValue: input)
 		#expect(parsed != nil)
 	}
 }
