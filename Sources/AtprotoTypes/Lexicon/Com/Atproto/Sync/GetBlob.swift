@@ -46,20 +46,26 @@ extension Lexicon.Com.Atproto.Sync {
 				]
 			}
 		}
-		public typealias Output = Data?
+		public typealias Output = Data
 	}
 }
 
-extension Lexicon.Com.Atproto.Sync.GetBlob: Atproto.XRPC.ResponseParsing {
+extension Lexicon.Com.Atproto.Sync.GetBlob: Atproto.XRPC.OptionalResultRequest, Atproto.XRPC
+		.ResponseParsing
+{
+	public static var notFoundCodes: Set<String> {
+		Set(["BlobNotFound", "RepoNotFound"])
+	}
+
 	public static var badRequestErrors: Set<String> {
 		defaultErrors.union(
 			[
-				"BlobNotFound",
-				"RepoNotFound",
 				"RepoTakendown",
 				"RepoSuspended",
 				"RepoDeactivated",
 			]
+
 		)
+		.union(notFoundCodes)
 	}
 }

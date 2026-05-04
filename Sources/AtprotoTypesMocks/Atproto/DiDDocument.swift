@@ -42,3 +42,14 @@ extension Atproto.DIDDocument: Mockable {
 		)
 	}
 }
+
+extension Atproto.DIDDocument.Verified: Mockable {
+	public static func mock() throws -> Atproto.DIDDocument.Verified {
+		let didDoc = try Atproto.DIDDocument.mock()
+
+		return try didDoc.verified(
+			expecting: didDoc.unverifiedHandle.tryUnwrap,
+			did: try .init(string: didDoc.id)
+		)
+	}
+}
