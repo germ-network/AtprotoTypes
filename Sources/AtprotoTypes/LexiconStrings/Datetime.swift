@@ -45,5 +45,9 @@ extension LexiconString {
 				return nil
 			}
 		}
+
+		public var date: Date? {
+			ISO8601DateFormatter().date(from: rawValue)
+		}
 	}
 }
