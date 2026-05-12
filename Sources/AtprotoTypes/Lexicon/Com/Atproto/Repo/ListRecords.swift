@@ -26,7 +26,6 @@ extension Lexicon.Com.Atproto.Repo {
 
 		public struct Parameters: QueryParametrizable {
 			let repo: LexiconString.AtIdentifier
-			// TODO: Enforce min/max (1-100)?
 			let limit: Int?
 			let cursor: String?
 			let reverse: Bool?
@@ -38,9 +37,23 @@ extension Lexicon.Com.Atproto.Repo {
 				reverse: Bool?
 			) {
 				self.repo = repo
-				self.limit = limit
+				self.limit = Self.boundLimit(limit)
 				self.cursor = cursor
 				self.reverse = reverse
+			}
+
+			private static func boundLimit(_ limit: Int?) -> Int? {
+				guard let limit else {
+					return nil
+				}
+				switch limit {
+				case 100...:
+					return 100
+				case ...1:
+					return 1
+				default:
+					return limit
+				}
 			}
 
 			public func asQueryItems() -> [URLQueryItem] {
