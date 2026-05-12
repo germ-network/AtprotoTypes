@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.4.3
+
+### Patch Changes
+
+- [#38](https://github.com/germ-network/AtprotoTypes/pull/38) [`f3368e3`](https://github.com/germ-network/AtprotoTypes/commit/f3368e32aa93d34f1e187bc1b37149fd5f83b8cd) Thanks [@anna-germ](https://github.com/anna-germ)! - Enforce limit bounds on listRecords
+
 ## 0.4.2
 
 ### Patch Changes
