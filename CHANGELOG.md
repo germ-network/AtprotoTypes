@@ -1,5 +1,13 @@
 # @germ-network/atprototypes
 
+## 0.4.4
+
+### Patch Changes
+
+- [#41](https://github.com/germ-network/AtprotoTypes/pull/41) [`868f1a0`](https://github.com/germ-network/AtprotoTypes/commit/868f1a00c60d5aebcaa15db08965a8c52c27aefd) Thanks [@germ-mark](https://github.com/germ-mark)! - add public blob and link inits
+
+- [#41](https://github.com/germ-network/AtprotoTypes/pull/41) [`03fdb71`](https://github.com/germ-network/AtprotoTypes/commit/03fdb71e3c79c61ce2c612e912dda76a0d8be1c3) Thanks [@germ-mark](https://github.com/germ-mark)! - reduce spurious atprotoIdentifier init throws
+
 ## 0.4.3
 
 ### Patch Changes
