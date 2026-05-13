@@ -29,6 +29,17 @@ extension Atproto.Primitive {
 
 		/// The size of the blob.
 		public let size: Int
+		
+		public init(
+			ref: Atproto.Primitive.Link,
+			mimeType: String,
+			size: Int
+		) {
+			self.type = TypeValue()
+			self.ref = ref
+			self.mimeType = mimeType
+			self.size = size
+		}
 
 		enum CodingKeys: String, CodingKey {
 			case type = "$type"

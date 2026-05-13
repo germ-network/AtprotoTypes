@@ -26,28 +26,16 @@ extension LexiconString {
 		}
 
 		public init(string: String) throws {
-			if let did = Atproto.DID(rawValue: string) {
-				self = .did(did)
-			} else if let handle = Atproto.Handle(rawValue: string) {
-				self = .handle(handle)
+			//prefix contains a colon which is not permitted in a handle
+			if string.hasPrefix(Atproto.DID.Constants.prefix) {
+				self = try .did(.init(string: string))
 			} else {
-				throw Errors.unrecognizedStringFormat
+				self = .handle(try .init(string: string))
 			}
 		}
 
 		package init(knownDID: Atproto.DID) {
 			self = .did(knownDID)
-		}
-	}
-
-	enum Errors: LocalizedError {
-		case unrecognizedStringFormat
-
-		var errorDescription: String? {
-			switch self {
-			case .unrecognizedStringFormat:
-				"Unrecognized string format"
-			}
 		}
 	}
 }
