@@ -12,7 +12,7 @@ import Foundation
 extension Atproto.Primitive {
 	public struct Link: Sendable, Codable, Equatable {
 		public let link: Atproto.CID
-		
+
 		public init(link: Atproto.CID) {
 			self.link = link
 		}

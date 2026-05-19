@@ -31,17 +31,13 @@ extension Atproto {
 				throw Atproto.Errors.invalidBase32Data
 			}
 
-			guard let decoded = body.base32DecodedData else {
-				throw Atproto.Errors.invalidBase32Data
-			}
-
-			bytes = decoded
+			bytes = try Base32.decode(body)
 		}
 
 		public var string: String {
 			// CID is DASL-compatible (https://atproto.com/specs/data-model)
 			// and DASL CID uses lowercase base-32 (https://dasl.ing/cid.html)
-			"b" + bytes.base32EncodedStringNoPadding.lowercased()
+			"b" + Base32.encode(bytes, options: .letterCase(.lower), .pad(false))
 		}
 	}
 }
