@@ -16,14 +16,15 @@ let package = Package(
 		.library(name: "Mockable", targets: ["Mockable"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/Jarema/Base32.git", from: "0.10.2"),
+		.package(url: "https://github.com/swift-libp2p/swift-bases.git", from: "0.2.0"),
 		.package(
 			url: "https://github.com/germ-network/GermConvenience.git",
-			from: "0.1.5"
+			from: "0.2.1"
 		),
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",
-			.upToNextMajor(from: "4.2.0")),
+			.upToNextMajor(from: "4.2.0")
+		),
 		.package(url: "https://github.com/apple/swift-http-types.git", from: "1.5.1"),
 		.package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
 	],
@@ -33,8 +34,8 @@ let package = Package(
 		.target(
 			name: "AtprotoTypes",
 			dependencies: [
-				"Base32",
 				"GermConvenience",
+				.product(name: "Base32", package: "swift-bases"),
 				.product(name: "Crypto", package: "swift-crypto"),
 				.product(name: "HTTPTypes", package: "swift-http-types"),
 				.product(name: "Logging", package: "swift-log"),

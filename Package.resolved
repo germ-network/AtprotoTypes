@@ -1,22 +1,13 @@
 {
-  "originHash" : "1b9b93255aea27c5335c39dcace2ef035821c8d239561e330fbe2d6e158f1dfd",
+  "originHash" : "8aec742b02f3ededabc54b75e17c53f89b7d0de27eec5cf337c068937f5bc42a",
   "pins" : [
-    {
-      "identity" : "base32",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Jarema/Base32.git",
-      "state" : {
-        "revision" : "7f723a2e55f1c76e7c79263aebf89dbfcd58e77d",
-        "version" : "0.10.2"
-      }
-    },
     {
       "identity" : "germconvenience",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/germ-network/GermConvenience.git",
       "state" : {
-        "revision" : "e98a7fc5301e1b1562f18180eb05bcfcdbd7632d",
-        "version" : "0.1.5"
+        "revision" : "af36c703ecbf25db5528a9c7c81fa33f04645ad7",
+        "version" : "0.2.1"
       }
     },
     {
@@ -26,6 +17,15 @@
       "state" : {
         "revision" : "9f542610331815e29cc3821d3b6f488db8715517",
         "version" : "1.6.0"
+      }
+    },
+    {
+      "identity" : "swift-bases",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-libp2p/swift-bases.git",
+      "state" : {
+        "revision" : "96615d4b582f9f6536d8278304ce2a64c8e5288a",
+        "version" : "0.2.0"
       }
     },
     {

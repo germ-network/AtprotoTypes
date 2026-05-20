@@ -29,7 +29,7 @@ extension Atproto.Primitive {
 
 		/// The size of the blob.
 		public let size: Int
-		
+
 		public init(
 			ref: Atproto.Primitive.Link,
 			mimeType: String,

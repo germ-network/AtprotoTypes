@@ -7,7 +7,8 @@
 
 import Foundation
 import GermConvenience
-import HTTPTypes
+
+import struct HTTPTypes.HTTPResponse
 
 extension Atproto.XRPC {
 	public protocol ResponseParsing: Sendable {
