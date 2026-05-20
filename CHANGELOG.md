@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.4.5
+
+### Patch Changes
+
+- [#43](https://github.com/germ-network/AtprotoTypes/pull/43) [`28d0cf0`](https://github.com/germ-network/AtprotoTypes/commit/28d0cf00c2c7459a354913308beb1f554f98a400) Thanks [@germ-mark](https://github.com/germ-mark)! - adopt swift-libp2p/swift-bases.git
+
 ## 0.4.4
 
 ### Patch Changes
