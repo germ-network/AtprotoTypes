@@ -14,10 +14,10 @@ import Foundation
 ///This matches logically an enum and is likely most easily implemetned as an enum, however
 ///
 ///Currently implemented as a union of records but could be any lexicon schema
-public protocol LexiconUnion: Decodable {
-	static func type(ref: Atproto.Ref) throws -> any Decodable.Type
+public protocol LexiconUnion: Decodable, Sendable {
+	static func type(ref: Atproto.Ref) throws -> any Codable.Type
 
-	init(object: any Decodable) throws
+	init(object: any Codable) throws
 }
 
 enum TypeHeader: String, CodingKey {
@@ -32,7 +32,6 @@ extension LexiconUnion {
 		let type = try Self.type(ref: typeNsid)
 
 		try self.init(object: try type.init(from: decoder))
-
 	}
 }
 
