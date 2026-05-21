@@ -32,7 +32,10 @@ enum SimpleRelationshipResult {
 	case relationship(Relationships)
 	case notFound(NotFoundActor)
 
-	struct Relationships: Codable, Sendable {
+	struct Relationships: Codable, Atproto.Schema {
+		static var ref: Atproto.Ref {
+			.init(string: "app.bsky.graph.defs#relationship")
+		}
 		let did: Atproto.DID
 		let blocking: Atproto.ATURI?
 		let blockedBy: Atproto.ATURI?
@@ -42,7 +45,11 @@ enum SimpleRelationshipResult {
 		let blockingbyList: Atproto.ATURI?
 	}
 
-	struct NotFoundActor: Codable, Sendable {
+	struct NotFoundActor: Atproto.Schema {
+		static var ref: Atproto.Ref {
+			.init(string: "app.bsky.graph.defs#notFoundActor")
+		}
+		
 		public let actor: LexiconString.AtIdentifier
 		var notFound: Bool = true
 
@@ -53,20 +60,15 @@ enum SimpleRelationshipResult {
 }
 
 extension SimpleRelationshipResult: LexiconUnion {
-	static func type(
-		ref: Atproto.Ref
-	) throws -> any Decodable.Type {
-		switch ref.rawValue {
-		case "app.bsky.graph.defs#relationship":
-			Relationships.self
-		case "app.bsky.graph.defs#notFoundActor":
-			NotFoundActor.self
-		default:
-			throw LexionUnionError.unknownType(ref)
-		}
+	static var members: [Atproto.Ref : any Atproto.Schema.Type] {
+		[
+			Relationships.ref: Relationships.self,
+			NotFoundActor.ref: NotFoundActor.self
+		]
 	}
 
-	init(object: any Decodable) throws {
+	
+	init(object: any Codable) throws {
 		if let relationships = object as? Relationships {
 			self = .relationship(relationships)
 		} else if let notFound = object as? NotFoundActor {

@@ -14,9 +14,9 @@ import Foundation
 ///This matches logically an enum and is likely most easily implemetned as an enum, however
 ///
 ///Currently implemented as a union of records but could be any lexicon schema
-public protocol LexiconUnion: Decodable, Sendable {
-	static func type(ref: Atproto.Ref) throws -> any Codable.Type
-
+public protocol LexiconUnion: Codable, Sendable {
+	static var members: [Atproto.Ref: any Atproto.Schema.Type] { get }
+	
 	init(object: any Codable) throws
 }
 
@@ -27,9 +27,11 @@ enum TypeHeader: String, CodingKey {
 extension LexiconUnion {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.container(keyedBy: TypeHeader.self)
-		let typeNsid = try container.decode(Atproto.Ref.self, forKey: .type)
-
-		let type = try Self.type(ref: typeNsid)
+		let ref = try container.decode(Atproto.Ref.self, forKey: .type)
+		
+		let type = try Self.members[ref].tryUnwrap(
+			LexionUnionError.unknownType(ref)
+		)
 
 		try self.init(object: try type.init(from: decoder))
 	}
