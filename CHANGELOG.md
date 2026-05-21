@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.4.6
+
+### Patch Changes
+
+- [#45](https://github.com/germ-network/AtprotoTypes/pull/45) [`c695a72`](https://github.com/germ-network/AtprotoTypes/commit/c695a7200d59995ae48f2eb982617694494a22b3) Thanks [@germ-mark](https://github.com/germ-mark)! - add ref definition in support of a union protocol
+
 ## 0.4.5
 
 ### Patch Changes
