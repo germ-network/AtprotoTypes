@@ -16,7 +16,7 @@ import Foundation
 ///Currently implemented as a union of records but could be any lexicon schema
 public protocol LexiconUnion: Codable, Sendable {
 	static var members: [Atproto.Ref: any Atproto.Schema.Type] { get }
-	
+
 	init(object: any Codable) throws
 }
 
@@ -28,7 +28,7 @@ extension LexiconUnion {
 	public init(from decoder: any Decoder) throws {
 		let container = try decoder.container(keyedBy: TypeHeader.self)
 		let ref = try container.decode(Atproto.Ref.self, forKey: .type)
-		
+
 		let type = try Self.members[ref].tryUnwrap(
 			LexionUnionError.unknownType(ref)
 		)
