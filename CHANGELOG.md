@@ -1,5 +1,13 @@
 # @germ-network/atprototypes
 
+## 0.4.7
+
+### Patch Changes
+
+- [#49](https://github.com/germ-network/AtprotoTypes/pull/49) [`7575e37`](https://github.com/germ-network/AtprotoTypes/commit/7575e372c9a3cc839219febe9ae5e45baa40d0e6) Thanks [@germ-mark](https://github.com/germ-mark)! - preserve the body-decode error when a recognized response fails to parse
+
+- [#48](https://github.com/germ-network/AtprotoTypes/pull/48) [`4036c82`](https://github.com/germ-network/AtprotoTypes/commit/4036c827e6a4a5294c66b248aec5999c92a03063) Thanks [@germ-mark](https://github.com/germ-mark)! - add JSONDecoder.atproto (dataDecodingStrategy .atprotoBase64) accepting the data model's unpadded base64, route XRPC response parsing through it, and emit $bytes unpadded
+
 ## 0.4.6
 
 ### Patch Changes
