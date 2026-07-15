@@ -18,5 +18,18 @@ extension Atproto.Primitive {
 		public enum CodingKeys: String, CodingKey {
 			case bytes = "$bytes"
 		}
+
+		//Decoding stays synthesized: whether unpadded base64 is accepted is the
+		//DECODER's choice — use JSONDecoder.atproto (or .dataDecodingStrategy =
+		//.atprotoBase64) when reading data-model JSON; a default JSONDecoder keeps
+		//Foundation's strict padded-only behavior.
+		//
+		//Encoding emits the data model's canonical form: base64 without padding.
+		public func encode(to encoder: any Encoder) throws {
+			var container = encoder.container(keyedBy: CodingKeys.self)
+			var encoded = bytes.base64EncodedString()
+			while encoded.hasSuffix("=") { encoded.removeLast() }
+			try container.encode(encoded, forKey: .bytes)
+		}
 	}
 }
