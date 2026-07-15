@@ -59,6 +59,11 @@ extension Atproto.XRPC {
 			error: ErrorResponse
 		)
 		case unrecognized(HTTPResponse)
+		//A recognized status whose body failed to decode. Distinct from .unrecognized
+		//so a well-formed 200 with an undecodable body (e.g. a record whose format
+		//drifted) keeps its DecodingError — coding path and all — instead of being
+		//reported identically to an unknown status.
+		case undecodable(HTTPResponse, underlying: any Error)
 
 		public var errorDescription: String? {
 			switch self {
@@ -66,6 +71,8 @@ extension Atproto.XRPC {
 				"\(status): \(error.error)"
 			case .unrecognized(let response):
 				"Unrecognized response: \(response)"
+			case .undecodable(let response, let underlying):
+				"Undecodable response: \(response), underlying: \(underlying)"
 			}
 		}
 	}
@@ -105,7 +112,7 @@ extension Atproto.XRPC.ResponseParsing {
 
 			return .error(.unrecognized(fullResponse.response))
 		} catch {
-			return .error(.unrecognized(fullResponse.response))
+			return .error(.undecodable(fullResponse.response, underlying: error))
 		}
 	}
 
