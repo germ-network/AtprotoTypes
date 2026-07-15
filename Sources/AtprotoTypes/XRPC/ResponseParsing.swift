@@ -80,7 +80,7 @@ extension Atproto.XRPC.ResponseParsing {
 			case .ok:
 				return .ok(try parseSuccess(body: fullResponse.data))
 			case .badRequest:
-				let errorObject = try JSONDecoder()
+				let errorObject = try JSONDecoder.atproto
 					.decode(
 						Atproto.XRPC.ErrorResponse.self,
 						from: fullResponse.data
@@ -91,7 +91,7 @@ extension Atproto.XRPC.ResponseParsing {
 					)
 				}
 			case let status where Self.recognizedStatuses.contains(status):
-				let errorObject = try JSONDecoder()
+				let errorObject = try JSONDecoder.atproto
 					.decode(
 						Atproto.XRPC.ErrorResponse.self,
 						from: fullResponse.data
@@ -117,7 +117,7 @@ extension Atproto.XRPC.ResponseParsing {
 			let result = body.isEmpty ? nil : body
 			return try (result as? Output).tryUnwrap
 		default:
-			return try JSONDecoder()
+			return try JSONDecoder.atproto
 				.decode(Output.self, from: body)
 		}
 	}

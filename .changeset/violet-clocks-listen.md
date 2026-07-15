@@ -2,4 +2,4 @@
 "@germ-network/atprototypes": patch
 ---
 
-accept the data model's unpadded base64 in $bytes, and emit it on encode
+add JSONDecoder.atproto (dataDecodingStrategy .atprotoBase64) accepting the data model's unpadded base64, route XRPC response parsing through it, and emit $bytes unpadded
