@@ -41,8 +41,8 @@ extension Atproto {
 		///
 		/// - Returns: An ``ATService`` item.
 		///
-		/// - Throws: ``DIDDocumentError`` if ``service`` is empty or if none of the items
-		/// contain `#atproto_pds`.
+		/// - Throws: ``DIDDocumentError`` if ``service`` is empty, if none of the items
+		/// contain `#atproto_pds`, or if that item's endpoint fails ``Service/validate(endpoint:)``.
 		public func checkServiceForAtproto() throws -> Service {
 			let services = self.service
 
@@ -52,6 +52,7 @@ extension Atproto {
 
 			for service in services {
 				if service.id == "#atproto_pds" {
+					try Service.validate(endpoint: service.serviceEndpoint)
 					return service
 				}
 			}
@@ -68,7 +69,7 @@ extension Atproto {
 		}
 
 		/// Errors relating to the DID Document.
-		public enum Errors: Error {
+		public enum Errors: Error, Equatable {
 
 			/// The ``DIDDocument/service`` array is empty.
 			case emptyArray
@@ -79,6 +80,13 @@ extension Atproto {
 
 			case urlConstructionError
 			case missingServiceUrl
+
+			/// The service endpoint is not `https`.
+			case insecureServiceUrlScheme(String?)
+
+			/// The service endpoint's host is one we refuse to send traffic to,
+			/// such as a loopback, link-local, or private-range address.
+			case disallowedServiceUrlHost(String)
 		}
 
 		public init(
@@ -163,6 +171,7 @@ extension Atproto.DIDDocument {
 			else {
 				throw Errors.missingServiceUrl
 			}
+			try Service.validate(endpoint: service.serviceEndpoint)
 			return service.serviceEndpoint
 		}
 	}
