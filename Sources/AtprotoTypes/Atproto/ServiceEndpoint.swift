@@ -9,13 +9,33 @@ import Darwin
 import Foundation
 import Network
 
+extension Atproto.DIDDocument {
+	/// What ``Service/validate(endpoint:policy:)`` will accept. Strict unless
+	/// the caller names otherwise, so nothing relaxes by omission.
+	public struct EndpointPolicy: Sendable, Equatable {
+		//no public memberwise init: `.default` and `.developmentLoopback` are
+		//the only values a consumer outside the package can name
+		let allowsInsecureLoopback: Bool
+
+		///https to a public host — the only policy that belongs in a shipped build.
+		public static let `default` = Self(allowsInsecureLoopback: false)
+
+		///Additionally accepts http, and only to a loopback host, so a
+		///development build can reach a PDS on the developer's own machine:
+		///atproto's dev-env serves plain http on `localhost:2583`. The private,
+		///CGNAT, link-local, and reserved-TLD rules still apply, so this opens
+		///the local machine and not the local network.
+		public static let developmentLoopback = Self(allowsInsecureLoopback: true)
+	}
+}
+
 extension Atproto.DIDDocument.Service {
 	/// A DID document is supplied by a resolver, so its `serviceEndpoint` is
 	/// attacker-influenced input that we then use as the base URL for both
 	/// credentialed and public traffic. Reject the schemes and hosts that would
 	/// turn that into an SSRF primitive. Reach the endpoint through ``pdsUrl``
-	/// or ``checkServiceForAtproto()`` — reading ``service`` directly hands
-	/// back a URL nothing has screened.
+	/// or ``checkServiceForAtproto(policy:)`` — reading ``service`` directly
+	/// hands back a URL nothing has screened.
 	///
 	/// This is a name-level contract: it rejects reserved-address literals in
 	/// every spelling the platform's parsers accept, plus name space that is
@@ -26,21 +46,48 @@ extension Atproto.DIDDocument.Service {
 	/// requirement means a listener at a reserved address must still present a
 	/// valid certificate for the attacker's chosen name, and the OS
 	/// local-network entitlement gates connections into private address space.
-	package static func validate(endpoint: URL) throws {
-		guard endpoint.scheme?.lowercased() == "https" else {
+	package static func validate(
+		endpoint: URL,
+		policy: Atproto.DIDDocument.EndpointPolicy = .default
+	) throws {
+		let scheme = endpoint.scheme?.lowercased()
+		//already strips the brackets around an IPv6 literal
+		let host = endpoint.host(percentEncoded: false) ?? ""
+		let exempt = policy.allowsInsecureLoopback && loopback(host: host)
+
+		guard scheme == "https" || (exempt && scheme == "http") else {
 			throw Atproto.DIDDocument.Errors
 				.insecureServiceUrlScheme(endpoint.scheme)
 		}
 
-		//already strips the brackets around an IPv6 literal
-		let host = endpoint.host(percentEncoded: false) ?? ""
-
-		guard permitted(host: host) else {
+		guard permitted(host: host) || exempt else {
 			throw Atproto.DIDDocument.Errors.disallowedServiceUrlHost(host)
 		}
 	}
 
-	static func permitted(host rawHost: String) -> Bool {
+	///the developer's own machine, which is narrower than the private ranges
+	private static func loopback(host rawHost: String) -> Bool {
+		let host = normalized(rawHost)
+
+		if host == "localhost" || host.hasSuffix(".localhost") { return true }
+
+		//same discipline as `permitted(host:)`: every parser that can read this
+		//has to agree, or we don't know where the connection actually lands
+		let v4Readings = [IPv4Address(host), inetAtonAddress(host)].compactMap { $0 }
+		if !v4Readings.isEmpty {
+			return v4Readings.allSatisfy { [UInt8]($0.rawValue).first == 127 }
+		}
+
+		guard let v6 = IPv6Address(host) else { return false }
+		if let mapped = v6.asIPv4 {
+			return [UInt8](mapped.rawValue).first == 127
+		}
+		let bytes = [UInt8](v6.rawValue)
+		return bytes.count == 16 && bytes.dropLast().allSatisfy { $0 == 0 }
+			&& bytes[15] == 1
+	}
+
+	private static func normalized(_ rawHost: String) -> String {
 		var host = rawHost.lowercased()
 		//a trailing dot is the same name in FQDN form
 		if host.hasSuffix(".") {
@@ -50,6 +97,11 @@ extension Atproto.DIDDocument.Service {
 		if host.hasPrefix("["), host.hasSuffix("]") {
 			host = String(host.dropFirst().dropLast())
 		}
+		return host
+	}
+
+	static func permitted(host rawHost: String) -> Bool {
+		let host = normalized(rawHost)
 
 		guard !host.isEmpty else { return false }
 
