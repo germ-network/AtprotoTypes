@@ -2,4 +2,4 @@
 "@germ-network/atprototypes": minor
 ---
 
-reject non-https and loopback/private-range PDS service endpoints
+reject non-https, loopback/private-range, reserved-TLD, and single-label PDS service endpoints

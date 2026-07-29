@@ -13,7 +13,19 @@ extension Atproto.DIDDocument.Service {
 	/// A DID document is supplied by a resolver, so its `serviceEndpoint` is
 	/// attacker-influenced input that we then use as the base URL for both
 	/// credentialed and public traffic. Reject the schemes and hosts that would
-	/// turn that into an SSRF primitive before the URL escapes this type.
+	/// turn that into an SSRF primitive. Reach the endpoint through ``pdsUrl``
+	/// or ``checkServiceForAtproto()`` — reading ``service`` directly hands
+	/// back a URL nothing has screened.
+	///
+	/// This is a name-level contract: it rejects reserved-address literals in
+	/// every spelling the platform's parsers accept, plus name space that is
+	/// defined to resolve locally. It does not resolve names, so it cannot see
+	/// a public name that resolves — or rebinds after any one-shot check — to a
+	/// reserved address. URLSession offers no hook into the resolution its
+	/// connections actually use, so that gap is closed elsewhere: the https
+	/// requirement means a listener at a reserved address must still present a
+	/// valid certificate for the attacker's chosen name, and the OS
+	/// local-network entitlement gates connections into private address space.
 	package static func validate(endpoint: URL) throws {
 		guard endpoint.scheme?.lowercased() == "https" else {
 			throw Atproto.DIDDocument.Errors
@@ -41,8 +53,6 @@ extension Atproto.DIDDocument.Service {
 
 		guard !host.isEmpty else { return false }
 
-		if host == "localhost" || host.hasSuffix(".localhost") { return false }
-
 		//One string can name different addresses depending on who parses it:
 		//`0177.0.0.1` is 177.0.0.1 to IPv4Address and 127.0.0.1 to inet_aton,
 		//and `010.0.0.1` splits the other way. We don't control which parser the
@@ -51,8 +61,20 @@ extension Atproto.DIDDocument.Service {
 		if let v4 = IPv4Address(host), !permitted(v4) { return false }
 		if let legacy = inetAtonAddress(host), !permitted(legacy) { return false }
 
-		return true
+		//an address literal that survived every parser's screening
+		if IPv4Address(host) != nil || IPv6Address(host) != nil { return true }
+
+		//single-label names resolve through local search domains, never a public PDS
+		guard let lastDot = host.lastIndex(of: ".") else { return false }
+
+		return !reservedTLDs.contains(host[host.index(after: lastDot)...])
 	}
+
+	//special-use TLDs defined to name local or non-Internet hosts
+	//(RFC 6761/6762, ICANN `.internal`); same list Bluesky's safe fetch rejects
+	private static let reservedTLDs: Set<Substring> = [
+		"localhost", "local", "internal", "test", "invalid", "example",
+	]
 
 	private static func permitted(_ address: IPv4Address) -> Bool {
 		let bytes = [UInt8](address.rawValue)

@@ -41,6 +41,11 @@ struct PDSEndpointTests {
 			"https://11.0.0.1",
 			"https://100.128.0.1",
 			"https://8.8.8.8",
+			//dotless literals: only the address parsers can vouch for these,
+			//the single-label rule would otherwise reject them
+			"https://[2606:4700:4700::1111]",
+			//1.1.1.1 to every parser we consult
+			"https://16843009",
 		]
 	)
 	func acceptsPublicHttpsEndpoints(_ endpoint: String) throws {
@@ -87,6 +92,30 @@ struct PDSEndpointTests {
 		]
 	)
 	func rejectsLoopbackAndPrivateHosts(_ endpoint: String) throws {
+		let document = try document(endpoint: endpoint)
+		let host = try #require(URL(string: endpoint)?.host(percentEncoded: false))
+
+		#expect(throws: Atproto.DIDDocument.Errors.disallowedServiceUrlHost(host)) {
+			try document.pdsUrl
+		}
+	}
+
+	@Test(
+		arguments: [
+			//single-label hosts resolve via local search domains
+			"https://pds",
+			"https://intranet",
+			//special-use TLDs (RFC 6761/6762, ICANN .internal)
+			"https://foo.local",
+			"https://foo.internal",
+			"https://foo.test",
+			"https://foo.invalid",
+			"https://foo.example",
+			"https://FOO.INTERNAL",
+			"https://foo.local.",
+		]
+	)
+	func rejectsReservedNameSpace(_ endpoint: String) throws {
 		let document = try document(endpoint: endpoint)
 		let host = try #require(URL(string: endpoint)?.host(percentEncoded: false))
 
