@@ -41,9 +41,12 @@ extension Atproto {
 		///
 		/// - Returns: An ``ATService`` item.
 		///
-		/// - Throws: ``DIDDocumentError`` if ``service`` is empty or if none of the items
-		/// contain `#atproto_pds`.
-		public func checkServiceForAtproto() throws -> Service {
+		/// - Throws: ``DIDDocumentError`` if ``service`` is empty, if none of the items
+		/// contain `#atproto_pds`, or if that item's endpoint fails
+		/// ``Service/validate(endpoint:policy:)``.
+		public func checkServiceForAtproto(
+			policy: EndpointPolicy = .default
+		) throws -> Service {
 			let services = self.service
 
 			guard services.count > 0 else {
@@ -52,6 +55,8 @@ extension Atproto {
 
 			for service in services {
 				if service.id == "#atproto_pds" {
+					try Service.validate(
+						endpoint: service.serviceEndpoint, policy: policy)
 					return service
 				}
 			}
@@ -68,7 +73,7 @@ extension Atproto {
 		}
 
 		/// Errors relating to the DID Document.
-		public enum Errors: Error {
+		public enum Errors: Error, Equatable {
 
 			/// The ``DIDDocument/service`` array is empty.
 			case emptyArray
@@ -79,6 +84,13 @@ extension Atproto {
 
 			case urlConstructionError
 			case missingServiceUrl
+
+			/// The service endpoint is not `https`.
+			case insecureServiceUrlScheme(String?)
+
+			/// The service endpoint's host is one we refuse to send traffic to,
+			/// such as a loopback, link-local, or private-range address.
+			case disallowedServiceUrlHost(String)
 		}
 
 		public init(
@@ -155,15 +167,20 @@ extension Atproto.DIDDocument {
 	//"The first matching entry in the array should be used, and any others ignored. "
 	//"an account with no valid PDS location in their DID document is broken"
 	public var pdsUrl: URL {
-		get throws {
-			guard
-				let service = service.first(where: {
-					$0.type == "AtprotoPersonalDataServer"
-				})
-			else {
-				throw Errors.missingServiceUrl
-			}
-			return service.serviceEndpoint
+		get throws { try pdsUrl(policy: .default) }
+	}
+
+	///a property can't take an argument, so anything but ``EndpointPolicy/default``
+	///goes through this spelling
+	public func pdsUrl(policy: EndpointPolicy) throws -> URL {
+		guard
+			let service = service.first(where: {
+				$0.type == "AtprotoPersonalDataServer"
+			})
+		else {
+			throw Errors.missingServiceUrl
 		}
+		try Service.validate(endpoint: service.serviceEndpoint, policy: policy)
+		return service.serviceEndpoint
 	}
 }
