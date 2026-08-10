@@ -1,3 +1,5 @@
+[![Apple](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-apple.yml/badge.svg)](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-apple.yml)
+
 This library provides types corresponding to [atproto](https://atproto.com) type definitions.
 
 
