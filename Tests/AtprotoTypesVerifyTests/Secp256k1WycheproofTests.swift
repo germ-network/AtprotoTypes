@@ -17,8 +17,9 @@ import Testing
 ///hand-picked known-answer tests are unlikely to stumble onto by chance.
 ///
 ///`ecdsa_secp256k1_sha256_p1363_test.json`, vendored below under Apache-2.0
-///from https://github.com/C2SP/wycheproof — 252 vectors over 108 groups,
-///IEEE P1363 (fixed-width `r ‖ s`) over SHA-256, secp256k1.
+///from https://github.com/C2SP/wycheproof (LICENSE copied alongside it in
+///`Resources/wycheproof/`) — 252 vectors over 108 groups, IEEE P1363
+///(fixed-width `r ‖ s`) over SHA-256, secp256k1.
 private struct WycheproofFile: Decodable {
 	let numberOfTests: Int
 	let testGroups: [TestGroup]

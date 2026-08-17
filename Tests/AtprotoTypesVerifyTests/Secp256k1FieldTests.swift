@@ -110,6 +110,6 @@ struct Secp256k1FieldTests {
 	@Test("canonical init rejects a value equal to or above the modulus")
 	func rejectsNonCanonicalValues() {
 		#expect(Field(bigEndian: Array(Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"))) == nil)  //== p
-		#expect(Field(bigEndian: Array(Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))) == nil)  //> p
+		#expect(Field(bigEndian: Array(Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))) == nil)  //> p
 	}
 }

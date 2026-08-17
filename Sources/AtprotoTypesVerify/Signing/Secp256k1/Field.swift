@@ -100,9 +100,10 @@ extension Secp256k1 {
 		///Folds a 512-bit product down using 2^256 ≡ 2^32 + 977 (mod p): each
 		///pass multiplies the high half by the 33-bit `foldFactor` and adds it
 		///back into the low half, which is what the modulus's special form
-		///buys — no division anywhere. The high half provably shrinks each
-		///pass (roughly 2^256 → 2^97 → 2^34 → 0), so this terminates well
-		///inside the loop bound below.
+		///buys — no division anywhere. Each pass's leftover high part is
+		///roughly `foldFactor`'s own width (33 bits) narrower than the one
+		///before it, so a handful of passes clears it — well inside the loop
+		///bound below.
 		static func reduce(_ wide: [UInt64]) -> Field {
 			var buffer = wide
 

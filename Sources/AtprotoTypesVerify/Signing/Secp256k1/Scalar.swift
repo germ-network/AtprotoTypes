@@ -83,11 +83,11 @@ extension Secp256k1 {
 			reduce(Limbs256.multiplyWide(lhs.value, rhs.value))
 		}
 
-		///Folds using 2^256 ≡ foldFactor (mod n). The high half shrinks each
-		///pass — foldFactor is ~129 bits, roughly halving the bit-length left
-		///to fold each time (2^512 → ~2^321 → ~2^193 → ~2^65 → 0) — so this
-		///converges well inside the loop bound, and the trailing subtraction
-		///loop mops up whatever remains below 2^256.
+		///Folds using 2^256 ≡ foldFactor (mod n). Each pass's leftover high
+		///part is roughly `foldFactor`'s own width (~129 bits) narrower than
+		///the one before it, so this converges in a handful of passes, well
+		///inside the loop bound — and the trailing subtraction loop mops up
+		///whatever remains below 2^256.
 		static func reduce(_ wide: [UInt64]) -> Scalar {
 			var buffer = wide
 
