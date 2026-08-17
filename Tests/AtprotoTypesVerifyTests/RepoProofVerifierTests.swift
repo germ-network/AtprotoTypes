@@ -332,6 +332,37 @@ struct RepoProofVerifierTests {
 		}
 	}
 
+	///An empty `controller` means "self-controlled" (the DID document convention
+	///for an absent field), not "skip the check" — otherwise a caller-side bug
+	///pairing the wrong document with a `did` would pass silently whenever the
+	///method simply omits the field, which is the common shape for real
+	///documents. The document here is genuinely the attacker's own — correctly
+	///self-controlled, with no explicit `controller` string at all — and must
+	///still be refused when checked against the victim's `did`.
+	@Test("an empty controller falls back to the document's own id, not a skip")
+	func refusesEmptyControllerForWrongDID() throws {
+		let scenario = Scenario()
+		let document = try RepoFixture.document(
+			did: RepoFixture.attacker,
+			methods: [
+				(
+					id: RepoFixture.attacker.rawValue + "#atproto",
+					controller: "",
+					multibase: RepoFixture.multibase(scenario.signing.publicKey)
+				)
+			]
+		)
+
+		#expect(throws: Atproto.Repo.ProofError.signingKeyControllerMismatch) {
+			try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try scenario.car(),
+				did: scenario.did,
+				path: Self.path,
+				document: document
+			)
+		}
+	}
+
 	// MARK: - The space-constrained conformer
 
 	@Test("the non-verifying conformer refuses rather than passing bytes through")

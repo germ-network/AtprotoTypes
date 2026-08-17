@@ -52,11 +52,10 @@ public struct ContentIdentifier: Sendable, Hashable {
 		"b" + Base32.encode(bytes, options: .letterCase(.lower), .pad(false))
 	}
 
-	///Round-trips through the string form because `Atproto.CID`'s byte
-	///initialiser is package-scoped to AtprotoTypes. Cheap enough at proof
-	///sizes, and it avoids a wider access bump just to hand back a value type.
+	///The bridge back to the opaque, JSON-facing CID type. `Atproto.CID`'s byte
+	///initialiser is `package`-scoped, which this target shares.
 	public var atprotoCID: Atproto.CID {
-		get throws { try .init(string: string) }
+		.init(bytes: bytes)
 	}
 
 	public static func compute(codec: Codec, block: Data) throws -> ContentIdentifier {
@@ -104,9 +103,10 @@ public struct ContentIdentifier: Sendable, Hashable {
 		}
 	}
 
-	///Exposed beyond this module so fixture-building test support can frame CAR
-	///headers and block lengths without a second LEB128 implementation.
-	public static func varint(_ value: UInt64) -> [UInt8] {
+	///Exposed package-wide so fixture-building test support in
+	///AtprotoTypesVerifyMocks can frame CAR headers and block lengths without a
+	///second LEB128 implementation.
+	package static func varint(_ value: UInt64) -> [UInt8] {
 		var remaining = value
 		var out: [UInt8] = []
 		repeat {

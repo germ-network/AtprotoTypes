@@ -58,8 +58,13 @@ public struct RepoSigningKey: Sendable {
 		}
 
 		//a document that names someone else as controller of its signing key is
-		//not making a claim about this DID's repo
-		guard method.controller.isEmpty || method.controller == did.rawValue else {
+		//not making a claim about this DID's repo. An absent controller falls
+		//back to the document's own id, per DID convention (no controller means
+		//self-controlled) — never to a blanket skip, or a document paired with
+		//the wrong `did` by a caller-side bug would pass whenever the method
+		//simply omits the field, which is the common case for real documents.
+		let controllerDID = method.controller.isEmpty ? document.id : method.controller
+		guard controllerDID == did.rawValue else {
 			throw Atproto.Repo.ProofError.signingKeyControllerMismatch
 		}
 
@@ -137,10 +142,11 @@ public struct RepoSigningKey: Sendable {
 		}
 	}
 
-	///Exposed beyond this module so fixture-building test support (which needs
-	///to fold a signature to its low- or high-S twin) shares the same threshold
-	///rather than risking a second, driftable copy of it.
-	public static let p256Order: [UInt8] = [
+	///Exposed beyond this module (package-wide, not public) so fixture-building
+	///test support in AtprotoTypesVerifyMocks — which needs to fold a signature
+	///to its low- or high-S twin — shares the same threshold rather than
+	///risking a second, driftable copy of it.
+	package static let p256Order: [UInt8] = [
 		0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
 		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 		0xBC, 0xE6, 0xFA, 0xAD, 0xA7, 0x17, 0x9E, 0x84,
@@ -150,7 +156,7 @@ public struct RepoSigningKey: Sendable {
 	///`s <= n/2`. The half-order is derived from the order rather than written
 	///out, so there is one constant to check against the curve parameters
 	///instead of two.
-	public static func isLowS(_ s: [UInt8], order: [UInt8]) -> Bool {
+	package static func isLowS(_ s: [UInt8], order: [UInt8]) -> Bool {
 		let half = halved(order)
 		guard s.count == half.count else { return false }
 		for (lhs, rhs) in zip(s, half) where lhs != rhs {

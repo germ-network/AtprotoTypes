@@ -59,7 +59,7 @@ extension Atproto.Repo {
 			return Proof(
 				did: did,
 				path: path,
-				cid: try recordCID.atprotoCID,
+				cid: recordCID.atprotoCID,
 				block: try archive.block(recordCID),
 				rev: rev
 			)

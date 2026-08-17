@@ -47,7 +47,7 @@ struct ContentIdentifierTests {
 			block: Data("some block".utf8)
 		)
 		#expect(cid.string.hasPrefix("bafyrei"))
-		#expect(try cid.atprotoCID.string == cid.string)
+		#expect(cid.atprotoCID.string == cid.string)
 		#expect(try Atproto.CID(string: cid.string).string == cid.string)
 	}
 
