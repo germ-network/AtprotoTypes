@@ -14,6 +14,11 @@ let package = Package(
 		),
 		.library(name: "AtprotoTypesMocks", targets: ["AtprotoTypesMocks"]),
 		.library(name: "Mockable", targets: ["Mockable"]),
+		//CAR framing, DAG-CBOR, MST proof walking, CID recomputation and repo
+		//commit-signature verification — additive, so a consumer that never
+		//links it (e.g. an App Clip target) pays nothing for it existing.
+		.library(name: "AtprotoTypesVerify", targets: ["AtprotoTypesVerify"]),
+		.library(name: "AtprotoTypesVerifyMocks", targets: ["AtprotoTypesVerifyMocks"]),
 	],
 	dependencies: [
 		.package(url: "https://github.com/swift-libp2p/swift-bases.git", from: "0.2.0"),
@@ -52,6 +57,39 @@ let package = Package(
 		.testTarget(
 			name: "AtprotoTypesTests",
 			dependencies: ["AtprotoTypes", "AtprotoTypesMocks", "Mockable"]
+		),
+		.target(
+			name: "AtprotoTypesVerify",
+			dependencies: [
+				"AtprotoTypes",
+				.product(name: "Crypto", package: "swift-crypto"),
+				.product(name: "Base32", package: "swift-bases"),
+				.product(name: "BaseX", package: "swift-bases"),
+			]
+		),
+		//Fixture-building support for AtprotoTypesVerify — builds a real signed
+		//commit over an MST over record blocks, so a consumer's tests can forge
+		//one field and watch the proof fail for the reason it should, rather
+		//than pinning captured bytes. A real library target, not test-target-
+		//internal code, mirroring `AtprotoTypesMocks` alongside `AtprotoTypes`,
+		//so it is usable from a different package's tests (`@testable import`
+		//does not cross package boundaries).
+		.target(
+			name: "AtprotoTypesVerifyMocks",
+			dependencies: [
+				"AtprotoTypesVerify",
+				"AtprotoTypes",
+				.product(name: "Crypto", package: "swift-crypto"),
+			]
+		),
+		.testTarget(
+			name: "AtprotoTypesVerifyTests",
+			dependencies: [
+				"AtprotoTypesVerify",
+				"AtprotoTypesVerifyMocks",
+				"AtprotoTypes",
+				.product(name: "Crypto", package: "swift-crypto"),
+			]
 		),
 	]
 )
