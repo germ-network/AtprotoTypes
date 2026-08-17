@@ -19,6 +19,58 @@ import Foundation
 ///wants to build a synthetic repo for its own tests can depend on this rather
 ///than reimplementing it — the same shape as `AtprotoTypesMocks` alongside
 ///`AtprotoTypes`. It only touches `AtprotoTypesVerify`'s public API.
+///A compressed EC public key this package knows how to publish in a DID
+///document — just enough to build a multibase string, not to verify or sign.
+///Lets `AtprotoTypesVerifyTests` mint a k256 fixture key from raw bytes (via
+///P256K, a test-only dependency) without `AtprotoTypesVerifyMocks` itself
+///needing to depend on it.
+public protocol RepoFixturePublicKey {
+	///multicodec, e.g. `0x1200` (p256) or `0xe7` (secp256k1).
+	var repoFixtureMulticodec: UInt64 { get }
+	///SEC1 compressed point, 33 bytes.
+	var repoFixtureCompressedRepresentation: Data { get }
+}
+
+///A signing key `RepoFixture.commit` can use to produce a repo signature —
+///P256's own type conforms below; a k256 conformance backed by P256K lives in
+///`AtprotoTypesVerifyTests` only, since that library is a differential-test
+///dependency, never a shipped one (`AtprotoTypesVerify` carries its own
+///from-scratch, verify-only secp256k1 — no signing path, by design).
+public protocol RepoFixtureSigningKey {
+	associatedtype PublicKey: RepoFixturePublicKey
+	var publicKey: PublicKey { get }
+	///A 64-byte compact `r ‖ s` signature over `message`, already folded to
+	///its low-S form — callers that want a malleable twin flip it after via
+	///`RepoFixture.highS`, rather than every conformance having to know the
+	///atproto policy itself.
+	func repoFixtureSignature(for message: Data) throws -> Data
+}
+
+extension P256.Signing.PublicKey: RepoFixturePublicKey {
+	public var repoFixtureMulticodec: UInt64 { 0x1200 }
+	public var repoFixtureCompressedRepresentation: Data { compressedRepresentation }
+}
+
+extension P256.Signing.PrivateKey: RepoFixtureSigningKey {
+	public func repoFixtureSignature(for message: Data) throws -> Data {
+		RepoFixture.lowS(try signature(for: message).rawRepresentation, order: RepoSigningKey.p256Order)
+	}
+}
+
+///A secp256k1 public key, wrapping only the bytes a multibase string needs.
+///Dependency-free: `AtprotoTypesVerifyTests` decodes a P256K public key down
+///to its compressed representation and wraps it here, so this package never
+///needs to know P256K exists.
+public struct Secp256k1PublicKey: RepoFixturePublicKey, Sendable {
+	public let repoFixtureCompressedRepresentation: Data
+
+	public init(compressedRepresentation: Data) {
+		self.repoFixtureCompressedRepresentation = compressedRepresentation
+	}
+
+	public var repoFixtureMulticodec: UInt64 { 0xE7 }
+}
+
 public enum RepoFixture {
 	public static let did = try! Atproto.DID(string: "did:plc:germverifytestsubject")
 	public static let attacker = try! Atproto.DID(string: "did:plc:germverifytestforger")
@@ -96,7 +148,7 @@ public enum RepoFixture {
 		did: Atproto.DID,
 		dataRoot: ContentIdentifier,
 		rev: String = "3lbwqrstuvwxy",
-		signedBy key: P256.Signing.PrivateKey
+		signedBy key: some RepoFixtureSigningKey
 	) throws -> DAGCBORValue {
 		let unsigned = DAGCBORValue.map([
 			("data", .link(dataRoot)),
@@ -106,12 +158,10 @@ public enum RepoFixture {
 			("version", .integer(3)),
 		])
 
-		let signature = try key.signature(for: DAGCBOREncoder.encode(unsigned))
+		let signature = try key.repoFixtureSignature(for: DAGCBOREncoder.encode(unsigned))
 		guard case .map(let fields) = unsigned else { fatalError("unreachable") }
 
-		return .map(
-			fields + [(key: "sig", value: .bytes(lowS(signature.rawRepresentation)))]
-		)
+		return .map(fields + [(key: "sig", value: .bytes(signature))])
 	}
 
 	// MARK: - CAR
@@ -144,7 +194,7 @@ public enum RepoFixture {
 	///actually arrives in, so the fixture exercises the real decode.
 	public static func document(
 		did: Atproto.DID,
-		key: P256.Signing.PublicKey,
+		key: some RepoFixturePublicKey,
 		fragment: String = "#atproto",
 		controller: String? = nil
 	) throws -> Atproto.DIDDocument {
@@ -183,11 +233,11 @@ public enum RepoFixture {
 		)
 	}
 
-	///multicodec p256-pub (0x1200) over the compressed point, multibase
-	///base58btc — the form a DID document publishes.
-	public static func multibase(_ key: P256.Signing.PublicKey) -> String {
-		var payload = Data([0x80, 0x24])
-		payload.append(key.compressedRepresentation)
+	///The multicodec prefix over the compressed point, multibase base58btc —
+	///the form a DID document publishes, for whichever curve `key` names.
+	public static func multibase(_ key: some RepoFixturePublicKey) -> String {
+		var payload = Data(ContentIdentifier.varint(key.repoFixtureMulticodec))
+		payload.append(key.repoFixtureCompressedRepresentation)
 		return "z" + BaseXEncoding.base58BTC(payload)
 	}
 
@@ -196,23 +246,37 @@ public enum RepoFixture {
 	///swift-crypto does not normalise `s`, and atproto requires the low
 	///variant, so fixtures fold it here rather than emitting signatures the
 	///verifier is right to reject.
+	///
+	///No default `order` parameter: the default would have to name
+	///`RepoSigningKey.p256Order`, a `package`-scoped constant, from this
+	///public API's default-argument expression — which the compiler
+	///evaluates at each call site, outside the package. This overload is the
+	///substitute.
 	public static func lowS(_ signature: Data) -> Data {
+		lowS(signature, order: RepoSigningKey.p256Order)
+	}
+
+	public static func lowS(_ signature: Data, order: [UInt8]) -> Data {
 		let r = Array(signature.prefix(32))
 		let s = Array(signature.suffix(32))
-		guard !RepoSigningKey.isLowS(s, order: RepoSigningKey.p256Order) else {
+		guard !RepoSigningKey.isLowS(s, order: order) else {
 			return signature
 		}
-		return Data(r + subtract(RepoSigningKey.p256Order, s))
+		return Data(r + subtract(order, s))
 	}
 
 	///Flips a signature to its high-S twin, for the malleability test.
 	public static func highS(_ signature: Data) -> Data {
+		highS(signature, order: RepoSigningKey.p256Order)
+	}
+
+	public static func highS(_ signature: Data, order: [UInt8]) -> Data {
 		let r = Array(signature.prefix(32))
 		let s = Array(signature.suffix(32))
-		guard RepoSigningKey.isLowS(s, order: RepoSigningKey.p256Order) else {
+		guard RepoSigningKey.isLowS(s, order: order) else {
 			return signature
 		}
-		return Data(r + subtract(RepoSigningKey.p256Order, s))
+		return Data(r + subtract(order, s))
 	}
 
 	public static func subtract(_ lhs: [UInt8], _ rhs: [UInt8]) -> [UInt8] {

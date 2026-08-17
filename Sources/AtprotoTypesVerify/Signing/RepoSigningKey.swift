@@ -14,10 +14,9 @@ import Foundation
 ///base58btc string wrapping a multicodec prefix and a compressed point.
 ///
 ///Two curves are in use across the network. P-256 is here; secp256k1 is what
-///Bluesky's own PDS mints by default, and swift-crypto has no k256 at all,
-///which is why the verify-only port is its own piece of work (Q-PMR-23). Until
-///it lands, a k256 account fails closed with `unsupportedCurve` rather than
-///being waved through.
+///Bluesky's own PDS mints by default, and swift-crypto has no k256 at all, so
+///this file carries a from-scratch, verify-only secp256k1 port (`Secp256k1.
+///ECDSA`, Q-PMR-23) alongside the P-256 path swift-crypto backs directly.
 public struct RepoSigningKey: Sendable {
 	public enum Curve: Sendable, Equatable {
 		case p256
@@ -115,7 +114,19 @@ public struct RepoSigningKey: Sendable {
 
 		switch curve {
 		case .secp256k1:
-			throw Atproto.Repo.ProofError.unsupportedCurve(curve.name)
+			//same low-S rule as p256, against this curve's own order — atproto
+			//requires it network-wide, not just for the curve swift-crypto backs
+			guard Self.isLowS(Array(signature.suffix(32)), order: Self.secp256k1Order) else {
+				throw Atproto.Repo.ProofError.nonCanonicalSignature
+			}
+
+			let digest = SHA256.hash(data: message)
+			guard
+				Secp256k1.ECDSA.verify(
+					signature: signature, digest: Data(digest), compressedPublicKey: compressedPoint)
+			else {
+				throw Atproto.Repo.ProofError.signatureDidNotVerify
+			}
 
 		case .p256:
 			//atproto requires low-S. swift-crypto will happily verify the
@@ -152,6 +163,12 @@ public struct RepoSigningKey: Sendable {
 		0xBC, 0xE6, 0xFA, 0xAD, 0xA7, 0x17, 0x9E, 0x84,
 		0xF3, 0xB9, 0xCA, 0xC2, 0xFC, 0x63, 0x25, 0x51,
 	]
+
+	///Derived from `Secp256k1.Scalar.order` rather than transcribed as a
+	///second hex constant — one order to keep in sync with the curve
+	///parameters, not two.
+	package static let secp256k1Order: [UInt8] = Secp256k1.Limbs256.bigEndianBytes(
+		Secp256k1.Scalar.order)
 
 	///`s <= n/2`. The half-order is derived from the order rather than written
 	///out, so there is one constant to check against the curve parameters

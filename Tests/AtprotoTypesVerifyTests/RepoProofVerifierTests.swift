@@ -246,27 +246,70 @@ struct RepoProofVerifierTests {
 		}
 	}
 
-	// MARK: - Identity plumbing
+	// MARK: - secp256k1
 
-	///Most real Bluesky accounts are here today, which is why the secp256k1
-	///verify-only port is its own piece of work. Until it lands the answer is
-	///"cannot check", never "checked out fine".
-	@Test("a secp256k1 account fails closed rather than being waved through")
-	func refusesSecp256k1() throws {
-		let scenario = Scenario()
-		let document = try RepoFixture.document(
-			did: scenario.did,
-			methods: [
-				(
-					id: scenario.did.rawValue + "#atproto",
-					controller: scenario.did.rawValue,
-					//a real k256 did:key
-					multibase: "zQ3shPrWRUXva2mWziWZtffrjuXUx3E28WfgsAwStMcAmDt93"
+	///Mirrors `Scenario`, kept separate rather than adding a type parameter to
+	///it: every other test in this file is p256-only and gains nothing from
+	///carrying a curve around, and `Scenario`'s default-argument initialiser
+	///(`Key = Key()`) doesn't generalize to an arbitrary `RepoFixtureSigningKey`.
+	struct Secp256k1Scenario {
+		let did: Atproto.DID
+		let signer: Secp256k1TestSigner
+		let record: DAGCBORValue
+
+		init(
+			did: Atproto.DID = RepoFixture.did,
+			signer: Secp256k1TestSigner = Secp256k1TestSigner(),
+			anchorKey: Data = Data(repeating: 0xA1, count: 32)
+		) {
+			self.did = did
+			self.signer = signer
+			self.record = RepoFixture.declaration(currentKey: anchorKey)
+		}
+
+		func car() throws -> Data {
+			let recordBlock = try RepoFixture.block(record)
+			let node = try RepoFixture.block(
+				RepoFixture.node(
+					entries: [
+						(key: RepoProofVerifierTests.path.mstKey, value: recordBlock.cid)
+					]
 				)
-			]
+			)
+			let commit = try RepoFixture.commit(did: did, dataRoot: node.cid, signedBy: signer)
+			let commitBlock = try RepoFixture.block(commit)
+			return RepoFixture.car(root: commitBlock.cid, blocks: [recordBlock, node, commitBlock])
+		}
+
+		func document() throws -> Atproto.DIDDocument {
+			try RepoFixture.document(did: did, key: signer.publicKey)
+		}
+	}
+
+	///Most real Bluesky accounts sign with this curve, which is what made the
+	///from-scratch verify-only port (Q-PMR-23) worth doing: a genuine k256
+	///commit signature now verifies rather than failing closed.
+	@Test("a genuine secp256k1 record verifies against the DID document's signing key")
+	func verifiesGenuineSecp256k1Record() throws {
+		let scenario = Secp256k1Scenario()
+		let proof = try Atproto.Repo.Verifier().verifyRecordProof(
+			car: try scenario.car(),
+			did: scenario.did,
+			path: Self.path,
+			document: try scenario.document()
 		)
 
-		#expect(throws: Atproto.Repo.ProofError.unsupportedCurve("secp256k1")) {
+		#expect(proof.did == scenario.did)
+		#expect(proof.block == DAGCBOREncoder.encode(scenario.record))
+	}
+
+	@Test("a secp256k1 document naming a different key refuses the proof")
+	func refusesWrongSecp256k1DocumentKey() throws {
+		let scenario = Secp256k1Scenario()
+		let unrelated = Secp256k1TestSigner()
+		let document = try RepoFixture.document(did: scenario.did, key: unrelated.publicKey)
+
+		#expect(throws: Atproto.Repo.ProofError.signatureDidNotVerify) {
 			try Atproto.Repo.Verifier().verifyRecordProof(
 				car: try scenario.car(),
 				did: scenario.did,
@@ -275,6 +318,8 @@ struct RepoProofVerifierTests {
 			)
 		}
 	}
+
+	// MARK: - Identity plumbing
 
 	@Test("a document with no atproto verification method is refused")
 	func refusesDocumentWithoutKey() throws {

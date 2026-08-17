@@ -32,6 +32,10 @@ let package = Package(
 		),
 		.package(url: "https://github.com/apple/swift-http-types.git", from: "1.5.1"),
 		.package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
+		//Differential oracle for the from-scratch secp256k1 verify port — test
+		//dependency only, never in a shipped product (that's the whole reason
+		//AtprotoTypesVerify carries its own pure-Swift implementation).
+		.package(url: "https://github.com/21-DOT-DEV/swift-secp256k1.git", from: "0.23.1"),
 	],
 	targets: [
 		// Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -89,7 +93,9 @@ let package = Package(
 				"AtprotoTypesVerifyMocks",
 				"AtprotoTypes",
 				.product(name: "Crypto", package: "swift-crypto"),
-			]
+				.product(name: "P256K", package: "swift-secp256k1"),
+			],
+			resources: [.copy("Resources/wycheproof")]
 		),
 	]
 )
