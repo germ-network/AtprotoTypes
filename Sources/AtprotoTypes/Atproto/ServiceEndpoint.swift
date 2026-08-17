@@ -5,9 +5,7 @@
 //  Created by Mark @ Germ on 7/25/26.
 //
 
-import Darwin
 import Foundation
-import Network
 
 extension Atproto.DIDDocument {
 	/// What ``Service/validate(endpoint:policy:)`` will accept. Strict unless
@@ -73,18 +71,17 @@ extension Atproto.DIDDocument.Service {
 
 		//same discipline as `permitted(host:)`: every parser that can read this
 		//has to agree, or we don't know where the connection actually lands
-		let v4Readings = [IPv4Address(host), inetAtonAddress(host)].compactMap { $0 }
+		let v4Readings = [IPLiteral.v4(host), IPLiteral.legacyV4(host)]
+			.compactMap { $0 }
 		if !v4Readings.isEmpty {
-			return v4Readings.allSatisfy { [UInt8]($0.rawValue).first == 127 }
+			return v4Readings.allSatisfy { $0.first == 127 }
 		}
 
-		guard let v6 = IPv6Address(host) else { return false }
-		if let mapped = v6.asIPv4 {
-			return [UInt8](mapped.rawValue).first == 127
+		guard let v6 = IPLiteral.v6(host) else { return false }
+		if let mapped = IPLiteral.embeddedV4(in: v6) {
+			return mapped.first == 127
 		}
-		let bytes = [UInt8](v6.rawValue)
-		return bytes.count == 16 && bytes.dropLast().allSatisfy { $0 == 0 }
-			&& bytes[15] == 1
+		return v6.dropLast().allSatisfy { $0 == 0 } && v6[15] == 1
 	}
 
 	private static func normalized(_ rawHost: String) -> String {
@@ -106,15 +103,17 @@ extension Atproto.DIDDocument.Service {
 		guard !host.isEmpty else { return false }
 
 		//One string can name different addresses depending on who parses it:
-		//`0177.0.0.1` is 177.0.0.1 to IPv4Address and 127.0.0.1 to inet_aton,
+		//`0177.0.0.1` is 177.0.0.1 to IPLiteral.v4 and 127.0.0.1 to inet_aton,
 		//and `010.0.0.1` splits the other way. We don't control which parser the
 		//connection ultimately uses, so every reading has to be acceptable.
-		if let v6 = IPv6Address(host), !permitted(v6) { return false }
-		if let v4 = IPv4Address(host), !permitted(v4) { return false }
-		if let legacy = inetAtonAddress(host), !permitted(legacy) { return false }
+		if let v6 = IPLiteral.v6(host), !permitted(v6: v6) { return false }
+		if let v4 = IPLiteral.v4(host), !permitted(v4: v4) { return false }
+		if let legacy = IPLiteral.legacyV4(host), !permitted(v4: legacy) {
+			return false
+		}
 
 		//an address literal that survived every parser's screening
-		if IPv4Address(host) != nil || IPv6Address(host) != nil { return true }
+		if IPLiteral.v4(host) != nil || IPLiteral.v6(host) != nil { return true }
 
 		//single-label names resolve through local search domains, never a public PDS
 		guard let lastDot = host.lastIndex(of: ".") else { return false }
@@ -128,8 +127,7 @@ extension Atproto.DIDDocument.Service {
 		"localhost", "local", "internal", "test", "invalid", "example",
 	]
 
-	private static func permitted(_ address: IPv4Address) -> Bool {
-		let bytes = [UInt8](address.rawValue)
+	private static func permitted(v4 bytes: [UInt8]) -> Bool {
 		guard bytes.count == 4 else { return false }
 
 		switch bytes[0] {
@@ -145,13 +143,12 @@ extension Atproto.DIDDocument.Service {
 		}
 	}
 
-	private static func permitted(_ address: IPv6Address) -> Bool {
+	private static func permitted(v6 bytes: [UInt8]) -> Bool {
 		//::ffff:127.0.0.1 and friends are the v4 ranges wearing a v6 hat
-		if let mapped = address.asIPv4 {
-			return permitted(mapped)
+		if let mapped = IPLiteral.embeddedV4(in: bytes) {
+			return permitted(v4: mapped)
 		}
 
-		let bytes = [UInt8](address.rawValue)
 		guard bytes.count == 16 else { return false }
 
 		//:: unspecified and ::1 loopback
@@ -166,12 +163,4 @@ extension Atproto.DIDDocument.Service {
 		return true
 	}
 
-	///the legacy decimal/octal/hex forms `getaddrinfo` still honors
-	private static func inetAtonAddress(_ host: String) -> IPv4Address? {
-		var address = in_addr()
-		guard host.withCString({ inet_aton($0, &address) }) == 1 else {
-			return nil
-		}
-		return IPv4Address(withUnsafeBytes(of: address.s_addr) { Data($0) })
-	}
 }
