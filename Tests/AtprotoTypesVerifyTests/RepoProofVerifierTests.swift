@@ -336,6 +336,50 @@ struct RepoProofVerifierTests {
 		}
 	}
 
+	///`verificationMethod` and `publicKeyMultibase` are both optional in the
+	///canonical DID schema, so a document can omit either entirely. Absent has
+	///to mean the same refusal as empty — these two cases are only reachable
+	///by hand-written JSON, so without them the nil branches are decided by
+	///whoever last touched the unwrap rather than by a test.
+	@Test("a document omitting verificationMethod entirely is refused")
+	func refusesDocumentWithNoVerificationMethodKey() throws {
+		let scenario = Scenario()
+		let document = try JSONDecoder().decode(
+			Atproto.DIDDocument.self,
+			from: Data(#"{"id":"\#(scenario.did.rawValue)"}"#.utf8)
+		)
+
+		#expect(throws: Atproto.Repo.ProofError.noAtprotoSigningKey) {
+			try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try scenario.car(),
+				did: scenario.did,
+				path: Self.path,
+				document: document
+			)
+		}
+	}
+
+	@Test("an atproto method publishing no key material is refused")
+	func refusesMethodWithoutMultibase() throws {
+		let scenario = Scenario()
+		let json = """
+			{"id":"\(scenario.did.rawValue)","verificationMethod":[\
+			{"id":"\(scenario.did.rawValue)#atproto","type":"Multikey",\
+			"controller":"\(scenario.did.rawValue)"}]}
+			"""
+		let document = try JSONDecoder().decode(
+			Atproto.DIDDocument.self, from: Data(json.utf8))
+
+		#expect(throws: Atproto.Repo.ProofError.noAtprotoSigningKey) {
+			try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try scenario.car(),
+				did: scenario.did,
+				path: Self.path,
+				document: document
+			)
+		}
+	}
+
 	///The gap this closes on the shipped fetch path: today's `resolveMiniDoc`
 	///adapter builds a document with `verificationMethod: []`, so every proof
 	///would stop here until that key is carried through.
