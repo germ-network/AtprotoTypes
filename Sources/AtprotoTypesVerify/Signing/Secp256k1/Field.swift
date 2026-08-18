@@ -12,7 +12,7 @@ import Foundation
 ///**Not constant-time, deliberately.** This is verify-only: every value it
 ///ever touches — a public key, a signature, a message hash — is public, and
 ///there is no secret whose timing could leak. That is the property that made
-///a from-scratch Swift port acceptable at all (Q-PMR-23), and it is why the
+///a from-scratch Swift port acceptable at all, and it is why the
 ///code here can use straightforward branching arithmetic rather than the
 ///contortions a signing implementation would need.
 ///

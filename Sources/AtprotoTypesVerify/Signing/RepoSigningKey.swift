@@ -15,8 +15,9 @@ import Foundation
 ///
 ///Two curves are in use across the network. P-256 is here; secp256k1 is what
 ///Bluesky's own PDS mints by default, and swift-crypto has no k256 at all, so
-///this file carries a from-scratch, verify-only secp256k1 port (`Secp256k1.
-///ECDSA`, Q-PMR-23) alongside the P-256 path swift-crypto backs directly.
+///this file carries a from-scratch, verify-only secp256k1 port
+///(`Secp256k1.ECDSA`) alongside the P-256 path swift-crypto backs directly.
+///See `docs/dependency-choices.md` for why that isn't an imported library.
 public struct RepoSigningKey: Sendable {
 	public enum Curve: Sendable, Equatable {
 		case p256

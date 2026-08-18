@@ -14,6 +14,9 @@ import Foundation
 ///bytes opaquely and can render base32, which is all a JSON caller needs; a
 ///proof needs the parts, because the whole point is to recompute the digest
 ///from the block and compare rather than take the server's word for the link.
+///
+///Narrow on purpose — v1 only, two codecs, sha2-256 only. See
+///`docs/dependency-choices.md` for why this isn't a multiformats library.
 public struct ContentIdentifier: Sendable, Hashable {
 	public enum Codec: UInt64, Sendable {
 		case raw = 0x55

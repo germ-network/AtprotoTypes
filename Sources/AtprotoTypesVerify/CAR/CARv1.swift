@@ -20,6 +20,10 @@ import Foundation
 ///verifies it, and serves the stored CAR from its own `/records/{did}`. Either
 ///way the check below is identical, which is why nothing here knows about
 ///transport.
+///
+///Every block is checked against its own CID at load, not at lookup — the
+///property the rest of the walk rests on, and the one the available Swift CAR
+///readers skip. See `docs/dependency-choices.md`.
 public struct CARv1: Sendable {
 	public let roots: [ContentIdentifier]
 	private let blocks: [Data: Data]

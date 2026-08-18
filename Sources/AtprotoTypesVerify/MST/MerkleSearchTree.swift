@@ -15,6 +15,9 @@ import Foundation
 ///Keys are `collection/rkey`, stored bytewise-ascending with the shared prefix
 ///of the preceding key elided — so reconstructing a key means carrying the
 ///previous one, and a node that lies about `p` is the first thing to reject.
+///
+///The semantics are atproto's, not a generic Merkle tree's, so no general
+///library applies. See `docs/dependency-choices.md`.
 public enum MerkleSearchTree {
 	enum Step {
 		case found(ContentIdentifier)

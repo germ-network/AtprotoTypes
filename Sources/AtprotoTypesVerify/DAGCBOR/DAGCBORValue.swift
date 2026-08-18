@@ -15,6 +15,9 @@ import Foundation
 ///`sig`* and hashing that. Any field we didn't model would vanish in the
 ///round-trip and the preimage would be wrong — so the decode has to be
 ///lossless over the whole node, not just the parts we happen to read.
+///
+///This is also why a CBOR library doesn't substitute, strict or not — the ones
+///worth considering are `Codable`-only. See `docs/dependency-choices.md`.
 public indirect enum DAGCBORValue: Sendable, Hashable {
 	case null
 	case bool(Bool)
