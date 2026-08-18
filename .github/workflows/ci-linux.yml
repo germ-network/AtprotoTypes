@@ -2,16 +2,14 @@ name: Linux
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
     paths-ignore:
       - "README.md"
       - "CODE_OF_CONDUCT.md"
       - ".editorconfig"
       - ".spi.yml"
   pull_request:
-    branches:
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -27,7 +25,7 @@ jobs:
     strategy:
       matrix:
         swift-version:
-          - "latest"
+          - "6.2"
     steps:
       - name: Checkout
         uses: actions/checkout@v6
