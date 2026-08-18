@@ -105,6 +105,8 @@ struct PDSEndpointTests {
 			//single-label hosts resolve via local search domains
 			"https://pds",
 			"https://intranet",
+			//octal-invalid, so no address parser vouches for it either
+			"https://018015111",
 			//special-use TLDs (RFC 6761/6762, ICANN .internal)
 			"https://foo.local",
 			"https://foo.internal",

@@ -19,12 +19,13 @@ struct IPLiteralTests {
 			("1.1.1.1", [1, 1, 1, 1]),
 			("0.0.0.0", [0, 0, 0, 0]),
 			("255.255.255.255", [255, 255, 255, 255]),
-			//a leading zero is decimal here and octal to inet_aton
+			//in a quad, a leading zero is decimal here and octal to inet_aton
 			("0177.0.0.1", [177, 0, 0, 1]),
 			("010.0.0.1", [10, 0, 0, 1]),
 			("01.02.03.04", [1, 2, 3, 4]),
 			("00000000000000000177.0.0.1", [177, 0, 0, 1]),
-			//fewer than four parts: the last one widens over what's left
+			//anything shorter defers to inet_aton: last part widens, and a
+			//leading zero is octal
 			("16843009", [1, 1, 1, 1]),
 			("2130706433", [127, 0, 0, 1]),
 			("1", [0, 0, 0, 1]),
@@ -32,6 +33,10 @@ struct IPLiteralTests {
 			("1.2", [1, 0, 0, 2]),
 			("127.1", [127, 0, 0, 1]),
 			("1.2.3", [1, 2, 0, 3]),
+			("010", [0, 0, 0, 8]),
+			("0177", [0, 0, 0, 127]),
+			("010.1", [8, 0, 0, 1]),
+			("017700000001", [127, 0, 0, 1]),
 			//0x is hex in any position
 			("0x7f000001", [127, 0, 0, 1]),
 			("0xffffffff", [255, 255, 255, 255]),
@@ -55,6 +60,9 @@ struct IPLiteralTests {
 			".1.2.3", "1..2", "1.2.3.4.5", "300.1.2.3", "1.2.3.0x100",
 			//UInt32(_:radix:) would take these; inet_aton and IPv4Address don't
 			"+1.2.3.4", "-1", "0x",
+			//octal context (leading zero) with a digit past 7: no parser reads
+			//these, so dotless ones stay subject to the single-label rule
+			"018015111", "08", "09",
 		]
 	)
 	func v4RejectsWhatIsNotAnAddress(_ host: String) {
@@ -66,6 +74,7 @@ struct IPLiteralTests {
 		arguments: [
 			("0177.0.0.1", [177, 0, 0, 1], [127, 0, 0, 1]),
 			("010.0.0.1", [10, 0, 0, 1], [8, 0, 0, 1]),
+			("0100.0.0.1", [100, 0, 0, 1], [64, 0, 0, 1]),
 		] as [(String, [UInt8], [UInt8])]
 	)
 	func leadingZeroSplitsTheReadings(

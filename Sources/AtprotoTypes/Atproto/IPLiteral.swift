@@ -25,38 +25,31 @@
 /// Two IPv4 readings, deliberately: one string can name different addresses
 /// depending on who parses it, and the caller rejects on any disagreement.
 package enum IPLiteral {
-	/// The permissive grammar `IPv4Address` accepts — one to four dot-separated
-	/// parts, `0x` honored as hex, a leading zero read as **decimal**, and the
-	/// final part widened over the bytes the earlier parts left unnamed
-	/// (`127.1` is 127.0.0.1, `16843009` is 1.1.1.1).
+	/// The permissive grammar `IPv4Address` accepts. In a dotted quad each part
+	/// names one byte, `0x` honored as hex and a leading zero read as
+	/// **decimal** (`0177.0.0.1` is 177.0.0.1). Every other shape defers to
+	/// ``legacyV4(_:)``, because that is what `IPv4Address` does: `16843009` is
+	/// 1.1.1.1, `127.1` is 127.0.0.1, and `010` is 0.0.0.8 — octal, so a
+	/// dotless spelling with an 8 or 9 after a leading zero has no reading and
+	/// falls to the single-label rule.
 	///
-	/// Two nonsense spellings read as no address here where `IPv4Address` still
-	/// produced one — `0x` with no digits after it, and a value past 2^32, which
-	/// it wrapped. Both directions are safe: a host with no reading loses the
-	/// literal exemption below and is screened as a name, and ``legacyV4(_:)``
-	/// reads both spellings anyway.
+	/// The one probed divergence from `IPv4Address` is a quad part of `0x` with
+	/// no digits (`1.0x.2.3`), which read as zero there and has no reading
+	/// here. Safe: a host with no reading loses the literal exemption and is
+	/// screened as a name, and where the platform's `inet_aton` reads the
+	/// spelling, ``legacyV4(_:)`` still screens that reading.
 	package static func v4(_ host: String) -> [UInt8]? {
-		//a trailing dot is a hostname's FQDN form, not an address
-		guard !host.isEmpty, !host.hasSuffix(".") else { return nil }
-
 		let parts = host.split(separator: ".", omittingEmptySubsequences: false)
-		guard (1...4).contains(parts.count) else { return nil }
+		guard parts.count == 4 else {
+			return legacyV4(host)
+		}
 
 		let values = parts.compactMap(partValue)
-		guard values.count == parts.count else { return nil }
-
-		//every part but the last names one byte
-		let leading = values.dropLast()
-		guard leading.allSatisfy({ $0 <= 0xff }), let last = values.last else {
+		guard values.count == 4, values.allSatisfy({ $0 <= 0xff }) else {
 			return nil
 		}
 
-		let remaining = 4 - leading.count
-		guard UInt64(last) < (1 << (8 * UInt64(remaining))) else { return nil }
-
-		return leading.map { UInt8($0) }
-			+ stride(from: (remaining - 1) * 8, through: 0, by: -8)
-			.map { UInt8((last >> UInt32($0)) & 0xff) }
+		return values.map { UInt8($0) }
 	}
 
 	/// `inet_aton`'s reading of the same string, where a leading zero is octal

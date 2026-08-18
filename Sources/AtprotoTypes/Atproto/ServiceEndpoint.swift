@@ -102,18 +102,25 @@ extension Atproto.DIDDocument.Service {
 
 		guard !host.isEmpty else { return false }
 
+		let v4 = IPLiteral.v4(host)
+		let v6 = IPLiteral.v6(host)
+
 		//One string can name different addresses depending on who parses it:
 		//`0177.0.0.1` is 177.0.0.1 to IPLiteral.v4 and 127.0.0.1 to inet_aton,
 		//and `010.0.0.1` splits the other way. We don't control which parser the
 		//connection ultimately uses, so every reading has to be acceptable.
-		if let v6 = IPLiteral.v6(host), !permitted(v6: v6) { return false }
-		if let v4 = IPLiteral.v4(host), !permitted(v4: v4) { return false }
+		if let v6, !permitted(v6: v6) { return false }
+		if let v4, !permitted(v4: v4) { return false }
 		if let legacy = IPLiteral.legacyV4(host), !permitted(v4: legacy) {
 			return false
 		}
 
-		//an address literal that survived every parser's screening
-		if IPLiteral.v4(host) != nil || IPLiteral.v6(host) != nil { return true }
+		//An address literal that survived every parser's screening. Deliberately
+		//v4/v6 only: a spelling only inet_aton reads earns no exemption — its
+		//blocked readings were rejected above, and the rest fall through to the
+		//name rules, which is how the resolver will treat the string wherever
+		//its own inet_aton agrees it is not an address.
+		if v4 != nil || v6 != nil { return true }
 
 		//single-label names resolve through local search domains, never a public PDS
 		guard let lastDot = host.lastIndex(of: ".") else { return false }
