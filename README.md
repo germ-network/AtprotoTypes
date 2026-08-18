@@ -1,3 +1,7 @@
+[![Apple](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-apple.yml/badge.svg)](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-apple.yml)
+[![Linux](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-linux.yml)
+[![Android](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-android.yml/badge.svg)](https://github.com/germ-network/AtprotoTypes/actions/workflows/ci-android.yml)
+
 This library provides types corresponding to [atproto](https://atproto.com) type definitions.
 
 
