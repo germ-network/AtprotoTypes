@@ -1,5 +1,33 @@
 # @germ-network/atprototypes
 
+## 0.5.0
+
+### Minor Changes
+
+- [#51](https://github.com/germ-network/AtprotoTypes/pull/51) [`3729867`](https://github.com/germ-network/AtprotoTypes/commit/372986720797b10388ceb87087a168133df19554) Thanks [@germ-mark](https://github.com/germ-mark)! - add EndpointPolicy so a development build can reach a loopback PDS over http
+
+- [#51](https://github.com/germ-network/AtprotoTypes/pull/51) [`28b2294`](https://github.com/germ-network/AtprotoTypes/commit/28b2294fd480d6fbe142909b140c3ead8f7ecb30) Thanks [@germ-mark](https://github.com/germ-mark)! - reject non-https, loopback/private-range, reserved-TLD, and single-label PDS service endpoints
+
+- [#54](https://github.com/germ-network/AtprotoTypes/pull/54) [`d0f526f`](https://github.com/germ-network/AtprotoTypes/commit/d0f526fb332656d24402776094b5ef31896782ad) Thanks [@germ-mark](https://github.com/germ-mark)! - `AtprotoTypesVerify` now verifies secp256k1 repo commit signatures, not just P-256 — a from-scratch, verify-only Swift port (field/scalar arithmetic, Jacobian point operations, SEC1 decompression, ECDSA), since most Bluesky accounts sign with this curve and swift-crypto has no k256 support. Checked against Wycheproof's secp256k1 test vectors and a P256K-backed differential oracle in `AtprotoTypesVerifyTests` (test-only dependency; nothing new ships in the product). `AtprotoTypesVerifyMocks`'s fixture signer is now a protocol (`RepoFixtureSigningKey`) instead of concrete P256, so a consumer's tests can build synthetic k256 repos too.
+
+- [#54](https://github.com/germ-network/AtprotoTypes/pull/54) [`2ea1805`](https://github.com/germ-network/AtprotoTypes/commit/2ea1805462363028ecb23200a7ace679796fb439) Thanks [@germ-mark](https://github.com/germ-mark)! - Add `AtprotoTypesVerify` and `AtprotoTypesVerifyMocks`: CAR framing, DAG-CBOR, MST proof walking, CID recomputation, and P-256 repo commit-signature verification, plus fixture-building support for building synthetic signed repos in tests. Additive products — a consumer that never links the new products pays nothing for their existing (e.g. an App Clip target). The existing `AtprotoTypes` target gains one small addition of its own: an `Atproto.Repo` seam (`RecordPath`, `Proof`, `ProofVerifying`, `ProofUnavailable`) cheap enough for a space-constrained consumer to link even when it doesn't want the verifier itself.
+
+- [#58](https://github.com/germ-network/AtprotoTypes/pull/58) [`bf05899`](https://github.com/germ-network/AtprotoTypes/commit/bf05899d911d2cb8d17155102bd05b2ec47daf34) Thanks [@germ-mark](https://github.com/germ-mark)! - Two fixes to `Atproto.DIDDocument`:
+
+  `verified(expecting:did:)` shadowed its own `did:` parameter and never checked it, so the DID-matches-document-id check `Resolver.swift`'s own doc comment claims is enforced never actually ran. Both the synchronous and async (`verified(resolver:)`, now taking an optional `expectedDid:`) overloads check it and throw `documentIdMismatch` on a mismatch. Everywhere in the current call graph this was traced to be a provable no-op except one site (a plc.directory response accepted without comparing its `id` to the requested DID) — this closes that gap directly.
+
+  `DIDDocument`'s decode was stricter than the canonical schema: `@context`, `verificationMethod`, `service`, and `VerificationMethod.publicKeyMultibase` are now optional, `@context` accepts a bare string as well as an array, and `Service.serviceEndpoint` is now `URL?` (an object-shaped endpoint, or a string that doesn't parse as a `URL`, decodes to `nil` rather than failing the whole document). PLC-issued documents hid this — plc.directory emits one uniform, tool-generated shape — but did:web documents are self-hosted and far more likely to be minimal or hand-authored.
+
+### Patch Changes
+
+- [#59](https://github.com/germ-network/AtprotoTypes/pull/59) [`8adbeca`](https://github.com/germ-network/AtprotoTypes/commit/8adbecaf892588406ac809110ffb11ccadf3506a) Thanks [@germ-mark](https://github.com/germ-mark)! - Fix the build: `AtprotoTypesVerify`'s `RepoSigningKey` still unwrapped `DIDDocument.verificationMethod` and `VerificationMethod.publicKeyMultibase` as non-optional after they became optional in the canonical-schema relaxation. Both absent cases now refuse with `noAtprotoSigningKey`, matching the existing empty-list behaviour, with regression tests for each.
+
+- [#55](https://github.com/germ-network/AtprotoTypes/pull/55) [`17738ad`](https://github.com/germ-network/AtprotoTypes/commit/17738adb76eea59389a4c7bea10a6925c0e0086f) Thanks [@germ-mark](https://github.com/germ-mark)! - Screen PDS endpoint hosts without Network.framework, so the package builds on
+  Linux and Android. Readings are unchanged on Apple platforms: dotted quads go
+  through a reimplementation of `IPv4Address`'s grammar pinned by tests, every
+  other v4 shape defers to the platform's `inet_aton` exactly as `IPv4Address`
+  did, and IPv6 moves to `inet_pton`.
+
 ## 0.4.7
 
 ### Patch Changes
