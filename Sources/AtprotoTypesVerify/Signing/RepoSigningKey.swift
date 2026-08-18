@@ -49,8 +49,11 @@ public struct RepoSigningKey: Sendable {
 	///fragment, and taking "the first one" instead would let a document with an
 	///extra method up front decide what we check against.
 	public init(atprotoKeyIn document: Atproto.DIDDocument, did: Atproto.DID) throws {
+		//`verificationMethod` is optional in the canonical DID schema, so an
+		//absent list and an empty one mean the same thing here: nothing to
+		//check against, which is a refusal rather than a pass.
 		guard
-			let method = document.verificationMethod.first(where: {
+			let method = document.verificationMethod?.first(where: {
 				$0.id == "#atproto" || $0.id.hasSuffix("#atproto")
 			})
 		else {
@@ -68,7 +71,13 @@ public struct RepoSigningKey: Sendable {
 			throw Atproto.Repo.ProofError.signingKeyControllerMismatch
 		}
 
-		try self.init(multibase: method.publicKeyMultibase)
+		//A method that publishes no key material proves nothing, so it is the
+		//same refusal as having no `#atproto` method at all — never a skip.
+		guard let multibase = method.publicKeyMultibase else {
+			throw Atproto.Repo.ProofError.noAtprotoSigningKey
+		}
+
+		try self.init(multibase: multibase)
 	}
 
 	public init(multibase: String) throws {
