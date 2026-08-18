@@ -216,10 +216,11 @@ struct PDSEndpointTests {
 	@Test func checkServiceForAtprotoHonorsPolicy() throws {
 		let document = try document(endpoint: "http://localhost:2583")
 
-		#expect(
+		let endpoint = try #require(
 			try document.checkServiceForAtproto(policy: .developmentLoopback)
-				.serviceEndpoint.host() == "localhost"
+				.serviceEndpoint
 		)
+		#expect(endpoint.host() == "localhost")
 		#expect(throws: Atproto.DIDDocument.Errors.insecureServiceUrlScheme("http")) {
 			try document.checkServiceForAtproto()
 		}
@@ -236,9 +237,8 @@ struct PDSEndpointTests {
 	@Test func checkServiceForAtprotoAcceptsPublicEndpoint() throws {
 		let document = try document(endpoint: "https://pds.example.com")
 
-		#expect(
-			try document.checkServiceForAtproto().serviceEndpoint.host()
-				== "pds.example.com")
+		let endpoint = try #require(try document.checkServiceForAtproto().serviceEndpoint)
+		#expect(endpoint.host() == "pds.example.com")
 	}
 
 	//the mock is the fixture every other suite builds on, so it has to stay valid
