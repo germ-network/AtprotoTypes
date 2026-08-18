@@ -37,4 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Test platform ${{ matrix.destination }}
-        run: set -o pipefail && xcodebuild -skipMacroValidation -scheme AtprotoTypes -destination "${{ matrix.destination }}" test | xcbeautify
+        # -skipPackagePluginValidation: swift-secp256k1 (the differential-test
+        # oracle for AtprotoTypesVerify's from-scratch k256, test-only and never
+        # shipped) carries a build-tool plugin that copies its shared sources.
+        # xcodebuild refuses unvalidated plugins non-interactively; `swift test`
+        # doesn't gate them, which is why Linux stayed green while Apple failed.
+        run: set -o pipefail && xcodebuild -skipMacroValidation -skipPackagePluginValidation -scheme AtprotoTypes -destination "${{ matrix.destination }}" test | xcbeautify
