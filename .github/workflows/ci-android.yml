@@ -26,3 +26,13 @@ jobs:
         uses: skiptools/swift-android-action@v2
         with:
           swift-version: "6.3"
+          # The emulator, not the tests, is what fails here: seen twice as
+          # `adb: device offline` right after "Successfully loaded snapshot",
+          # and as the adb daemon dying mid-run (exit 137) — never as a failing
+          # assertion. `-no-snapshot` takes the snapshot save/restore step out
+          # of the picture at the cost of a slower boot, and the extra memory
+          # gives the AVD headroom now that the test binary statically links
+          # libsecp256k1. Reclaiming disk first keeps the Swift toolchain and
+          # Android SDK from crowding the emulator's own image out.
+          android-emulator-options: "-no-window -noaudio -no-boot-anim -no-snapshot -memory 4096"
+          free-disk-space: "true"
