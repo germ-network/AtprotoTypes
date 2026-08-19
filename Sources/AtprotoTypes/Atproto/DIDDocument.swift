@@ -178,7 +178,13 @@ extension Atproto.DIDDocument {
 		/// though this type does not model that field, since nothing here reads it.
 		public let publicKeyMultibase: String?
 
-		package init(
+		/// Public, matching ``Service``'s initializer, because a resolver
+		/// adapter in another package may be handed the signing key directly
+		/// rather than a full DID document — Slingshot's `resolveMiniDoc`
+		/// returns it on the wire. While this was package-scoped, such an
+		/// adapter could only publish an empty `verificationMethod`, and any
+		/// repo proof checked against its documents failed for want of a key.
+		public init(
 			id: String,
 			type: String,
 			controller: String,
