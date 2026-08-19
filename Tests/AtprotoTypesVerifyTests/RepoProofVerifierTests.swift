@@ -380,9 +380,10 @@ struct RepoProofVerifierTests {
 		}
 	}
 
-	///The gap this closes on the shipped fetch path: today's `resolveMiniDoc`
-	///adapter builds a document with `verificationMethod: []`, so every proof
-	///would stop here until that key is carried through.
+	///The gap this closes on the shipped fetch path: Slingshot's
+	///`resolveMiniDoc` adapter used to build a document with
+	///`verificationMethod: []`, so every proof stopped here until that key
+	///was carried through.
 	@Test("a document with only a non-atproto method is refused")
 	func refusesWrongFragment() throws {
 		let scenario = Scenario()
