@@ -53,7 +53,9 @@ extension P256.Signing.PublicKey: RepoFixturePublicKey {
 
 extension P256.Signing.PrivateKey: RepoFixtureSigningKey {
 	public func repoFixtureSignature(for message: Data) throws -> Data {
-		RepoFixture.lowS(try signature(for: message).rawRepresentation, order: RepoSigningKey.p256Order)
+		RepoFixture.lowS(
+			try signature(for: message).rawRepresentation,
+			order: RepoSigningKey.p256Order)
 	}
 }
 
@@ -129,7 +131,11 @@ public enum RepoFixture {
 				.map([
 					("k", .bytes(Data(key.dropFirst(shared)))),
 					("p", .integer(Int64(shared))),
-					("t", subtrees[entry.key].map { DAGCBORValue.link($0) } ?? .null),
+					(
+						"t",
+						subtrees[entry.key].map { DAGCBORValue.link($0) }
+							?? .null
+					),
 					("v", .link(entry.value)),
 				])
 			)

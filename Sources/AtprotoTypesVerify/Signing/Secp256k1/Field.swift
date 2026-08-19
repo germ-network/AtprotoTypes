@@ -94,7 +94,9 @@ extension Secp256k1 {
 		}
 
 		var negated: Field {
-			isZero ? self : Field(unchecked: Limbs256.subtracting(Self.modulus, value).0)
+			isZero
+				? self
+				: Field(unchecked: Limbs256.subtracting(Self.modulus, value).0)
 		}
 
 		///Folds a 512-bit product down using 2^256 ≡ 2^32 + 977 (mod p): each
@@ -108,7 +110,9 @@ extension Secp256k1 {
 			var buffer = wide
 
 			var pass = 0
-			while !(buffer[4] == 0 && buffer[5] == 0 && buffer[6] == 0 && buffer[7] == 0) {
+			while !(buffer[4] == 0 && buffer[5] == 0 && buffer[6] == 0
+				&& buffer[7] == 0)
+			{
 				pass += 1
 				precondition(pass < 8, "field reduction did not converge")
 

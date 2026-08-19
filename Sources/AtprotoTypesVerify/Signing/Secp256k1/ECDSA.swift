@@ -21,7 +21,8 @@ extension Secp256k1 {
 		///point at infinity all collapse to a plain refusal rather than a
 		///distinguished error, matching how Wycheproof's "other invalid"
 		///bucket expects these to be indistinguishable from a wrong signature.
-		static func verify(signature: Data, digest: Data, compressedPublicKey: Data) -> Bool {
+		static func verify(signature: Data, digest: Data, compressedPublicKey: Data) -> Bool
+		{
 			//not reachable from `RepoSigningKey.verify` today (always a
 			//32-byte SHA-256 output) — guarded anyway, because
 			//`Scalar(reducingBigEndian:)` folds any other length to zero,
@@ -30,13 +31,19 @@ extension Secp256k1 {
 			//any t, R = t·G, r = R.x mod n, s = r·t⁻¹ mod n.
 			guard digest.count == 32 else { return false }
 			guard signature.count == 64 else { return false }
-			guard let r = Scalar(canonicalBigEndian: Array(signature.prefix(32))), !r.isZero else {
+			guard let r = Scalar(canonicalBigEndian: Array(signature.prefix(32))),
+				!r.isZero
+			else {
 				return false
 			}
-			guard let s = Scalar(canonicalBigEndian: Array(signature.suffix(32))), !s.isZero else {
+			guard let s = Scalar(canonicalBigEndian: Array(signature.suffix(32))),
+				!s.isZero
+			else {
 				return false
 			}
-			guard let publicKey = Point(compressed: compressedPublicKey) else { return false }
+			guard let publicKey = Point(compressed: compressedPublicKey) else {
+				return false
+			}
 
 			let z = Scalar(reducingBigEndian: Array(digest))
 			let w = s.inverted

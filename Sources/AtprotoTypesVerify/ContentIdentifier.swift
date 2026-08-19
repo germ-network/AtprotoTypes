@@ -24,7 +24,7 @@ public struct ContentIdentifier: Sendable, Hashable {
 	}
 
 	//multicodec sha2-256, and the only digest atproto uses
-	static let sha2_256: UInt64 = 0x12
+	static let sha2256: UInt64 = 0x12
 	static let digestLength = 32
 
 	public let codec: Codec
@@ -44,7 +44,7 @@ public struct ContentIdentifier: Sendable, Hashable {
 	public var bytes: Data {
 		var out = Self.varint(1)
 		out += Self.varint(codec.rawValue)
-		out += Self.varint(Self.sha2_256)
+		out += Self.varint(Self.sha2256)
 		out += Self.varint(UInt64(Self.digestLength))
 		out += digest
 		return Data(out)
@@ -86,7 +86,7 @@ public struct ContentIdentifier: Sendable, Hashable {
 		}
 
 		let hash = try reader.readUnsignedVarint()
-		guard hash == Self.sha2_256 else {
+		guard hash == Self.sha2256 else {
 			throw Atproto.Repo.ProofError.unsupportedHash(hash)
 		}
 

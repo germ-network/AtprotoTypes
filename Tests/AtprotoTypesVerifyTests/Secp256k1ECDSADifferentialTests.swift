@@ -41,12 +41,14 @@ struct Secp256k1ECDSADifferentialTests {
 			let signature = key.signature(for: message).compactRepresentation
 
 			let oracleAccepts = key.publicKey.isValidSignature(
-				try P256K.Signing.ECDSASignature(compactRepresentation: signature), for: message)
+				try P256K.Signing.ECDSASignature(compactRepresentation: signature),
+				for: message)
 			#expect(oracleAccepts)  //sanity: P256K agrees with itself
 
 			let digest = Crypto.SHA256.hash(data: message)
 			let oursAccepts = Secp256k1.ECDSA.verify(
-				signature: signature, digest: Data(digest), compressedPublicKey: publicKeyBytes)
+				signature: signature, digest: Data(digest),
+				compressedPublicKey: publicKeyBytes)
 			#expect(oursAccepts)
 		}
 	}
@@ -92,9 +94,11 @@ struct Secp256k1ECDSADifferentialTests {
 				if let parsedSignature = try? P256K.Signing.ECDSASignature(
 					compactRepresentation: testCase.signature),
 					let parsedKey = try? P256K.Signing.PublicKey(
-						dataRepresentation: testCase.key, format: .compressed)
+						dataRepresentation: testCase.key,
+						format: .compressed)
 				{
-					parsedKey.isValidSignature(parsedSignature, for: testCase.message)
+					parsedKey.isValidSignature(
+						parsedSignature, for: testCase.message)
 				} else {
 					false
 				}

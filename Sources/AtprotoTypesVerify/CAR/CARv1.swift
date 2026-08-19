@@ -43,7 +43,8 @@ public struct CARv1: Sendable {
 			throw Atproto.Repo.ProofError.badCARHeader
 		}
 		guard version == 1 else {
-			throw Atproto.Repo.ProofError.unsupportedCARVersion(UInt64(clamping: version))
+			throw Atproto.Repo.ProofError.unsupportedCARVersion(
+				UInt64(clamping: version))
 		}
 		guard let rawRoots = header["roots"]?.arrayValue else {
 			throw Atproto.Repo.ProofError.badCARHeader

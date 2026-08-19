@@ -45,7 +45,8 @@ struct Secp256k1FieldTests {
 	@Test("0 - 1 == p - 1")
 	func subtractionUnderflowsCorrectly() {
 		let direct = Field.zero - Field.one
-		let expected = Self.field("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2E")
+		let expected = Self.field(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2E")
 		#expect(direct == expected)
 	}
 
@@ -67,7 +68,8 @@ struct Secp256k1FieldTests {
 	///drop a carry.
 	@Test("multiplying two near-maximal field elements does not lose a carry")
 	func multiplicationOfLargeValuesRoundTrips() {
-		let pMinus1 = Self.field("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2E")
+		let pMinus1 = Self.field(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2E")
 		let product = pMinus1 * pMinus1
 		//p-1 ≡ -1 (mod p), so (p-1)^2 ≡ (-1)^2 == 1
 		#expect(product == Field.one)
@@ -75,7 +77,8 @@ struct Secp256k1FieldTests {
 		//a second, less degenerate near-maximal case: p-2 ≡ -2, so
 		//(p-2)^2 ≡ 4 — a non-trivial answer a dropped carry is less likely
 		//to accidentally still land on
-		let pMinus2 = Self.field("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2D")
+		let pMinus2 = Self.field(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2D")
 		#expect(pMinus2 * pMinus2 == Self.small(4))
 	}
 
@@ -93,7 +96,8 @@ struct Secp256k1FieldTests {
 
 	@Test("square root: sqrt(a^2) squares back to a^2")
 	func squareRootRoundTrips() throws {
-		let value = Self.field("0000000000000000000000000000000000000000000000000000000000000005")
+		let value = Self.field(
+			"0000000000000000000000000000000000000000000000000000000000000005")
 		let squared = value.squared()
 		let root = try #require(squared.squareRoot)
 		#expect(root.squared() == squared)
@@ -103,13 +107,26 @@ struct Secp256k1FieldTests {
 	func squareRootOfNonResidueIsNil() {
 		//3 is a quadratic non-residue mod secp256k1's p (p ≡ 3 mod 4, and 3's
 		//Legendre symbol here is -1 — verified against a reference computation)
-		let three = Self.field("0000000000000000000000000000000000000000000000000000000000000003")
+		let three = Self.field(
+			"0000000000000000000000000000000000000000000000000000000000000003")
 		#expect(three.squareRoot == nil)
 	}
 
 	@Test("canonical init rejects a value equal to or above the modulus")
 	func rejectsNonCanonicalValues() {
-		#expect(Field(bigEndian: Array(Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"))) == nil)  //== p
-		#expect(Field(bigEndian: Array(Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"))) == nil)  //> p
+		#expect(
+			Field(
+				bigEndian: Array(
+					Data(
+						hex:
+							"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"
+					))) == nil)  //== p
+		#expect(
+			Field(
+				bigEndian: Array(
+					Data(
+						hex:
+							"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+					))) == nil)  //> p
 	}
 }

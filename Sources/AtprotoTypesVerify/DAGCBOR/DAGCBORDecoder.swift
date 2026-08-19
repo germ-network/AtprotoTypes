@@ -114,7 +114,8 @@ public enum DAGCBORDecoder {
 					throw Atproto.Repo.ProofError.duplicateMapKey(key)
 				}
 				guard canonicallyPrecedes(previousKey, key) else {
-					throw Atproto.Repo.ProofError.unorderedMapKeys(previousKey, key)
+					throw Atproto.Repo.ProofError.unorderedMapKeys(
+						previousKey, key)
 				}
 			}
 			previousKey = key
