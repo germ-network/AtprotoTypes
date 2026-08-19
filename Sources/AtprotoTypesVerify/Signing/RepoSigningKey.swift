@@ -101,7 +101,8 @@ public struct RepoSigningKey: Sendable {
 		var reader = ByteReader(decoded)
 		let code = try reader.readUnsignedVarint()
 		guard let curve = Curve.named(code) else {
-			throw Atproto.Repo.ProofError.unsupportedCurve("multicodec 0x\(String(code, radix: 16))")
+			throw Atproto.Repo.ProofError.unsupportedCurve(
+				"multicodec 0x\(String(code, radix: 16))")
 		}
 
 		let pointLength = reader.remaining
@@ -126,14 +127,16 @@ public struct RepoSigningKey: Sendable {
 		case .secp256k1:
 			//same low-S rule as p256, against this curve's own order — atproto
 			//requires it network-wide, not just for the curve swift-crypto backs
-			guard Self.isLowS(Array(signature.suffix(32)), order: Self.secp256k1Order) else {
+			guard Self.isLowS(Array(signature.suffix(32)), order: Self.secp256k1Order)
+			else {
 				throw Atproto.Repo.ProofError.nonCanonicalSignature
 			}
 
 			let digest = SHA256.hash(data: message)
 			guard
 				Secp256k1.ECDSA.verify(
-					signature: signature, digest: Data(digest), compressedPublicKey: compressedPoint)
+					signature: signature, digest: Data(digest),
+					compressedPublicKey: compressedPoint)
 			else {
 				throw Atproto.Repo.ProofError.signatureDidNotVerify
 			}
@@ -152,7 +155,8 @@ public struct RepoSigningKey: Sendable {
 				key = try P256.Signing.PublicKey(
 					compressedRepresentation: compressedPoint
 				)
-				parsed = try P256.Signing.ECDSASignature(rawRepresentation: signature)
+				parsed = try P256.Signing.ECDSASignature(
+					rawRepresentation: signature)
 			} catch {
 				throw Atproto.Repo.ProofError.badMultibaseKey
 			}

@@ -92,7 +92,9 @@ extension Secp256k1 {
 			var buffer = wide
 
 			var pass = 0
-			while !(buffer[4] == 0 && buffer[5] == 0 && buffer[6] == 0 && buffer[7] == 0) {
+			while !(buffer[4] == 0 && buffer[5] == 0 && buffer[6] == 0
+				&& buffer[7] == 0)
+			{
 				pass += 1
 				precondition(pass < 12, "scalar reduction did not converge")
 

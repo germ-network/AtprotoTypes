@@ -60,9 +60,16 @@ struct RepoProofVerifierTests {
 			)
 			if let mutateSignature, let existing = commit["sig"]?.bytesValue {
 				commit = commit.removing(key: "sig")
-				guard case .map(let fields) = commit else { fatalError("unreachable") }
+				guard case .map(let fields) = commit else {
+					fatalError("unreachable")
+				}
 				commit = .map(
-					fields + [(key: "sig", value: .bytes(mutateSignature(existing)))]
+					fields + [
+						(
+							key: "sig",
+							value: .bytes(mutateSignature(existing))
+						)
+					]
 				)
 			}
 			let commitBlock = try RepoFixture.block(commit)
@@ -272,13 +279,18 @@ struct RepoProofVerifierTests {
 			let node = try RepoFixture.block(
 				RepoFixture.node(
 					entries: [
-						(key: RepoProofVerifierTests.path.mstKey, value: recordBlock.cid)
+						(
+							key: RepoProofVerifierTests.path.mstKey,
+							value: recordBlock.cid
+						)
 					]
 				)
 			)
-			let commit = try RepoFixture.commit(did: did, dataRoot: node.cid, signedBy: signer)
+			let commit = try RepoFixture.commit(
+				did: did, dataRoot: node.cid, signedBy: signer)
 			let commitBlock = try RepoFixture.block(commit)
-			return RepoFixture.car(root: commitBlock.cid, blocks: [recordBlock, node, commitBlock])
+			return RepoFixture.car(
+				root: commitBlock.cid, blocks: [recordBlock, node, commitBlock])
 		}
 
 		func document() throws -> Atproto.DIDDocument {

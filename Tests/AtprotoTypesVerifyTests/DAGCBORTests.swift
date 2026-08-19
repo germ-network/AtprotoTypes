@@ -55,7 +55,10 @@ struct DAGCBORTests {
 		let value = DAGCBORValue.map([
 			("did", .string("did:plc:example")),
 			("rev", .string("3lbw")),
-			("data", .link(try ContentIdentifier.compute(codec: .dagCBOR, block: Data()))),
+			(
+				"data",
+				.link(try ContentIdentifier.compute(codec: .dagCBOR, block: Data()))
+			),
 			("prev", .null),
 			("nested", .array([.integer(-1), .bytes(Data([0, 1, 2])), .bool(true)])),
 			("version", .integer(3)),

@@ -41,11 +41,13 @@ struct Secp256k1PointTests {
 		#expect(
 			x
 				== Self.field(
-					"C6047F9441ED7D6D3045406E95C07CD85C778E4B8CEF3CA7ABAC09B95C709EE5"))
+					"C6047F9441ED7D6D3045406E95C07CD85C778E4B8CEF3CA7ABAC09B95C709EE5"
+				))
 		#expect(
 			y
 				== Self.field(
-					"1AE168FEA63DC339A3C58419466CEAEEF7F632653266D0E1236431A950CFE52A"))
+					"1AE168FEA63DC339A3C58419466CEAEEF7F632653266D0E1236431A950CFE52A"
+				))
 
 		//routed through addition and through scalar multiplication too, since
 		//doubling is a distinct code path from both
@@ -65,11 +67,13 @@ struct Secp256k1PointTests {
 		#expect(
 			x
 				== Self.field(
-					"F9308A019258C31049344F85F89D5229B531C845836F99B08601F113BCE036F9"))
+					"F9308A019258C31049344F85F89D5229B531C845836F99B08601F113BCE036F9"
+				))
 		#expect(
 			y
 				== Self.field(
-					"388F7B0F632DE8140FE337E62A37F3566500A99934C2231B6CB9FD7584B8E672"))
+					"388F7B0F632DE8140FE337E62A37F3566500A99934C2231B6CB9FD7584B8E672"
+				))
 
 		let viaMultiply = Point.generator.multiplied(by: Self.scalar(3))
 		#expect(viaMultiply.affine?.x == x)
@@ -109,7 +113,10 @@ struct Secp256k1PointTests {
 	func scalarMultiplicationByOrderMinusOneNegatesTheGenerator() throws {
 		let nMinus1 = Scalar(
 			canonicalBigEndian: Array(
-				Data(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140")))!
+				Data(
+					hex:
+						"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140"
+				)))!
 		let result = try #require(Point.generator.multiplied(by: nMinus1).affine)
 		let expected = try #require(Point.generator.negated.affine)
 		#expect(result.x == expected.x)
@@ -161,7 +168,9 @@ struct Secp256k1PointTests {
 		var compressed = Data([0x02])
 		compressed.append(
 			contentsOf: Data(
-				hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"))  //== p
+				hex:
+					"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"
+			))  //== p
 		#expect(Point(compressed: compressed) == nil)
 	}
 

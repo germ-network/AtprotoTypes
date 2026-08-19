@@ -42,10 +42,14 @@ extension Secp256k1 {
 		static let generator: Point = {
 			let x = Field(
 				bigEndian: Array(
-					hex: "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"))!
+					hex:
+						"79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"
+				))!
 			let y = Field(
 				bigEndian: Array(
-					hex: "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8"))!
+					hex:
+						"483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8"
+				))!
 			return .jacobian(x: x, y: y, z: Field.one)
 		}()
 
@@ -53,8 +57,11 @@ extension Secp256k1 {
 
 		///Standard Jacobian doubling for a = 0 curves.
 		func doubled() -> Point {
-			guard case .affinePoint(let x1, let y1, let z1) = self else { return .infinity }
-			if y1.isZero { return .infinity }  //a point of order 2, which secp256k1 has none of except this degenerate input
+			guard case .affinePoint(let x1, let y1, let z1) = self else {
+				return .infinity
+			}
+			//a point of order 2, which secp256k1 has none of except this degenerate input
+			if y1.isZero { return .infinity }
 
 			let a = x1.squared()
 			let b = y1.squared()
@@ -107,7 +114,9 @@ extension Secp256k1 {
 		}
 
 		var negated: Point {
-			guard case .affinePoint(let x, let y, let z) = self else { return .infinity }
+			guard case .affinePoint(let x, let y, let z) = self else {
+				return .infinity
+			}
 			return .jacobian(x: x, y: y.negated, z: z)
 		}
 

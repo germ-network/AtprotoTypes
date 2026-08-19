@@ -82,9 +82,16 @@ struct Secp256k1WycheproofTests {
 
 	static func signingKey(uncompressedHex: String) throws -> RepoSigningKey {
 		let bytes = try data(hex: uncompressedHex)
-		precondition(bytes.count == 65 && bytes.first == 0x04, "not a SEC1 uncompressed point")
-		let x = bytes.subdata(in: bytes.index(bytes.startIndex, offsetBy: 1)..<bytes.index(bytes.startIndex, offsetBy: 33))
-		let y = bytes.subdata(in: bytes.index(bytes.startIndex, offsetBy: 33)..<bytes.index(bytes.startIndex, offsetBy: 65))
+		precondition(
+			bytes.count == 65 && bytes.first == 0x04, "not a SEC1 uncompressed point")
+		let x = bytes.subdata(
+			in: bytes.index(
+				bytes.startIndex, offsetBy: 1)..<bytes.index(
+					bytes.startIndex, offsetBy: 33))
+		let y = bytes.subdata(
+			in: bytes.index(
+				bytes.startIndex, offsetBy: 33)..<bytes.index(
+					bytes.startIndex, offsetBy: 65))
 		let prefix: UInt8 = (y.last! & 1 == 0) ? 0x02 : 0x03
 		let publicKey = Secp256k1PublicKey(compressedRepresentation: Data([prefix]) + x)
 		return try RepoSigningKey(multibase: RepoFixture.multibase(publicKey))
@@ -112,9 +119,11 @@ struct Secp256k1WycheproofTests {
 	func matchesExactCensus() throws {
 		let url = try #require(
 			Bundle.module.url(
-				forResource: "ecdsa_secp256k1_sha256_p1363_test", withExtension: "json",
+				forResource: "ecdsa_secp256k1_sha256_p1363_test",
+				withExtension: "json",
 				subdirectory: "wycheproof"))
-		let file = try JSONDecoder().decode(WycheproofFile.self, from: Data(contentsOf: url))
+		let file = try JSONDecoder().decode(
+			WycheproofFile.self, from: Data(contentsOf: url))
 		#expect(file.numberOfTests == 252)
 
 		var tally: [Bucket: Int] = [:]
@@ -122,12 +131,14 @@ struct Secp256k1WycheproofTests {
 		for group in file.testGroups {
 			#expect(group.publicKey.curve == "secp256k1")
 			#expect(group.sha == "SHA-256")
-			let signingKey = try Self.signingKey(uncompressedHex: group.publicKey.uncompressed)
+			let signingKey = try Self.signingKey(
+				uncompressedHex: group.publicKey.uncompressed)
 
 			for vector in group.tests {
 				let message = try Self.data(hex: vector.msg)
 				let signature = try Self.data(hex: vector.sig)
-				let expected = Self.expectedBucket(signature: signature, result: vector.result)
+				let expected = Self.expectedBucket(
+					signature: signature, result: vector.result)
 
 				let actual: Bucket
 				do {
@@ -141,7 +152,9 @@ struct Secp256k1WycheproofTests {
 					actual = .refusedOther
 				}
 
-				#expect(actual == expected, "tcId \(vector.tcId): \(vector.comment)")
+				#expect(
+					actual == expected, "tcId \(vector.tcId): \(vector.comment)"
+				)
 				tally[actual, default: 0] += 1
 			}
 		}

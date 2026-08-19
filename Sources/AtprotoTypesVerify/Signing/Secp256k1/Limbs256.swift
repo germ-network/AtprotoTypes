@@ -106,12 +106,17 @@ extension Secp256k1 {
 		///believed so: a hand-fused add can undercount by exactly one in a
 		///narrow edge case (large product, both inputs already near
 		///`UInt64.max`), and that is not a bug a quick reading catches.
-		static func rippleAdd(_ value: UInt64, at position: Int, into accumulator: inout [UInt64]) {
+		static func rippleAdd(
+			_ value: UInt64, at position: Int, into accumulator: inout [UInt64]
+		) {
 			var carry = value
 			var index = position
 			while carry != 0 {
-				precondition(index < accumulator.count, "carry overflowed the accumulator")
-				let (sum, overflow) = accumulator[index].addingReportingOverflow(carry)
+				precondition(
+					index < accumulator.count,
+					"carry overflowed the accumulator")
+				let (sum, overflow) = accumulator[index].addingReportingOverflow(
+					carry)
 				accumulator[index] = sum
 				carry = overflow ? 1 : 0
 				index += 1

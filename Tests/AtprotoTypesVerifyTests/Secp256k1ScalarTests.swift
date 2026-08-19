@@ -34,7 +34,8 @@ struct Secp256k1ScalarTests {
 
 	@Test("n - 1 + 1 wraps to zero")
 	func wrapsAtOrder() {
-		let nMinus1 = Self.scalar("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140")
+		let nMinus1 = Self.scalar(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140")
 		#expect(Self.adding(nMinus1, Scalar.one) == Scalar.zero)
 	}
 
@@ -61,10 +62,12 @@ struct Secp256k1ScalarTests {
 	///constant is a different opportunity to drop a carry across more limbs.
 	@Test("multiplying two near-maximal scalars does not lose a carry")
 	func multiplicationOfLargeValuesRoundTrips() {
-		let nMinus1 = Self.scalar("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140")
+		let nMinus1 = Self.scalar(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140")
 		#expect(nMinus1 * nMinus1 == Scalar.one)  //(-1)^2 == 1
 
-		let nMinus2 = Self.scalar("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD036413F")
+		let nMinus2 = Self.scalar(
+			"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD036413F")
 		#expect(nMinus2 * nMinus2 == Self.small(4))  //(-2)^2 == 4
 	}
 
@@ -102,7 +105,9 @@ struct Secp256k1ScalarTests {
 			Scalar(
 				canonicalBigEndian: Array(
 					Data(
-						hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"))
+						hex:
+							"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"
+					))
 			) == nil)  //== n
 	}
 }

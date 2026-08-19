@@ -91,7 +91,8 @@ extension Atproto.Repo {
 			case .unsupportedSimpleValue(let v): "Unsupported CBOR simple value \(v)"
 			case .nonStringMapKey: "DAG-CBOR map keys must be strings"
 			case .duplicateMapKey(let k): "Duplicate map key \(k)"
-			case .unorderedMapKeys(let a, let b): "Map keys out of order: \(a) before \(b)"
+			case .unorderedMapKeys(let a, let b):
+				"Map keys out of order: \(a) before \(b)"
 			case .badCIDLink: "Malformed CID link"
 			case .invalidUTF8: "Invalid UTF-8 in text string"
 			case .nestingTooDeep: "DAG-CBOR nesting too deep"

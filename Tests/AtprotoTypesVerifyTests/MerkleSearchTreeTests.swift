@@ -72,7 +72,8 @@ struct MerkleSearchTreeTests {
 
 		for (key, expected) in tree.values {
 			#expect(
-				try MerkleSearchTree.find(key: key, root: tree.root, in: tree.archive)
+				try MerkleSearchTree.find(
+					key: key, root: tree.root, in: tree.archive)
 					== expected,
 				"looking up \(key)"
 			)
