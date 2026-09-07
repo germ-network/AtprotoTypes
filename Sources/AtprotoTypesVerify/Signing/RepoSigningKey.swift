@@ -47,14 +47,16 @@ public struct RepoSigningKey: Sendable {
 	///Picks the `#atproto` verification method out of a DID document. atproto
 	///documents may list several; the repo signing key is the one with that
 	///fragment, and taking "the first one" instead would let a document with an
-	///extra method up front decide what we check against.
+	///extra method up front decide what we check against. The suffix match
+	///covers both the fully-qualified `did:...#atproto` form (what plc.directory
+	///and the miniDoc adapter emit) and a bare `#atproto` fragment.
 	public init(atprotoKeyIn document: Atproto.DIDDocument, did: Atproto.DID) throws {
 		//`verificationMethod` is optional in the canonical DID schema, so an
 		//absent list and an empty one mean the same thing here: nothing to
 		//check against, which is a refusal rather than a pass.
 		guard
 			let method = document.verificationMethod?.first(where: {
-				$0.id == "#atproto" || $0.id.hasSuffix("#atproto")
+				$0.id.hasSuffix("#atproto")
 			})
 		else {
 			throw Atproto.Repo.ProofError.noAtprotoSigningKey
