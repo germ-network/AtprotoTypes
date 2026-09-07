@@ -195,9 +195,9 @@ public enum RepoFixture {
 
 	// MARK: - Identity
 
-	///Built by decoding JSON because `VerificationMethod`'s initialiser is
-	///package-scoped to AtprotoTypes. No loss — this is the shape a document
-	///actually arrives in, so the fixture exercises the real decode.
+	///Built by decoding JSON — the shape a document actually arrives in, so the
+	///fixture exercises the real decode rather than the memberwise initialiser
+	///(now public; it was package-scoped until GER-2268 opened it for Slingshot).
 	public static func document(
 		did: Atproto.DID,
 		key: some RepoFixturePublicKey,
