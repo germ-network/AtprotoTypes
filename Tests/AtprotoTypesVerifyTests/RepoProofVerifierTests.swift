@@ -92,12 +92,17 @@ struct RepoProofVerifierTests {
 	@Test("a record in the repo verifies against the DID document's signing key")
 	func verifiesGenuineRecord() throws {
 		let scenario = Scenario()
-		let proof = try Atproto.Repo.Verifier().verifyRecordProof(
-			car: try scenario.car(),
-			did: scenario.did,
-			path: Self.path,
-			document: try scenario.document()
-		)
+		guard
+			case .present(let proof) = try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try scenario.car(),
+				did: scenario.did,
+				path: Self.path,
+				document: try scenario.document()
+			)
+		else {
+			Issue.record("expected a present proof")
+			return
+		}
 
 		#expect(proof.did == scenario.did)
 		#expect(proof.path == Self.path)
@@ -203,18 +208,94 @@ struct RepoProofVerifierTests {
 		}
 	}
 
-	@Test("asking for a path the repo does not hold is refused")
-	func rejectsAbsentPath() throws {
+	///Pins signature-first for the absent path: an exclusion proof is only as
+	///trustworthy as the commit it's rooted at, so a forged signer must still
+	///throw here, never fall through `find`'s `recordNotInTree` into `.absent`
+	///— the downgrade a reordered `checkCommit`/`find` would silently reopen.
+	@Test("a forged-signer exclusion proof is refused, not read as absent")
+	func rejectsForgedExclusionProof() throws {
+		let victim = Scenario()
+		let attacker = P256.Signing.PrivateKey()
+
+		//attacker's own repo, claiming the victim's DID, proving the
+		//declaration path absent from it
+		let forged = Scenario(
+			did: victim.did,
+			signing: attacker,
+			anchorKey: Data(repeating: 0xEE, count: 32)
+		)
+
+		#expect(throws: Atproto.Repo.ProofError.signatureDidNotVerify) {
+			try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try forged.car(),
+				did: victim.did,
+				path: .init(
+					collection: .init(string: "com.germnetwork.declaration"),
+					rkey: "notself"
+				),
+				//the victim's real DID document is the authority
+				document: try victim.document()
+			)
+		}
+	}
+
+	///A complete, validly-signed MST walk to an empty subtree link is not a
+	///failure to verify — it is what a proof of absence looks like. The
+	///commit's signature and DID are checked before the MST is ever walked, so
+	///`.absent` here is exactly as authoritative as `.present` is above.
+	@Test("asking for a path the repo does not hold verifies as proven absent")
+	func absentPathProvenAbsent() throws {
 		let scenario = Scenario()
 
-		#expect(throws: Atproto.Repo.ProofError.recordNotInTree) {
-			try Atproto.Repo.Verifier().verifyRecordProof(
+		guard
+			case .absent = try Atproto.Repo.Verifier().verifyRecordProof(
 				car: try scenario.car(),
 				did: scenario.did,
 				path: .init(
 					collection: .init(string: "com.germnetwork.declaration"),
 					rkey: "notself"
 				),
+				document: try scenario.document()
+			)
+		else {
+			Issue.record("expected .absent")
+			return
+		}
+	}
+
+	///The absence path still has to run the MST's own integrity checks: a
+	///proof that merely omits the subtree the walk needs is an incomplete
+	///proof, not a smaller one — it must throw, never read as `.absent`.
+	@Test("an incomplete exclusion proof throws rather than reading as absent")
+	func rejectsIncompleteExclusionProof() throws {
+		let scenario = Scenario()
+		let value = try RepoFixture.block(.string("v"))
+		let orphan = try RepoFixture.block(.string("never included"))
+		//a single entry keyed after the declaration path, with a left subtree
+		//link the CAR never supplies — the walk toward "self" has to descend
+		//into `orphan` before it can conclude anything, and can't
+		let node = try RepoFixture.block(
+			RepoFixture.node(
+				entries: [(key: "com.germnetwork.zzz/self", value: value.cid)],
+				left: orphan.cid
+			)
+		)
+		let commit = try RepoFixture.commit(
+			did: scenario.did,
+			dataRoot: node.cid,
+			signedBy: scenario.signing
+		)
+		let commitBlock = try RepoFixture.block(commit)
+		let car = RepoFixture.car(
+			root: commitBlock.cid,
+			blocks: [node, commitBlock]
+		)
+
+		#expect(throws: Atproto.Repo.ProofError.missingBlock(orphan.cid.string)) {
+			try Atproto.Repo.Verifier().verifyRecordProof(
+				car: car,
+				did: scenario.did,
+				path: Self.path,
 				document: try scenario.document()
 			)
 		}
@@ -304,12 +385,17 @@ struct RepoProofVerifierTests {
 	@Test("a genuine secp256k1 record verifies against the DID document's signing key")
 	func verifiesGenuineSecp256k1Record() throws {
 		let scenario = Secp256k1Scenario()
-		let proof = try Atproto.Repo.Verifier().verifyRecordProof(
-			car: try scenario.car(),
-			did: scenario.did,
-			path: Self.path,
-			document: try scenario.document()
-		)
+		guard
+			case .present(let proof) = try Atproto.Repo.Verifier().verifyRecordProof(
+				car: try scenario.car(),
+				did: scenario.did,
+				path: Self.path,
+				document: try scenario.document()
+			)
+		else {
+			Issue.record("expected a present proof")
+			return
+		}
 
 		#expect(proof.did == scenario.did)
 		#expect(proof.block == DAGCBOREncoder.encode(scenario.record))
