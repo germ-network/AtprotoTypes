@@ -1,5 +1,15 @@
 # @germ-network/atprototypes
 
+## 0.6.0
+
+### Minor Changes
+
+- [#66](https://github.com/germ-network/AtprotoTypes/pull/66) [`2114160`](https://github.com/germ-network/AtprotoTypes/commit/2114160dab3bf7ad91764dbf3f2bf3a8a8a10cbd) Thanks [@germ-mark](https://github.com/germ-mark)! - `ProofVerifying.verifyRecordProof` now returns `Atproto.Repo.RecordProof` (`.present(Proof)` / `.absent`) instead of `Proof`. A validly-signed MST proof that a record is _not_ in the repo at a path is a successful verification, not a failure — the commit is signed and DID-matched, and the MST proves the path empty. Previously this case threw `AtprotoTypesVerify`'s `ProofError.recordNotInTree`, a concrete error type no base-module caller can catch by type; now a caller distinguishes proof-of-absence from a verification failure without importing the verify module at all. Every other outcome (malformed proof, bad signature, wrong DID, incomplete CAR) still throws.
+
+### Patch Changes
+
+- [#64](https://github.com/germ-network/AtprotoTypes/pull/64) [`339a229`](https://github.com/germ-network/AtprotoTypes/commit/339a229403374166eb248e6165a37181dd250338) Thanks [@germ-mark](https://github.com/germ-mark)! - `RepoSigningKey(atprotoKeyIn:did:)` selected the `#atproto` verification method with `$0.id == "#atproto" || $0.id.hasSuffix("#atproto")`. The equality disjunct is dead: any id equal to `"#atproto"` also has that suffix, so the `hasSuffix` check alone decides every case. Simplified to the suffix match. Behavior-neutral — no change to which documents are accepted.
+
 ## 0.5.1
 
 ### Patch Changes
