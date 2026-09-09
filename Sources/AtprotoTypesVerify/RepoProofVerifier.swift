@@ -29,7 +29,7 @@ extension Atproto.Repo {
 			did: Atproto.DID,
 			path: RecordPath,
 			document: Atproto.DIDDocument
-		) throws -> Proof {
+		) throws -> RecordProof {
 			let signingKey = try RepoSigningKey(atprotoKeyIn: document, did: did)
 			let archive = try CARv1(car)
 
@@ -47,21 +47,28 @@ extension Atproto.Repo {
 				throw ProofError.commitFieldMissing("data")
 			}
 
-			let recordCID = try MerkleSearchTree.find(
-				key: path.mstKey,
-				root: mstRoot,
-				in: archive
-			)
+			let recordCID: ContentIdentifier
+			do {
+				recordCID = try MerkleSearchTree.find(
+					key: path.mstKey,
+					root: mstRoot,
+					in: archive
+				)
+			} catch ProofError.recordNotInTree {
+				return .absent
+			}
 			guard recordCID.codec == .dagCBOR else {
 				throw ProofError.unsupportedCodec(recordCID.codec.rawValue)
 			}
 
-			return Proof(
-				did: did,
-				path: path,
-				cid: recordCID.atprotoCID,
-				block: try archive.block(recordCID),
-				rev: rev
+			return .present(
+				Proof(
+					did: did,
+					path: path,
+					cid: recordCID.atprotoCID,
+					block: try archive.block(recordCID),
+					rev: rev
+				)
 			)
 		}
 

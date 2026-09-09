@@ -66,11 +66,22 @@ extension Atproto.Repo {
 		}
 	}
 
+	///The outcome of verifying a record proof. `.absent` is an
+	///authoritatively-signed proof that the record is not in the repo at that
+	///path — the commit is signed and DID-matched, and the MST proves the path
+	///empty — establishing absence as of the commit's rev, no more. Both cases
+	///are successful verifications; every other outcome — malformed proof, bad
+	///signature, wrong DID, incomplete CAR — still throws.
+	public enum RecordProof: Sendable {
+		case present(Proof)
+		case absent
+	}
+
 	public protocol ProofVerifying: Sendable {
-		///Checks a CAR — a signed commit plus an inclusion proof: that the
-		///commit is signed by `document`'s atproto signing key, that the MST
-		///proves `path` from the signed commit's root, and that the record
-		///block hashes to the CID the MST names.
+		///Checks a CAR — a signed commit plus an inclusion or exclusion proof:
+		///that the commit is signed by `document`'s atproto signing key, and
+		///that the MST proves `path` either present (returning its block) or
+		///absent from the signed commit's root.
 		///
 		///Deliberately pure and synchronous, and it takes no view on where the
 		///bytes came from. That is the point: CAR is self-authenticating, so a
@@ -83,13 +94,14 @@ extension Atproto.Repo {
 			did: Atproto.DID,
 			path: RecordPath,
 			document: Atproto.DIDDocument
-		) throws -> Proof
+		) throws -> RecordProof
 	}
 
 	///What a space-constrained consumer injects instead of linking
 	///`AtprotoTypesVerify`. It refuses rather than passing the record through
 	///unverified: a caller asking for a proof must never receive a value that
-	///merely looks like one.
+	///merely looks like one. It can no more prove absence than presence, so it
+	///throws regardless of what the caller is asking about.
 	public struct ProofUnavailable: ProofVerifying {
 		public init() {}
 
@@ -98,7 +110,7 @@ extension Atproto.Repo {
 			did: Atproto.DID,
 			path: RecordPath,
 			document: Atproto.DIDDocument
-		) throws -> Proof {
+		) throws -> RecordProof {
 			throw Errors.verificationUnavailable
 		}
 	}
