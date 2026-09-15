@@ -24,7 +24,9 @@ let package = Package(
 		.package(url: "https://github.com/swift-libp2p/swift-bases.git", from: "0.2.0"),
 		.package(
 			url: "https://github.com/germ-network/GermConvenience.git",
-			from: "0.2.1"
+			// 0.8.0 split HTTP helpers into GermConvenienceHTTP — the floor this
+			// package now needs for HTTPDataResponse.
+			from: "0.8.0"
 		),
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",
@@ -44,6 +46,7 @@ let package = Package(
 			name: "AtprotoTypes",
 			dependencies: [
 				"GermConvenience",
+				.product(name: "GermConvenienceHTTP", package: "GermConvenience"),
 				.product(name: "Base32", package: "swift-bases"),
 				.product(name: "Crypto", package: "swift-crypto"),
 				.product(name: "HTTPTypes", package: "swift-http-types"),
