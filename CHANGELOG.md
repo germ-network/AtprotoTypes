@@ -1,5 +1,17 @@
 # @germ-network/atprototypes
 
+## 0.6.1
+
+### Patch Changes
+
+- [#67](https://github.com/germ-network/AtprotoTypes/pull/67) [`9a3e063`](https://github.com/germ-network/AtprotoTypes/commit/9a3e0631a79f99f4f483ec9d1a5270fba3ef70dd) Thanks [@germ-mark](https://github.com/germ-mark)! - Fix build against GermConvenience 0.8.0, which split `HTTPDataResponse` out
+  of the base `GermConvenience` library into a new `GermConvenienceHTTP`
+  product. Adds the `GermConvenienceHTTP` product dependency and the matching
+  import, and raises the floor to `from: "0.8.0"`.
+
+  No public API change — this only restores buildability against current
+  GermConvenience releases.
+
 ## 0.6.0
 
 ### Minor Changes
