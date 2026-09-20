@@ -1,5 +1,14 @@
 # @germ-network/atprototypes
 
+## 0.7.0
+
+### Minor Changes
+
+- [#69](https://github.com/germ-network/AtprotoTypes/pull/69) [`8e00dd8`](https://github.com/germ-network/AtprotoTypes/commit/8e00dd81013fef864de2b0f3dde7ad7fcbdc119b) Thanks [@germ-mark](https://github.com/germ-mark)! - Widen the `swift-crypto` dependency to `from: "5.0.0"`.
+
+  Part of the org-wide move to swift-crypto 5. Builds and the full test suite
+  (56 tests) pass against 5.0.0 unchanged.
+
 ## 0.6.1
 
 ### Patch Changes
