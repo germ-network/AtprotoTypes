@@ -86,7 +86,8 @@ struct PutRecordSwapEncodingTests {
 			#"{"repo":"did:plc:abcdefghijklmnopqrstuvwx","collection":"example.thing","rkey":"self","record":{"name":"x"},"validate":true,"swapCommit":"\#(Self.cidString)","swapRecord":"\#(Self.cidString)"}"#
 		// structural on purpose: JSONEncoder key order is not deterministic without .sortedKeys
 		let object = try JSONSerialization.jsonObject(with: encoded) as? NSDictionary
-		let expectedObject = try JSONSerialization.jsonObject(with: Data(expected.utf8)) as? NSDictionary
+		let expectedObject =
+			try JSONSerialization.jsonObject(with: Data(expected.utf8)) as? NSDictionary
 		#expect(object == expectedObject)
 	}
 
@@ -95,12 +96,14 @@ struct PutRecordSwapEncodingTests {
 		let base =
 			#""repo":"did:plc:abcdefghijklmnopqrstuvwx","collection":"example.thing","rkey":"self","record":{"name":"x"}"#
 		let decoder = JSONDecoder()
-		let null = try decoder.decode(Schema.self, from: Data("{\(base),\"swapRecord\":null}".utf8))
+		let null = try decoder.decode(
+			Schema.self, from: Data("{\(base),\"swapRecord\":null}".utf8))
 		#expect(null.swap == .absent)
 		let missing = try decoder.decode(Schema.self, from: Data("{\(base)}".utf8))
 		#expect(missing.swap == nil)
 		let cid = try decoder.decode(
-			Schema.self, from: Data("{\(base),\"swapRecord\":\"\(Self.cidString)\"}".utf8))
+			Schema.self,
+			from: Data("{\(base),\"swapRecord\":\"\(Self.cidString)\"}".utf8))
 		#expect(cid.swap == .record(try Atproto.CID(string: Self.cidString)))
 	}
 }
