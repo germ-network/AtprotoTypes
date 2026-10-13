@@ -37,7 +37,7 @@ extension Lexicon.Com.Atproto.Repo {
 				public let record: Record
 				let validate: Bool?
 				let swapCommit: Atproto.CID?
-				let swapRecord: Atproto.CID?
+				let swapRecord: Atproto.RecordSwap?
 
 				public init(
 					repo: LexiconString.AtIdentifier,
@@ -53,7 +53,78 @@ extension Lexicon.Com.Atproto.Repo {
 					self.record = record
 					self.validate = validate
 					self.swapCommit = swapCommit
-					self.swapRecord = swapRecord
+					self.swapRecord = swapRecord.map { .record($0) }
+				}
+
+				/// `swap: .absent` encodes `"swapRecord": null`; `nil` omits it.
+				public init(
+					repo: LexiconString.AtIdentifier,
+					rkey: Record.Key,
+					record: Record,
+					validate: Bool? = nil,
+					swapCommit: Atproto.CID? = nil,
+					swap: Atproto.RecordSwap?,
+				) {
+					self.repo = repo
+					self.collection = .init()
+					self.rkey = rkey
+					self.record = record
+					self.validate = validate
+					self.swapCommit = swapCommit
+					self.swapRecord = swap
+				}
+
+				/// The swap carried: `null` → `.absent`, a CID → `.record`, omitted → nil.
+				public var swap: Atproto.RecordSwap? { swapRecord }
+
+				private enum CodingKeys: String, CodingKey {
+					case repo, collection, rkey, record, validate, swapCommit,
+						swapRecord
+				}
+
+				public init(from decoder: any Decoder) throws {
+					let container = try decoder.container(
+						keyedBy: CodingKeys.self)
+					repo = try container.decode(
+						LexiconString.AtIdentifier.self, forKey: .repo)
+					collection = try container.decode(
+						Record.Collection.self, forKey: .collection)
+					rkey = try container.decode(Record.Key.self, forKey: .rkey)
+					record = try container.decode(Record.self, forKey: .record)
+					validate = try container.decodeIfPresent(
+						Bool.self, forKey: .validate)
+					swapCommit = try container.decodeIfPresent(
+						Atproto.CID.self, forKey: .swapCommit)
+					// `decodeIfPresent` would collapse null and missing
+					if container.contains(.swapRecord) {
+						if try container.decodeNil(forKey: .swapRecord) {
+							swapRecord = .absent
+						} else {
+							swapRecord = .record(
+								try container.decode(
+									Atproto.CID.self,
+									forKey: .swapRecord))
+						}
+					} else {
+						swapRecord = nil
+					}
+				}
+
+				public func encode(to encoder: any Encoder) throws {
+					var container = encoder.container(keyedBy: CodingKeys.self)
+					try container.encode(repo, forKey: .repo)
+					try container.encode(collection, forKey: .collection)
+					try container.encode(rkey, forKey: .rkey)
+					try container.encode(record, forKey: .record)
+					try container.encodeIfPresent(validate, forKey: .validate)
+					try container.encodeIfPresent(
+						swapCommit, forKey: .swapCommit)
+					switch swapRecord {
+					case nil: break
+					case .absent: try container.encodeNil(forKey: .swapRecord)
+					case .record(let cid):
+						try container.encode(cid, forKey: .swapRecord)
+					}
 				}
 			}
 			public let schema: Schema
