@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.8.0
+
+### Minor Changes
+
+- [#71](https://github.com/germ-network/AtprotoTypes/pull/71) [`5167148`](https://github.com/germ-network/AtprotoTypes/commit/5167148b0a8674c797039d19495c0f6b77efbe04) Thanks [@germ-mark](https://github.com/germ-mark)! - Add `Atproto.RecordSwap` and `PutRecord.Input.Schema.init(…, swap:)`, so a `putRecord` can send `swapRecord: null` (the Lexicon spec distinguishes null from omitted; the reference PDS reads null as "no record may exist"). The existing `swapRecord: CID?` init encodes as before.
+
 ## 0.7.0
 
 ### Minor Changes
