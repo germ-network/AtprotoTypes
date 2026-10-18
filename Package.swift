@@ -97,7 +97,7 @@ let package = Package(
 				.product(name: "Crypto", package: "swift-crypto"),
 				.product(name: "P256K", package: "swift-secp256k1"),
 			],
-			resources: [.copy("Resources/wycheproof")]
+			resources: [.copy("Resources/wycheproof"), .copy("Resources/plc")]
 		),
 	]
 )

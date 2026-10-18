@@ -1,0 +1,73 @@
+{
+  "did": "did:plc:l3rouwludahu3ui3bt66mfvj",
+  "source": "https://plc.directory/did:plc:l3rouwludahu3ui3bt66mfvj",
+  "fetchedAt": "2026-10-18",
+  "entries": [
+    {
+      "c": "bafyreic64lvfs5ayb5g5cgym7xtbnkpcr6g42reni7n3c7r7i547w7wfoa",
+      "o": "{\"sig\":\"HIAolK_uyrcg8a6CqBT_taoF0AJ6HAwy70hutFGVM54j20rTe90MH---pm6aoe5CsiIm6khqgbr5_Aj7F3rptA\",\"prev\":null,\"type\":\"create\",\"handle\":\"divy.bsky.social\",\"service\":\"https://bsky.social\",\"signingKey\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\",\"recoveryKey\":\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\"}",
+      "n": false
+    },
+    {
+      "c": "bafyreicqkazi5phb44tank6mdo3ytcrq6gqm47pfggm3wh3gpka55micfa",
+      "o": "{\"sig\":\"gxQ0X3710yHV1R_2NENBNXW2imWNkdqWkLcJMDED36opNzA0ZaufV1GjePSN03mN_E5zEYj1GmXSeBGXbglcrw\",\"prev\":\"bafyreic64lvfs5ayb5g5cgym7xtbnkpcr6g42reni7n3c7r7i547w7wfoa\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreihfe3qjgqbaxkarizskcpbyym3e7fsln44chc7uufg3wrnp5dhq5i",
+      "o": "{\"sig\":\"tGu-8uTXtaGdY8j2w_IiNqNJRu92OqQworBA5yhUy5U01x8-syghe6K4qdiloDhnfdpw9Fa6bEEhjoKVE2ZhSA\",\"prev\":\"bafyreicqkazi5phb44tank6mdo3ytcrq6gqm47pfggm3wh3gpka55micfa\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shXjHeiBuRCKmM36cuYnm7YEMzhGnCmCyW92sRJ9pribSF\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreif2z4xyccbua5c2xvba2ubkdk2zwtp3xjnwhnmwe35cfg266gzrqy",
+      "o": "{\"sig\":\"hjBxD3GDjzIL18cBlK8JlE0Bhs_1x4bRfhNJGsdAtUJHVLQh8BUpFw4DC-7mQvhyu6WQXngHMu_avlbLGUinmw\",\"prev\":\"bafyreihfe3qjgqbaxkarizskcpbyym3e7fsln44chc7uufg3wrnp5dhq5i\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://devinivy.bsky.social\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shXjHeiBuRCKmM36cuYnm7YEMzhGnCmCyW92sRJ9pribSF\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreibcpqhco2uq5q3aoh274ryhusubgp3pmzc5re4jujhlhc6z2edr7e",
+      "o": "{\"sig\":\"x1eCPPwyXD_SuuBzjhyxdA5z0sQYYh4Gpr68RUkp4FULujIG3KzmIWhXa282cZEPKytRuxq1fNKno4VMSVe2Hg\",\"prev\":\"bafyreif2z4xyccbua5c2xvba2ubkdk2zwtp3xjnwhnmwe35cfg266gzrqy\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shXjHeiBuRCKmM36cuYnm7YEMzhGnCmCyW92sRJ9pribSF\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreiaopl5tuoiw2rkoywhejnfhi7qvadrip6o7qqij2ptwe43y3yhgum",
+      "o": "{\"sig\":\"QO0V_1mNdxZ1Tp1mQfgSErOBXSJKColjq09mqJYUXbU52w7EVBcptQ8131rPknXyv6BetKplXVg1-8oESyDlWA\",\"prev\":\"bafyreibcpqhco2uq5q3aoh274ryhusubgp3pmzc5re4jujhlhc6z2edr7e\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://morel.us-east.host.bsky.network\"}},\"alsoKnownAs\":[\"at://divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shbzd9YoCFQrzfdw2AGpxUHTjUhh69MXRh7hHBavx9wQon\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreih5lzkiyjofxq5gp3xfueqncj4hpxdzcu4q5mupf3zqew5bp6li6u",
+      "o": "{\"sig\":\"8XpNZcHyMomFLrr9qzA8r4zcEllYFE1tCx26_SAoMbonfvY179L-ZKQc0lqSf97QuY00PUpJoRsMUQPKCVvBwQ\",\"prev\":\"bafyreiaopl5tuoiw2rkoywhejnfhi7qvadrip6o7qqij2ptwe43y3yhgum\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://morel.us-east.host.bsky.network\"}},\"alsoKnownAs\":[\"at://morel.divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shbzd9YoCFQrzfdw2AGpxUHTjUhh69MXRh7hHBavx9wQon\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreigcoktnpgtex4janw6ak2zyieuywk6kyufqfe32r5t2h2a4xmq33q",
+      "o": "{\"sig\":\"lxVEyRLJr7ZV-AGCDOKpz7UQX6b_QBt75tgB_se7umES9zihYg3RAoSlHMNMekL_axRLGqGwlBDfVNIOMtFAIA\",\"prev\":\"bafyreih5lzkiyjofxq5gp3xfueqncj4hpxdzcu4q5mupf3zqew5bp6li6u\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://morel.us-east.host.bsky.network\"}},\"alsoKnownAs\":[\"at://divy.zone\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shbzd9YoCFQrzfdw2AGpxUHTjUhh69MXRh7hHBavx9wQon\"}}",
+      "n": false
+    }
+  ],
+  "document": {
+    "@context": [
+      "https://www.w3.org/ns/did/v1",
+      "https://w3id.org/security/multikey/v1",
+      "https://w3id.org/security/suites/secp256k1-2019/v1"
+    ],
+    "id": "did:plc:l3rouwludahu3ui3bt66mfvj",
+    "alsoKnownAs": [
+      "at://divy.zone"
+    ],
+    "verificationMethod": [
+      {
+        "id": "did:plc:l3rouwludahu3ui3bt66mfvj#atproto",
+        "type": "Multikey",
+        "controller": "did:plc:l3rouwludahu3ui3bt66mfvj",
+        "publicKeyMultibase": "zQ3shbzd9YoCFQrzfdw2AGpxUHTjUhh69MXRh7hHBavx9wQon"
+      }
+    ],
+    "service": [
+      {
+        "id": "#atproto_pds",
+        "type": "AtprotoPersonalDataServer",
+        "serviceEndpoint": "https://morel.us-east.host.bsky.network"
+      }
+    ]
+  }
+}

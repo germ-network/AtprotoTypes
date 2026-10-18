@@ -1,0 +1,73 @@
+{
+  "did": "did:plc:yk4dd2qkboz2yv6tpubpc6co",
+  "source": "https://plc.directory/did:plc:yk4dd2qkboz2yv6tpubpc6co",
+  "fetchedAt": "2026-10-18",
+  "entries": [
+    {
+      "c": "bafyreigcxay6ucqlwowfpu35alyxqtv3c4vsj7gmdtmnidsnqs6nblyarq",
+      "o": "{\"sig\":\"7QTzqO1BcL3eDzP4P_YBxMmv5U4brHzAItkM9w5o8gZA7ElZkrVYEwsfQCfk5EoWLk58Z1y6fyNP9x1pthJnlw\",\"prev\":null,\"type\":\"create\",\"handle\":\"dan.bsky.social\",\"service\":\"https://bsky.social\",\"signingKey\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\",\"recoveryKey\":\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\"}",
+      "n": false
+    },
+    {
+      "c": "bafyreiho5sanautvnw3det66jcwic4vkeabc35y7iou3ygwj2l3xqcxdau",
+      "o": "{\"sig\":\"n-VWsPZY4xkFN8wlg-kJBU_yzWTNd2oBnbjkjxXu3HdjbBLaEB7K39JHIPn_DZVALKRjts6bUicjSEecZy8eIw\",\"prev\":\"bafyreigcxay6ucqlwowfpu35alyxqtv3c4vsj7gmdtmnidsnqs6nblyarq\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://dholms.xyz\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreic3am2nmgykxtwsxwigzn6faibxv5ef5kalcv7li3eatcqldcqrku",
+      "o": "{\"sig\":\"HWgrfQXxUN3mhR5TR-nrwGJwVr9RDbyDn6eCmqBg32x2zIjhe98YxOtFOLI9jQkBlTTzqzUOwJh1KZd4O2pDOw\",\"prev\":\"bafyreiho5sanautvnw3det66jcwic4vkeabc35y7iou3ygwj2l3xqcxdau\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://dholms.bsky.social\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreicwybxr6h6vkxpoarismso3liozdzswshmzcvl4tyckdazn5lxjte",
+      "o": "{\"sig\":\"9Fy2iHCSK5mtgLNCkS9CyI0r7lu6H1SVgusaD1jQdsMUySUU6apde0z7SobpYZKp4sThk4hxOWtO-bXhu1cNjg\",\"prev\":\"bafyreic3am2nmgykxtwsxwigzn6faibxv5ef5kalcv7li3eatcqldcqrku\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://dholms.xyz\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shP5TBe1sQfSttXty15FAEHV1DZgcxRZNxvEWnPfLFwLxJ\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreidfrpuegbqd5r56shka4duythb7phb6d7i3bck2dkeb5fjppwd7gi",
+      "o": "{\"sig\":\"lBXd8rHZ84hCuQysGdi_5A9C8yPHTHasPibO4DZiuZVrehs2hiBcjAL0srLSTsF1kvsHTw1ddai-QwH0Wd_drQ\",\"prev\":\"bafyreicwybxr6h6vkxpoarismso3liozdzswshmzcvl4tyckdazn5lxjte\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://bsky.social\"}},\"alsoKnownAs\":[\"at://dholms.xyz\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shXjHeiBuRCKmM36cuYnm7YEMzhGnCmCyW92sRJ9pribSF\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreidrgqwzjte7debznz5rdv4m6n3krfrn7eh4trtf6x43dqehal547u",
+      "o": "{\"sig\":\"obDq2oX_86odESj7wFZK1SSu3hb0N_9qkcCcRVOucBFJ1lseJ0s0EOQjZJtKH7k26dn0UXushDXzm6WsNCzx8g\",\"prev\":\"bafyreidfrpuegbqd5r56shka4duythb7phb6d7i3bck2dkeb5fjppwd7gi\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://morel.us-east.host.bsky.network\"}},\"alsoKnownAs\":[\"at://dholms.xyz\"],\"rotationKeys\":[\"did:key:zQ3shhCGUqDKjStzuDxPkTxN6ujddP4RkEKJJouJGRRkaLGbg\",\"did:key:zQ3shpKnbdPx3g3CmPf5cRVTPe1HtSwVn5ish3wSnDPQCbLJK\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shiM8z9mHN3hbkHjM5CSptVKn5xP8u7bZr5esG1xPDbTDC\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreif4ijyixunpfvk35fia4fpvfa3553lvqnw472hz3vpwptgyqcr7pa",
+      "o": "{\"sig\":\"PA99KljizEzFlquGHQSMkgQ61AdbK-DXIVatU2dfaA1A4g1ZiR4Pu2g_dXiJInHktDzjSb7NfpSV8n3XdUYc2A\",\"prev\":\"bafyreidrgqwzjte7debznz5rdv4m6n3krfrn7eh4trtf6x43dqehal547u\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://pds.dholms.xyz\"}},\"alsoKnownAs\":[\"at://dholms.xyz\"],\"rotationKeys\":[\"did:key:zQ3shvU1hgxTYEqQbjZjK8DVh2PY4uykFb8Nd1EPSaoULeLWX\",\"did:key:zQ3shVmhH9DtwtLf1P5AjcVj4KABGqP5ox5rMzh2AxvBQf2U5\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shsJcHdhfpKyF3U6rBQziDHsY1ikwCAsqGWhdC1tgaPQxq\"}}",
+      "n": false
+    },
+    {
+      "c": "bafyreib6xes5izs3gvypymieujtzltlyf3a65neeq4qv2gvzs64opvye6a",
+      "o": "{\"sig\":\"0qVW-5nEKnD9B_Q4XBHltEqmt1OObYe0suSQTMqAaxtzAyDsQ_1yIHXsXwnfjxBRWmckdkycNN-3V17DVJzs7A\",\"prev\":\"bafyreif4ijyixunpfvk35fia4fpvfa3553lvqnw472hz3vpwptgyqcr7pa\",\"type\":\"plc_operation\",\"services\":{\"atproto_pds\":{\"type\":\"AtprotoPersonalDataServer\",\"endpoint\":\"https://pds.dholms.xyz\"}},\"alsoKnownAs\":[\"at://dholms.at\"],\"rotationKeys\":[\"did:key:zQ3shvU1hgxTYEqQbjZjK8DVh2PY4uykFb8Nd1EPSaoULeLWX\",\"did:key:zQ3shVmhH9DtwtLf1P5AjcVj4KABGqP5ox5rMzh2AxvBQf2U5\"],\"verificationMethods\":{\"atproto\":\"did:key:zQ3shsJcHdhfpKyF3U6rBQziDHsY1ikwCAsqGWhdC1tgaPQxq\"}}",
+      "n": false
+    }
+  ],
+  "document": {
+    "@context": [
+      "https://www.w3.org/ns/did/v1",
+      "https://w3id.org/security/multikey/v1",
+      "https://w3id.org/security/suites/secp256k1-2019/v1"
+    ],
+    "id": "did:plc:yk4dd2qkboz2yv6tpubpc6co",
+    "alsoKnownAs": [
+      "at://dholms.at"
+    ],
+    "verificationMethod": [
+      {
+        "id": "did:plc:yk4dd2qkboz2yv6tpubpc6co#atproto",
+        "type": "Multikey",
+        "controller": "did:plc:yk4dd2qkboz2yv6tpubpc6co",
+        "publicKeyMultibase": "zQ3shsJcHdhfpKyF3U6rBQziDHsY1ikwCAsqGWhdC1tgaPQxq"
+      }
+    ],
+    "service": [
+      {
+        "id": "#atproto_pds",
+        "type": "AtprotoPersonalDataServer",
+        "serviceEndpoint": "https://pds.dholms.xyz"
+      }
+    ]
+  }
+}
