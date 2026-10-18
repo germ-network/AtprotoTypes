@@ -52,7 +52,19 @@ public struct ContentIdentifier: Sendable, Hashable {
 
 	///Base32 lower, `b`-prefixed, matching `Atproto.CID.string`.
 	public var string: String {
-		"b" + Base32.encode(bytes, options: .letterCase(.lower), .pad(false))
+		"b" + Self.base32Lower(bytes)
+	}
+
+	///base32 lower, unpadded, over raw bytes.
+	///
+	///A CID's base32 covers its framed bytes and carries the `b` multibase
+	///prefix; the `did:plc` identifier's covers the bare SHA-256 of a genesis
+	///operation and carries nothing, because it is an identifier segment rather
+	///than a multibase string. Two encodings of the same alphabet, and reaching
+	///for the wrong one fails every genesis check, so the shared half lives
+	///here where the alphabet is already imported.
+	package static func base32Lower(_ bytes: Data) -> String {
+		Base32.encode(bytes, options: .letterCase(.lower), .pad(false))
 	}
 
 	///The bridge back to the opaque, JSON-facing CID type. `Atproto.CID`'s byte

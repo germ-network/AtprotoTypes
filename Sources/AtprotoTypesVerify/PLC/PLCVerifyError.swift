@@ -59,11 +59,6 @@ extension Atproto.PLC {
 		///directory should never have accepted.
 		case noRotationKeyVerifiedTheSignature
 
-		///Scaffolding: the planned API surface compiles before the verification
-		///lands, and every throwing path says so rather than pretending. Removed
-		///with the implementation.
-		case notImplemented
-
 		public var errorDescription: String? {
 			switch self {
 			case .notAPlcDID(let did):
@@ -92,7 +87,6 @@ extension Atproto.PLC {
 			case .badRotationKey(let key): "Malformed rotation key \(key)"
 			case .noRotationKeyVerifiedTheSignature:
 				"No rotation key verifies the operation's signature"
-			case .notImplemented: "did:plc log verification is not implemented yet"
 			}
 		}
 	}
