@@ -38,7 +38,7 @@ struct PLCGenesisTests {
 	///A well-formed genesis presented under someone else's DID is refused. The
 	///signature verifies and every CID is self-consistent; only the hash is
 	///wrong, which is exactly the forgery the DID derivation exists to stop.
-	@Test(.disabled("pending: forged genesis through the fixture"))
+	@Test
 	func aGenesisThatDoesNotHashToTheDIDIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -52,7 +52,7 @@ struct PLCGenesisTests {
 
 	///A log with no operations has no genesis, so there is nothing for the DID
 	///to be the hash of — a truncation all the way down rather than a log.
-	@Test(.disabled("pending: an empty log through the fixture"))
+	@Test
 	func anEmptyLogIsRefused() throws {
 		let did = try Atproto.DID(string: "did:plc:ewvi7nxzyoun6zhxrhs64oiz")
 
@@ -64,7 +64,7 @@ struct PLCGenesisTests {
 	///The first operation is the genesis, and a genesis points at nothing. One
 	///that carries a `prev` is an update wearing the first slot, which the
 	///verifier has to refuse rather than take as a starting point.
-	@Test(.disabled("pending: a genesis with a prev, through the fixture"))
+	@Test
 	func aGenesisWithAPrevIsRefused() throws {
 		let scenario = PLCScenario()
 		let pointedAt = try scenario.signed(prev: nil)
@@ -81,7 +81,7 @@ struct PLCGenesisTests {
 	///writes `prev` as an explicit null, so one that does not is not a genesis —
 	///and reading the field is what lets the genesis rule catch it rather than
 	///the conversion quietly dropping it.
-	@Test(.disabled("pending: a legacy create with a prev, through the fixture"))
+	@Test
 	func aLegacyCreateCarryingAPrevIsRefused() throws {
 		let value = try DAGCBORValue.parse(
 			json: """

@@ -42,7 +42,7 @@ struct PLCLogChainTests {
 	///log never established and signs with it is refused. Under "the previous
 	///operation's keys" that is a forgery; under "its own keys" it would pass,
 	///which is the whole of the difference between the two readings.
-	@Test(.disabled("pending: the rotation-key rule, forged"))
+	@Test
 	func anOperationSignedByItsOwnNewRotationKeyIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -75,7 +75,7 @@ struct PLCLogChainTests {
 	///refused, though every CID in it is self-consistent and its signature
 	///verifies — a truncated log is a truncation, but a re-pointed one is a
 	///forgery.
-	@Test(.disabled("pending: forged prev through the fixture"))
+	@Test
 	func aBrokenPrevIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -99,7 +99,7 @@ struct PLCLogChainTests {
 	///A signature from a key the log never established is refused. Every other
 	///byte of the operation is honest and its CID matches, so nothing but the
 	///signature check can catch it.
-	@Test(.disabled("pending: forged signature through the fixture"))
+	@Test
 	func aForgedSignatureIsRefused() throws {
 		let scenario = PLCScenario()
 		let unsigned = scenario.unsigned(prev: nil)
@@ -120,7 +120,7 @@ struct PLCLogChainTests {
 	///A high-S twin of a valid signature is refused, and for its own reason: it
 	///is a second spelling of one signature, so accepting it would let an
 	///operation's CID change without invalidating the signature.
-	@Test(.disabled("pending: high-S through the fixture"))
+	@Test
 	func aHighSSignatureIsRefused() throws {
 		let scenario = PLCScenario()
 		let unsigned = scenario.unsigned(prev: nil)
@@ -142,7 +142,7 @@ struct PLCLogChainTests {
 	///refused. The operation is untouched, its signature holds, and its `prev`
 	///is honest — so unless the verifier recomputes the CID rather than
 	///believing the log, nothing catches this.
-	@Test(.disabled("pending: a forged entry CID through the fixture"))
+	@Test
 	func aLogWhoseEntryCIDDoesNotMatchItsOperationIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -164,7 +164,7 @@ struct PLCLogChainTests {
 	///through it rather than over it. Two operations share the genesis as their
 	///`prev` — a fork the directory has already ruled against — and the
 	///document has to come from the live one.
-	@Test(.disabled("pending: a nullified fork through the fixture"))
+	@Test
 	func aNullifiedForkOperationIsSkippedByTheLiveChain() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -199,7 +199,7 @@ struct PLCLogChainTests {
 
 	///The genesis cannot be nullified: it is what the DID is the hash of, so a
 	///log that disowns it disowns the identifier it is claimed for.
-	@Test(.disabled("pending: a nullified genesis through the fixture"))
+	@Test
 	func aNullifiedGenesisIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -216,11 +216,11 @@ struct PLCLogChainTests {
 	///`did:key` — the asymmetry with a verification-method key, which may be any
 	///syntactically valid `did:key` and is therefore not parsed into a key type
 	///at all.
-	@Test(.disabled("pending: a rotation key the specification does not permit"))
+	@Test
 	func aRotationKeyTheMethodSpecificationDoesNotPermitIsRefused() throws {
 		let scenario = PLCScenario()
 		let ed25519 = "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-		// The scenario's own secp256k1 key with the `did:key:` prefix dropped:
+		// The scenario's own P-256 key with the `did:key:` prefix dropped:
 		// a multibase string, which is not the serialization the method
 		// specification gives a rotation key, though the key parser would take
 		// it (it accepts a bare multibase for the repo path, where a document
