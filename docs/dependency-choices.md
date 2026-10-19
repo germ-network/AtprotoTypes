@@ -1,9 +1,9 @@
 # Why `AtprotoTypesVerify` implements its own primitives
 
-This target hand-rolls DAG-CBOR, CID, CAR framing, MST proof walking, and
-secp256k1 verification rather than importing them. That is a deliberate and
-recurring question, so this records the reasoning and — more usefully — what
-would change it.
+This target hand-rolls DAG-CBOR, CID, CAR framing, MST proof walking,
+base64url, and secp256k1 verification rather than importing them. That is a
+deliberate and recurring question, so this records the reasoning and — more
+usefully — what would change it.
 
 The general rule: **prefer a dependency**, unless it cannot express a property
 this target's correctness depends on. Every case below fails for a specific,
@@ -77,7 +77,7 @@ one — with the grammar, not just the value tree, being DAG-CBOR's.
 
 Candidate: [`swift-libp2p/swift-cid`][swift-cid] — real, maintained, pure
 Swift, and from the same organisation as `swift-bases`, which this package
-already depends on. This is the closest call of the five.
+already depends on. This is the closest call of the six.
 
 It is declined because it reaches CID through `swift-multihash`, which depends
 on **CryptoSwift**. That would pull a general-purpose pure-Swift crypto
@@ -106,6 +106,33 @@ Notably, the closest reference implementation **never recomputes a block's CID**
 at load time rather than lookup time, is the single property the rest of the
 proof walk rests on, so adopting that code would have meant deleting the reason
 the file exists.
+
+## base64url
+
+`swift-bases` — already a dependency of this target, for `Base32` and `BaseX` —
+exposes a `Base64` product with `Data.init?(base64URLEncoded:)` and
+`base64URLEncoded(padded:)`. Linking it would cost nothing in the graph, and it
+is still unusable for a signature, because the method specification makes the
+*encoding* part of what is signed: "non-canonical encodings or 'High-S' values
+[must be] rejected as invalid. Otherwise, it would be possible for the signature
+encoding to be modified (thus modifying the operation's CID) without
+invalidating the signature." Three spellings have to be refused, and the helper
+accepts all three:
+
+- **Non-zero trailing bits.** It hands the characters to Foundation, which
+  ignores them — `AB==` and `AA==` both decode to `0x00`.
+- **`=` padding.** It pads the input up to a multiple of four before decoding,
+  so a padded string is accepted rather than refused.
+- **The standard alphabet.** It maps `-` and `_` to `+` and `/` and leaves
+  `+` and `/` alone, so both alphabets decode.
+
+The encode direction does overlap — `base64URLEncoded(padded: false)` is what
+`Base64URL.encode` does — but all of the strictness is in the decoding, and a
+codec split across a lenient third-party encoder and a hand-written strict
+decoder would be worse than owning both halves.
+
+**What would change this:** the helper rejecting non-zero trailing bits and
+padding, or `swift-bases` growing a strict base64url mode.
 
 ## MST
 
