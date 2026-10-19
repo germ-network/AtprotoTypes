@@ -51,9 +51,27 @@ Round-tripping through a value tree makes `encode(decode(bytes)) == bytes` a
 property we can test directly, and lets one comparison rule serve both decode
 validation and canonical encoding.
 
+A value tree does exist in-house: `GermCBOR`, in `GermConvenience`, a package
+this repo already depends on, exposes one — `CBORValue` with
+`DeterministicCBOR.encode` / `decode`. It passes the test the two candidates
+above fail, and it is still not usable here, for reasons about its grammar
+rather than its API shape:
+
+- **No tags**, so it cannot spell a DAG-CBOR link (tag 42) — and `prev`, `data`
+  and MST subtree pointers are all links.
+- **No floats**, so it is not the IPLD data model the decoder here has to
+  accept.
+- **A different canonical order**: it sorts map keys bytewise over the encoded
+  key (RFC 8949 §4.2.1), where DAG-CBOR keeps RFC 7049's
+  length-first-then-bytewise order. Two orders, two byte strings, two CIDs.
+
+It is a narrow profile for COSE (RFC 9052), which is what its own docs say it
+is. The point is only that it is not a DAG-CBOR codec, so "a CBOR value tree
+exists in-house" is not by itself the trigger below.
+
 **What would change this:** either library exposing a public value tree
 (swift-cbor promoting `CborValue`, say), or a DAG-CBOR package built around
-one.
+one — with the grammar, not just the value tree, being DAG-CBOR's.
 
 ## CID
 
