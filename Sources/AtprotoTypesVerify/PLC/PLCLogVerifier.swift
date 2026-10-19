@@ -76,7 +76,9 @@ extension Atproto.PLC {
 			//runs through them rather than over them. Nothing re-derives which
 			//operations are nullified — that is the directory's judgement of
 			//recovery windows and key priority, taken on the same trust as the
-			//log's completeness.
+			//log's completeness. That includes the tombstone rule below: a
+			//nullified operation after a tombstone is not a live successor, so
+			//it is skipped rather than refused.
 			var lastLiveIndex = 0
 			var tombstoned = false
 			for index in 1..<entries.count {

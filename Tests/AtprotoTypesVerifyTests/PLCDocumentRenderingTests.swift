@@ -151,8 +151,9 @@ struct PLCDocumentRenderingTests {
 
 	///A `plc_tombstone` ends the live chain, and the document it renders is the
 	///cleared one: the tombstone removes every data field, so the DID keeps its
-	///identifier and nothing else. No operation may follow it.
-	@Test(.disabled("pending: tombstone through the fixture"))
+	///identifier and nothing else. No live operation may follow it — a nullified
+	///one is not part of the live chain in the first place.
+	@Test
 	func aTombstoneEndsTheLogAndRendersTheClearedDocument() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
@@ -181,7 +182,7 @@ struct PLCDocumentRenderingTests {
 	///Nothing follows a tombstone. A deactivated DID cannot be updated, so a
 	///live operation after one is a log the directory would never have
 	///produced — and rendering it would resurrect the identifier.
-	@Test(.disabled("pending: an operation after a tombstone, through the fixture"))
+	@Test
 	func aLiveOperationAfterTheTombstoneIsRefused() throws {
 		let scenario = PLCScenario()
 		let genesis = try scenario.signed(prev: nil)
