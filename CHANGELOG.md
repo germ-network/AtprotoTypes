@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.10.0
+
+### Minor Changes
+
+- [#75](https://github.com/germ-network/AtprotoTypes/pull/75) [`8d809ff`](https://github.com/germ-network/AtprotoTypes/commit/8d809ff90804ac1de8f1338fb807759e3acc13d8) Thanks [@germ-mark](https://github.com/germ-mark)! - `PutRecordOutput.commit`, `PutRecordOutput.validationStatus` and `DeleteRecordOutput.commit` are now optional, so a PDS no-op (identical record, or deleting a missing record) decodes. `PutRecordOutput.ValidationStatus` is now an open `RawRepresentable` struct with `.valid` and `.unknown`, so unrecognized values decode instead of throwing.
+
 ## 0.9.0
 
 ### Minor Changes
