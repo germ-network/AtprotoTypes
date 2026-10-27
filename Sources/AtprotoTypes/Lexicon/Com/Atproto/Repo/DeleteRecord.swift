@@ -61,9 +61,10 @@ extension Lexicon.Com.Atproto.Repo {
 	}
 
 	public struct DeleteRecordOutput: Codable, Sendable {
-		public let commit: Defs.CommitMeta
+		///Absent when the record did not exist.
+		public let commit: Defs.CommitMeta?
 
-		public init(commit: Defs.CommitMeta) {
+		public init(commit: Defs.CommitMeta?) {
 			self.commit = commit
 		}
 	}

@@ -141,19 +141,27 @@ extension Lexicon.Com.Atproto.Repo {
 	public struct PutRecordOutput: Codable, Sendable {
 		public let uri: String
 		public let cid: String
-		public let commit: Defs.CommitMeta
-		public let validationStatus: ValidationStatus
+		///Absent when the write was a no-op: the record was identical to the live one.
+		public let commit: Defs.CommitMeta?
+		public let validationStatus: ValidationStatus?
 
-		public enum ValidationStatus: String, Sendable, Codable {
-			case valid
-			case unknown
+		///Lexicon knownValues: an open set, so an unrecognized value still decodes.
+		public struct ValidationStatus: RawRepresentable, Codable, Hashable, Sendable {
+			public let rawValue: String
+
+			public init(rawValue: String) {
+				self.rawValue = rawValue
+			}
+
+			public static let valid = Self(rawValue: "valid")
+			public static let unknown = Self(rawValue: "unknown")
 		}
 
 		public init(
 			uri: String,
 			cid: String,
-			commit: Defs.CommitMeta,
-			validationStatus: ValidationStatus
+			commit: Defs.CommitMeta?,
+			validationStatus: ValidationStatus?
 		) {
 			self.uri = uri
 			self.cid = cid
