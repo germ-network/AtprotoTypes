@@ -76,9 +76,9 @@ extension Atproto.PLC {
 			case .genesisIsNullified: "The genesis operation is nullified"
 			case .genesisHasNonNilPrev: "The genesis operation carries a prev"
 			case .cidMismatch(let claimed, let computed):
-				"Entry claims \(claimed.string), its operation hashes to \(computed.string)"
+				"Entry claims \(claimed.rawValue), its operation hashes to \(computed.rawValue)"
 			case .chainBroken(let expected, let found):
-				"prev is \(found?.string ?? "null"), expected \(expected.string)"
+				"prev is \(found?.rawValue ?? "null"), expected \(expected.rawValue)"
 			case .operationAfterTombstone:
 				"A live operation follows a plc_tombstone"
 			case .badSignatureLength(let length):

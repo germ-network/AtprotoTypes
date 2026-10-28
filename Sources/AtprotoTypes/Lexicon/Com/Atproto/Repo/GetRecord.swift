@@ -58,7 +58,7 @@ extension Lexicon.Com.Atproto.Repo {
 				self.cid = cid
 			}
 
-			public func asQueryItems() -> [URLQueryItem] {
+			public var queryItems: [URLQueryItem] {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.rawValue),
 					.init(
@@ -67,7 +67,7 @@ extension Lexicon.Com.Atproto.Repo {
 					.init(name: "rkey", value: rkey.rawValue),
 				]
 				if let cid {
-					base.append(.init(name: "cid", value: cid.string))
+					base.append(.init(name: "cid", value: cid.rawValue))
 				}
 
 				return base

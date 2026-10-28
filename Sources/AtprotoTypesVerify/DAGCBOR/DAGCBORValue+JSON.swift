@@ -102,7 +102,7 @@ extension DAGCBORValue {
 			let base64 = String(data.base64EncodedString().prefix { $0 != "=" })
 			out += "{\"/\":{\"bytes\":\"" + base64 + "\"}}"
 		case .link(let cid):
-			out += "{\"/\":\"" + cid.string + "\"}"
+			out += "{\"/\":\"" + cid.rawValue + "\"}"
 		}
 	}
 

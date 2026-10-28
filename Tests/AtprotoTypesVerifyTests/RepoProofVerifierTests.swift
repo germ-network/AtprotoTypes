@@ -110,11 +110,11 @@ struct RepoProofVerifierTests {
 		#expect(proof.rev == "3lbwqrstuvwxy")
 		//the returned CID is the one recomputed from the block
 		#expect(
-			try proof.cid.string
+			try proof.cid.rawValue
 				== ContentIdentifier.compute(
 					codec: .dagCBOR,
 					block: proof.block
-				).string
+				).rawValue
 		)
 	}
 
@@ -291,7 +291,7 @@ struct RepoProofVerifierTests {
 			blocks: [node, commitBlock]
 		)
 
-		#expect(throws: Atproto.Repo.ProofError.missingBlock(orphan.cid.string)) {
+		#expect(throws: Atproto.Repo.ProofError.missingBlock(orphan.cid.rawValue)) {
 			try Atproto.Repo.Verifier().verifyRecordProof(
 				car: car,
 				did: scenario.did,

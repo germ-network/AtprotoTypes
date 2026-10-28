@@ -39,7 +39,7 @@ struct CARTests {
 			bytes: DAGCBOREncoder.encode(.string("tampered"))
 		)
 
-		#expect(throws: Atproto.Repo.ProofError.blockCIDMismatch(real.cid.string)) {
+		#expect(throws: Atproto.Repo.ProofError.blockCIDMismatch(real.cid.rawValue)) {
 			try CARv1(RepoFixture.car(root: real.cid, blocks: [swapped]))
 		}
 	}
@@ -87,7 +87,7 @@ struct CARTests {
 			RepoFixture.car(root: present.cid, blocks: [present])
 		)
 
-		#expect(throws: Atproto.Repo.ProofError.missingBlock(absent.cid.string)) {
+		#expect(throws: Atproto.Repo.ProofError.missingBlock(absent.cid.rawValue)) {
 			try archive.block(absent.cid)
 		}
 	}

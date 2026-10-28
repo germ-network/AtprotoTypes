@@ -29,8 +29,8 @@ extension LexiconUnion {
 		let container = try decoder.container(keyedBy: TypeHeader.self)
 		let ref = try container.decode(Atproto.Ref.self, forKey: .type)
 
-		let type = try Self.members[ref].tryUnwrap(
-			LexionUnionError.unknownType(ref)
+		let type = try Self.members[ref].unwrap(
+			or: LexionUnionError.unknownType(ref)
 		)
 
 		try self.init(object: try type.init(from: decoder))

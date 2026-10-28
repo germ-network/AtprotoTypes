@@ -41,7 +41,7 @@ extension Atproto {
 
 		//In the XRPC lexicon, parameter is optional
 		public struct EmptyParameters: QueryParametrizable {
-			public func asQueryItems() -> [URLQueryItem] {
+			public var queryItems: [URLQueryItem] {
 				[]
 			}
 
@@ -71,5 +71,12 @@ extension Atproto.XRPC.EndpointId {
 }
 
 public protocol QueryParametrizable: Sendable {
-	func asQueryItems() -> [URLQueryItem]
+	var queryItems: [URLQueryItem] { get }
+}
+
+extension QueryParametrizable {
+	@available(*, deprecated, renamed: "queryItems")
+	public func asQueryItems() -> [URLQueryItem] {
+		queryItems
+	}
 }

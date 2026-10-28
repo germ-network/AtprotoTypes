@@ -73,7 +73,7 @@ public struct CARv1: Sendable {
 			let payload = Data(try reader.read(blockLength - cidLength))
 
 			guard cid.matches(block: payload) else {
-				throw Atproto.Repo.ProofError.blockCIDMismatch(cid.string)
+				throw Atproto.Repo.ProofError.blockCIDMismatch(cid.rawValue)
 			}
 			//a duplicate block is harmless: it hashed to the same CID, so it is
 			//the same bytes
@@ -84,7 +84,7 @@ public struct CARv1: Sendable {
 
 	public func block(_ cid: ContentIdentifier) throws -> Data {
 		guard let payload = blocks[cid.bytes] else {
-			throw Atproto.Repo.ProofError.missingBlock(cid.string)
+			throw Atproto.Repo.ProofError.missingBlock(cid.rawValue)
 		}
 		return payload
 	}

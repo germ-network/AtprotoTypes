@@ -54,7 +54,7 @@ struct PutRecordSwapEncodingTests {
 	func recordEncodesCIDString() throws {
 		let cid = try Atproto.CID(string: Self.cidString)
 		let object = try Self.json(Self.schema(swap: .record(cid)))
-		#expect(object["swapRecord"] as? String == cid.string)
+		#expect(object["swapRecord"] as? String == cid.rawValue)
 	}
 
 	@Test

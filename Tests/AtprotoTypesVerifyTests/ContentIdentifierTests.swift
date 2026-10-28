@@ -46,9 +46,9 @@ struct ContentIdentifierTests {
 			codec: .dagCBOR,
 			block: Data("some block".utf8)
 		)
-		#expect(cid.string.hasPrefix("bafyrei"))
-		#expect(cid.atprotoCID.string == cid.string)
-		#expect(try Atproto.CID(string: cid.string).string == cid.string)
+		#expect(cid.rawValue.hasPrefix("bafyrei"))
+		#expect(cid.atprotoCID.rawValue == cid.rawValue)
+		#expect(try Atproto.CID(string: cid.rawValue).rawValue == cid.rawValue)
 	}
 
 	@Test("matches() recomputes rather than trusting the link")

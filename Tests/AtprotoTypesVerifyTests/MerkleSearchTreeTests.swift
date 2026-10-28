@@ -215,7 +215,7 @@ struct MerkleSearchTreeTests {
 			RepoFixture.car(root: node.cid, blocks: [value, node])
 		)
 
-		#expect(throws: Atproto.Repo.ProofError.missingBlock(orphan.cid.string)) {
+		#expect(throws: Atproto.Repo.ProofError.missingBlock(orphan.cid.rawValue)) {
 			try MerkleSearchTree.find(
 				key: Tree.key("a"),
 				root: node.cid,
