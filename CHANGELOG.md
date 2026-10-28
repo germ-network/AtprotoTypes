@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.11.0
+
+### Minor Changes
+
+- [#78](https://github.com/germ-network/AtprotoTypes/pull/78) [`630caa1`](https://github.com/germ-network/AtprotoTypes/commit/630caa1d07002e8199470fe3a6aef58b907ab933) Thanks [@germ-mark](https://github.com/germ-mark)! - Align public API names with Swift conventions, including `queryItems` and `rawValue`, while retaining deprecated compatibility accessors where practical. `QueryParametrizable` conformers must now implement `queryItems`; existing calls to `asQueryItems()` remain available as a deprecated forwarding method.
+
 ## 0.10.0
 
 ### Minor Changes
