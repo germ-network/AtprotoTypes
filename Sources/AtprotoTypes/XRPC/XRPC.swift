@@ -72,17 +72,11 @@ extension Atproto.XRPC.EndpointId {
 
 public protocol QueryParametrizable: Sendable {
 	var queryItems: [URLQueryItem] { get }
-	@available(*, deprecated, renamed: "queryItems")
-	func asQueryItems() -> [URLQueryItem]
 }
 
 extension QueryParametrizable {
 	@available(*, deprecated, renamed: "queryItems")
 	public func asQueryItems() -> [URLQueryItem] {
 		queryItems
-	}
-
-	public var queryItems: [URLQueryItem] {
-		asQueryItems()
 	}
 }

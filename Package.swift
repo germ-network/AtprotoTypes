@@ -24,7 +24,7 @@ let package = Package(
 		.package(url: "https://github.com/swift-libp2p/swift-bases.git", from: "0.2.0"),
 		.package(
 			url: "https://github.com/germ-network/GermConvenience.git",
-			branch: "mark/ger-3167-germconvenience"
+			.upToNextMinor(from: "0.15.0")
 		),
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",
