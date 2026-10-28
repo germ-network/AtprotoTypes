@@ -52,7 +52,7 @@ extension Atproto {
 
 			self.authority = try LexiconString.AtIdentifier(
 				rawValue: String(components[0])
-			).tryUnwrap
+			).unwrapped
 			self.collection =
 				components.count >= 2
 				? NSID(rawValue: String(components[1]))

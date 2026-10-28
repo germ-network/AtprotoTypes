@@ -13,7 +13,7 @@ extension Lexicon.Com.Atproto.Repo.GetRecord.Output: Mockable where Result: Mock
 	public static func mock() throws -> Self {
 		.init(
 			uri: .mock(),
-			cid: Atproto.CID.mock().string,
+			cid: Atproto.CID.mock().rawValue,
 			value: try .mock()
 		)
 	}

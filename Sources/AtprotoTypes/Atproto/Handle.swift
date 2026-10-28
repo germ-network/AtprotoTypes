@@ -35,10 +35,6 @@ extension Atproto {
 			rawValue = knownValue
 		}
 
-		var string: String {
-			rawValue
-		}
-
 		public enum Errors: Error, LocalizedError {
 			case tooLong
 			case badHandle

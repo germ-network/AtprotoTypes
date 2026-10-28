@@ -51,9 +51,12 @@ public struct ContentIdentifier: Sendable, Hashable {
 	}
 
 	///Base32 lower, `b`-prefixed, matching `Atproto.CID.string`.
-	public var string: String {
+	public var rawValue: String {
 		"b" + Self.base32Lower(bytes)
 	}
+
+	@available(*, deprecated, renamed: "rawValue")
+	public var string: String { rawValue }
 
 	///base32 lower, unpadded, over raw bytes.
 	///

@@ -29,7 +29,7 @@ extension Lexicon.Com.Atproto.Identity {
 				self.handle = handle
 			}
 
-			public func asQueryItems() -> [URLQueryItem] {
+			public var queryItems: [URLQueryItem] {
 				[.init(name: "handle", value: handle.rawValue)]
 			}
 		}

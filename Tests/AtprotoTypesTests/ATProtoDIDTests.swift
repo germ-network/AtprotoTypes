@@ -34,7 +34,7 @@ struct AtprotoDIDTests {
 			let did: Atproto.DID
 		}
 		let wrapped = try Wrapper(
-			did: .init(rawValue: Self.exampleDidString).tryUnwrap
+			did: .init(rawValue: Self.exampleDidString).unwrapped
 		)
 		let encoded = try JSONEncoder().encode(wrapped)
 		let decoded = try JSONSerialization.jsonObject(with: encoded)

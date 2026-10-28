@@ -12,7 +12,7 @@ import Foundation
 //https://atproto.com/specs/data-model#link-and-cid-formats
 
 extension Atproto {
-	public struct CID: Sendable, Hashable {
+	public struct CID: StringRepresentable {
 		//todo: further parse components of the CID data such as the hash
 		let bytes: Data
 
@@ -34,11 +34,14 @@ extension Atproto {
 			bytes = try Base32.decode(body)
 		}
 
-		public var string: String {
+		public var rawValue: String {
 			// CID is DASL-compatible (https://atproto.com/specs/data-model)
 			// and DASL CID uses lowercase base-32 (https://dasl.ing/cid.html)
 			"b" + Base32.encode(bytes, options: .letterCase(.lower), .pad(false))
 		}
+
+		@available(*, deprecated, renamed: "rawValue")
+		public var string: String { rawValue }
 	}
 }
 
@@ -50,6 +53,6 @@ extension Atproto.CID: Codable {
 
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
-		try container.encode(self.string)
+		try container.encode(self.rawValue)
 	}
 }

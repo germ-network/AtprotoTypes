@@ -24,8 +24,7 @@ let package = Package(
 		.package(url: "https://github.com/swift-libp2p/swift-bases.git", from: "0.2.0"),
 		.package(
 			url: "https://github.com/germ-network/GermConvenience.git",
-			// 0.10.0 is its swift-crypto-5 release — the revision pin drops.
-			from: "0.10.0"
+			branch: "mark/ger-3167-germconvenience"
 		),
 		.package(
 			url: "https://github.com/apple/swift-crypto.git",

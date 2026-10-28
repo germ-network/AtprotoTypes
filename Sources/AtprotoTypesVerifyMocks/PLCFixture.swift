@@ -79,7 +79,7 @@ public enum PLCFixture {
 						)
 					})
 			),
-			(key: "prev", value: prev.map { .string($0.string) } ?? .null),
+			(key: "prev", value: prev.map { .string($0.rawValue) } ?? .null),
 		])
 	}
 
@@ -106,7 +106,7 @@ public enum PLCFixture {
 	public static func unsignedTombstone(prev: Atproto.CID) -> DAGCBORValue {
 		.map([
 			(key: "type", value: .string("plc_tombstone")),
-			(key: "prev", value: .string(prev.string)),
+			(key: "prev", value: .string(prev.rawValue)),
 		])
 	}
 

@@ -120,10 +120,10 @@ extension Atproto.XRPC.ResponseParsing {
 	private static func parseSuccess(body: Data) throws -> Output {
 		switch Output.self {
 		case is Data.Type:
-			return try (body as? Output).tryUnwrap
+			return try (body as? Output).unwrapped
 		case is Data?.Type:
 			let result = body.isEmpty ? nil : body
-			return try (result as? Output).tryUnwrap
+			return try (result as? Output).unwrapped
 		default:
 			return try JSONDecoder.atproto
 				.decode(Output.self, from: body)

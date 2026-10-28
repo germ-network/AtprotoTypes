@@ -56,7 +56,7 @@ extension Lexicon.Com.Atproto.Repo {
 				}
 			}
 
-			public func asQueryItems() -> [URLQueryItem] {
+			public var queryItems: [URLQueryItem] {
 				var base: [URLQueryItem] = [
 					.init(name: "repo", value: repo.rawValue),
 					.init(

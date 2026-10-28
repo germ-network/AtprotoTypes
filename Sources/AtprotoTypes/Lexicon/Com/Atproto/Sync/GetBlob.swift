@@ -39,10 +39,10 @@ extension Lexicon.Com.Atproto.Sync {
 				self.cid = cid
 			}
 
-			public func asQueryItems() -> [URLQueryItem] {
+			public var queryItems: [URLQueryItem] {
 				return [
 					.init(name: "did", value: did.rawValue),
-					.init(name: "cid", value: cid.string),
+					.init(name: "cid", value: cid.rawValue),
 				]
 			}
 		}

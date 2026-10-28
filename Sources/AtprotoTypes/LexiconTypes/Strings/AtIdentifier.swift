@@ -20,7 +20,7 @@ extension LexiconString {
 		//over the wire, passed as a string
 		public var rawValue: String {
 			switch self {
-			case .handle(let handle): handle.string
+			case .handle(let handle): handle.rawValue
 			case .did(let did): did.rawValue
 			}
 		}

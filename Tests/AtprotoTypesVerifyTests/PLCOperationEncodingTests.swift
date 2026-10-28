@@ -26,7 +26,7 @@ struct PLCOperationEncodingTests {
 				let bytes = DAGCBOREncoder.encode(value)
 				let cid = try ContentIdentifier.compute(
 					codec: .dagCBOR, block: bytes)
-				#expect(cid.atprotoCID == entry.cid, "\(name): \(entry.cid.string)")
+				#expect(cid.atprotoCID == entry.cid, "\(name): \(entry.cid.rawValue)")
 			}
 		}
 	}

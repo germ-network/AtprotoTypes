@@ -48,7 +48,7 @@ extension Atproto.PLC {
 		///in hand rather than normalized away.
 		public init(cid claimed: String, operationJSON: String, nullified: Bool) throws {
 			let parsed = try Atproto.CID(string: claimed)
-			guard parsed.string == claimed else {
+			guard parsed.rawValue == claimed else {
 				throw Errors.nonCanonicalCID(claimed)
 			}
 			self.init(cid: parsed, operationJSON: operationJSON, nullified: nullified)
