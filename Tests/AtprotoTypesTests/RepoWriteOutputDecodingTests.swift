@@ -6,7 +6,6 @@
 import AtprotoTypes
 import Foundation
 import GermConvenience
-import GermConvenienceHTTP
 import HTTPTypes
 import Testing
 
@@ -15,15 +14,27 @@ import Testing
 //(an identical record, or deleting a record that doesn't exist), and
 //`validationStatus` is an open knownValues string.
 struct RepoWriteOutputDecodingTests {
-	typealias PutRecord = Lexicon.Com.Atproto.Repo.PutRecord<
-		PutRecordSwapEncodingTests.Thing
-	>
-	typealias DeleteRecord = Lexicon.Com.Atproto.Repo.DeleteRecord<
-		PutRecordSwapEncodingTests.Thing
-	>
+	struct Thing: Atproto.Record {
+		struct Collection: Atproto.RecordType {
+			static var nsid: Atproto.NSID { .init(string: "example.thing") }
+			init() {}
+			init(from decoder: any Decoder) throws { self.init() }
+			func encode(to encoder: any Encoder) throws {
+				var container = encoder.singleValueContainer()
+				try container.encode(Self.nsid.rawValue)
+			}
+		}
+		typealias Key = Atproto.LiteralSelfRecordKey
+		var nsid: Collection { .init() }
+		var name = "x"
+		private enum CodingKeys: String, CodingKey { case name }
+	}
+
+	typealias PutRecord = Lexicon.Com.Atproto.Repo.PutRecord<Thing>
+	typealias DeleteRecord = Lexicon.Com.Atproto.Repo.DeleteRecord<Thing>
 
 	static let uri = "at://did:plc:abcdefghijklmnopqrstuvwx/example.thing/self"
-	static let cid = PutRecordSwapEncodingTests.cidString
+	static let cid = "bafyreibmcnkzbxtciyydktbatjlpgh5hollpov4zvpwtaaq353vyzfbxwu"
 	static let rev = "3lbwqrstuvwxy"
 
 	static func ok(_ json: String) -> HTTPDataResponse {
@@ -50,6 +61,15 @@ struct RepoWriteOutputDecodingTests {
 		#expect(output.cid == Self.cid)
 		#expect(output.commit == nil)
 		#expect(output.validationStatus == .valid)
+	}
+
+	//rsky (Blacksky's PDS) returns only these two fields on every write
+	@Test func putRecordUriAndCidOnlyParses() throws {
+		let output = try Self.parsed(
+			PutRecord.self, #"{"cid":"\#(Self.cid)","uri":"\#(Self.uri)"}"#)
+		#expect(output.uri == Self.uri)
+		#expect(output.commit == nil)
+		#expect(output.validationStatus == nil)
 	}
 
 	@Test func putRecordWithoutValidationStatusParses() throws {
