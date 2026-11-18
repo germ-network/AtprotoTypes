@@ -31,6 +31,8 @@ extension Atproto.XRPC {
 //default
 extension Atproto.XRPC.ResponseParsing {
 	static public var recognizedStatuses: Set<HTTPResponse.Status> {
+		/// Flagging that 404 is not a recognized status because we only want to recognize it
+		/// in specific cases (i.e. `OptionalResultRequest` with `notFoundCodes`)
 		[.badRequest, .unauthorized]
 	}
 
@@ -111,7 +113,9 @@ extension Atproto.XRPC.ResponseParsing {
 			case .notFound where !Self.notFoundErrors.isEmpty:
 				// Not decoding as an XRPC error is still just an unrecognized 404.
 				if let errorObject = try? JSONDecoder.atproto.decode(
-					Atproto.XRPC.ErrorResponse.self, from: fullResponse.data),
+					Atproto.XRPC.ErrorResponse.self,
+					from: fullResponse.data
+				),
 					Self.notFoundErrors.contains(errorObject.error)
 				{
 					return .error(
