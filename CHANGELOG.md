@@ -1,5 +1,11 @@
 # @germ-network/atprototypes
 
+## 0.12.0
+
+### Minor Changes
+
+- [#81](https://github.com/germ-network/AtprotoTypes/pull/81) [`d1c4109`](https://github.com/germ-network/AtprotoTypes/commit/d1c4109116fb7668f7954d65c2888bf308504bc6) Thanks [@anna-germ](https://github.com/anna-germ)! - An `OptionalResultRequest` (getRecord, getBlob, resolveHandle) types a 404 whose body names one of its `notFoundCodes` as `.xrpcError(status: .notFound, …)`, as it already typed the 400. tranquil PDSes send a missing record as `404 RecordNotFound`, which surfaced as `.unrecognized(404)`. Adds the `ResponseParsing.notFoundErrors` requirement, defaulted.
+
 ## 0.11.0
 
 ### Minor Changes
