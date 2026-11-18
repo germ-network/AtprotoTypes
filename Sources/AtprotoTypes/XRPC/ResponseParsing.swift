@@ -41,6 +41,7 @@ extension Atproto.XRPC.ResponseParsing {
 		["InvalidRequest", "ExpiredToken", "InvalidToken"]
 	}
 
+	/// Default empty, set to `notFoundCodes` below in the case of an `OptionalResultRequest`
 	static public var notFoundErrors: Set<String> { [] }
 }
 
