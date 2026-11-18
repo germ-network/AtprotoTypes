@@ -62,7 +62,7 @@ struct ResponseParsingTests {
 /// its conformance picks up.
 struct NotFoundParsingTests {
 	private typealias GetRecord = Lexicon.Com.Atproto.Repo.GetRecord<
-		PutRecordSwapEncodingTests.Thing
+		RepoWriteOutputDecodingTests.Thing
 	>
 
 	private func parse(_ status: Int, _ body: String) throws
@@ -113,7 +113,7 @@ struct NotFoundParsingTests {
 
 	@Test func endpointWithoutNotFoundCodesIgnores404Body() throws {
 		let parsed = try Lexicon.Com.Atproto.Repo.PutRecord<
-			PutRecordSwapEncodingTests.Thing
+			RepoWriteOutputDecodingTests.Thing
 		>
 		.parse(
 			fullResponse: HTTPDataResponse(
