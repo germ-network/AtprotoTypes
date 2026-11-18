@@ -16,6 +16,11 @@ extension Atproto.XRPC {
 		//this is defined in the lexicon, and additionally in the api spec
 		static var badRequestErrors: Set<String> { get }
 		static var recognizedStatuses: Set<HTTPResponse.Status> { get }
+		/// Error names typed as `.xrpcError(status: .notFound, …)` when a 404
+		/// carries them. Empty by default; an `OptionalResultRequest` uses its
+		/// `notFoundCodes`, since some PDSes (tranquil) send a miss as a 404
+		/// where the reference PDS sends a 400.
+		static var notFoundErrors: Set<String> { get }
 	}
 
 	public struct EmptyOutput: Decodable, Sendable {
@@ -32,6 +37,12 @@ extension Atproto.XRPC.ResponseParsing {
 	static public var defaultErrors: Set<String> {
 		["InvalidRequest", "ExpiredToken", "InvalidToken"]
 	}
+
+	static public var notFoundErrors: Set<String> { [] }
+}
+
+extension Atproto.XRPC.ResponseParsing where Self: Atproto.XRPC.OptionalResultRequest {
+	static public var notFoundErrors: Set<String> { notFoundCodes }
 }
 
 extension Atproto.XRPC {
@@ -96,6 +107,15 @@ extension Atproto.XRPC.ResponseParsing {
 					return .error(
 						.xrpcError(status: .badRequest, error: errorObject)
 					)
+				}
+			case .notFound where !Self.notFoundErrors.isEmpty:
+				// Not decoding as an XRPC error is still just an unrecognized 404.
+				if let errorObject = try? JSONDecoder.atproto.decode(
+					Atproto.XRPC.ErrorResponse.self, from: fullResponse.data),
+					Self.notFoundErrors.contains(errorObject.error)
+				{
+					return .error(
+						.xrpcError(status: .notFound, error: errorObject))
 				}
 			case let status where Self.recognizedStatuses.contains(status):
 				let errorObject = try JSONDecoder.atproto
