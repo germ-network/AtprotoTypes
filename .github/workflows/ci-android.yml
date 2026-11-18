@@ -30,6 +30,13 @@ jobs:
           # 6.4 is also the first release with an Ubuntu 26.04 host toolchain,
           # which `ubuntu-latest` became in November 2026; 6.3 only 404s there.
           swift-version: "6.4.2"
+          # 6.4 defaults `swift build` to the Swift Build engine, which on this
+          # target never writes `AtprotoTypes_AtprotoTypesVerifyTests.resources`
+          # into the products folder (the action's `cp *.resources` step found
+          # nothing to copy), so `Bundle.module` trapped on the emulator the
+          # moment a test loaded a PLC or Wycheproof vector. The deprecated
+          # native engine still lays the bundle out where the action expects it.
+          swift-build-flags: "--build-system native"
           # The emulator, not the tests, is what fails here: seen twice as
           # `adb: device offline` right after "Successfully loaded snapshot",
           # and as the adb daemon dying mid-run (exit 137) — never as a failing
