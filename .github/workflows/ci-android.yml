@@ -5,38 +5,44 @@ on:
     branches:
       - main
     paths-ignore:
-      - "README.md"
-      - "CODE_OF_CONDUCT.md"
-      - ".editorconfig"
-      - ".spi.yml"
+      - 'README.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.editorconfig'
+      - '.spi.yml'
   pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+# Least privilege: these jobs only read the repository.
+permissions:
+  contents: read
+
 jobs:
   linux-android:
     name: Test Android
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v6
-      - name: "Test Swift Package on Android"
-        uses: skiptools/swift-android-action@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: 'Test Swift Package on Android'
+        # Third-party action: pinned to a commit SHA so a rewritten tag can't
+        # change what runs. Dependabot keeps the pin current.
+        uses: skiptools/swift-android-action@2044b79660f201ccef8cbce62877e4ec5409f9c8 # v2.9.5
         with:
           # Full patch version on purpose: the action derives the download URL
           # from it, and swift.org has no bare `swift-6.4-RELEASE` directory.
-          # 6.4 is also the first release with an Ubuntu 26.04 host toolchain,
-          # which `ubuntu-latest` became in November 2026; 6.3 only 404s there.
-          swift-version: "6.4.2"
+          # 6.4 is also the first release with an Ubuntu 26.04 host toolchain;
+          # 6.3 only 404s on this runner.
+          swift-version: '6.4.2'
           # Swift 6.4 builds with Swift Build, whose generated Bundle.module
           # accessor looks for `<name>.bundle` beside the test runner. The
           # action only packs the old SwiftPM `*.resources` layout, so the
           # AtprotoTypesVerifyTests fixtures (wycheproof, plc) never reached
           # the emulator and the first test to touch them died with "unable
           # to find bundle named AtprotoTypes_AtprotoTypesVerifyTests".
-          copy-files: ".build/out/Products/*/*.bundle"
+          copy-files: '.build/out/Products/*/*.bundle'
           # The emulator, not the tests, is what fails here: seen twice as
           # `adb: device offline` right after "Successfully loaded snapshot",
           # and as the adb daemon dying mid-run (exit 137) — never as a failing
@@ -45,5 +51,5 @@ jobs:
           # gives the AVD headroom now that the test binary statically links
           # libsecp256k1. Reclaiming disk first keeps the Swift toolchain and
           # Android SDK from crowding the emulator's own image out.
-          android-emulator-options: "-no-window -noaudio -no-boot-anim -no-snapshot -memory 4096"
-          free-disk-space: "true"
+          android-emulator-options: '-no-window -noaudio -no-boot-anim -no-snapshot -memory 4096'
+          free-disk-space: 'true'
