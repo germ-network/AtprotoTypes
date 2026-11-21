@@ -5,42 +5,49 @@ on:
     branches:
       - main
     paths-ignore:
-      - "README.md"
-      - "CODE_OF_CONDUCT.md"
-      - ".editorconfig"
-      - ".spi.yml"
+      - 'README.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.editorconfig'
+      - '.spi.yml'
   pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+# Least privilege: these jobs only read the repository.
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
-      image: swift:6.2
+      image: swift:6.4
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Lint
         run: swift format lint --recursive --configuration .swift-format --strict Sources Tests
 
   linux_test:
     name: Test Linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: swift:${{matrix.swift-version}}
     timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
+        # The 6.3 floor (swift-tools-version in Package.swift) is covered by
+        # the Apple workflow only.
         swift-version:
-          - "6.2"
+          - '6.4'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: swift --version
       - name: Test
         run: swift test

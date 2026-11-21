@@ -1,0 +1,18 @@
+# Generated or vendored — reformatting these either loses meaning or fights the
+# tool that writes them.
+pnpm-lock.yaml
+Package.resolved
+CHANGELOG.md
+
+# Build output and per-user Xcode state.
+.build/
+.swiftpm/
+
+# Test fixtures are byte-exact inputs (wycheproof, plc), not prose.
+Tests/**/Resources/
+
+# Local tool state, not tracked.
+.claude/
+
+# Swift is formatted by swift-format, using .swift-format — not by Prettier.
+*.swift

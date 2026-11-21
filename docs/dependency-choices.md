@@ -113,7 +113,7 @@ the file exists.
 exposes a `Base64` product with `Data.init?(base64URLEncoded:)` and
 `base64URLEncoded(padded:)`. Linking it would cost nothing in the graph, and it
 is still unusable for a signature, because the method specification makes the
-*encoding* part of what is signed: "non-canonical encodings or 'High-S' values
+_encoding_ part of what is signed: "non-canonical encodings or 'High-S' values
 [must be] rejected as invalid. Otherwise, it would be possible for the signature
 encoding to be modified (thus modifying the operation's CID) without
 invalidating the signature." Three spellings have to be refused, and the helper
@@ -152,7 +152,7 @@ swift-crypto has no secp256k1 at all, and most atproto accounts sign with it,
 so this cannot simply be skipped.
 
 The one mature Swift option wraps Bitcoin Core's C `libsecp256k1`, which
-conflicts with the no-C constraint above. It *is* used — as a differential
+conflicts with the no-C constraint above. It _is_ used — as a differential
 test oracle in `AtprotoTypesVerifyTests`, never in a shipped product — which
 gives the from-scratch implementation an independent implementation to check
 against, alongside the Wycheproof vector suite.
